@@ -37,14 +37,28 @@ public class ServerSidePlayer extends Thread {
         this.opponent = opponent;
     }
 
-
+    public ServerSidePlayer getOpponent() {
+        return opponent;
+    }
 
     public void run(){
         try{
             output.println("All players connected");
+
+            if (player.equals("playerOne")){
+                output.println("yourTurn");
+            }
+            if (player.equals("playerTwo")){
+                output.println("yourTurn");
+            }
+
             while (true){
-                String command = input.readLine();
+                String command = input.readLine(); // variable to conatin client "request"
+                Protocol protocol = new Protocol();
+                String toSend = protocol.processInput(command); // processes w/e client send
+                output.println(toSend); //sends back to client what protocol says it should do
                 if (command.equals("MOVE")){
+
                     System.out.println(player + " connected");
                 }else {
                     System.out.println("not yey"); // skriver ut ifall nåt skulle gå fel

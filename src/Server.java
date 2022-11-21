@@ -14,14 +14,14 @@ public class Server {
 
                 ServerSideGame game = new ServerSideGame();
 
-                ServerSidePlayer player1 = new ServerSidePlayer(ss.accept(), "Player1", game);
-                ServerSidePlayer player2 = new ServerSidePlayer(ss.accept(), "Player2", game);
+                ServerSidePlayer playerOne = new ServerSidePlayer(ss.accept(), "PlayerOne", game);
+                ServerSidePlayer playerTwo = new ServerSidePlayer(ss.accept(), "PlayerTwo", game);
 
-                player1.setOpponent(player2);
-                player2.setOpponent(player1);
-                game.currentPlayer = player1;
-                player1.start();
-                player2.start();
+                playerOne.setOpponent(playerTwo);
+                playerTwo.setOpponent(playerOne);
+                game.currentPlayer = playerOne;
+                playerOne.start();
+                playerTwo.start();
             }
         } finally {
             ss.close();

@@ -38,11 +38,12 @@ public class Client extends JFrame implements ActionListener {
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
 
+        continueButton.setEnabled(false);
         infoLabel.setBackground(Color.white);
         backpanel.setBackground(Color.lightGray);
         userNamePanel.add(usernamePromptLabel);
         userNamePanel.add(userNameTextField);
-        submitUsernameButton.addActionListener(e ->{out.println("MOVE");});
+        submitUsernameButton.addActionListener(e ->{out.println("MOVE");}); // "p1turn"
         userNamePanel.add(submitUsernameButton);
         backpanel.add(userNamePanel,BorderLayout.WEST);
         headerPanel.add(headerLabel,BorderLayout.NORTH);
@@ -52,21 +53,23 @@ public class Client extends JFrame implements ActionListener {
         frame.getContentPane().add(infoLabel, "South");
         frame.getContentPane().add(backpanel, "Center");
         continueButton.addActionListener(this);
-
-
-
     }
 
     public void play() throws IOException {
         String response;
-        String player = "1";
-        String opponentPlayer = "2";
+        String player = "";
+        String opponentPlayer = "";
         try {
             while (true) {
                 response = in.readLine();
                 if (response.startsWith("WELCOME")) {
-                    player = response.substring(8,response.length()-1);
-                    frame.setTitle("Quiz Game" + player);
+                    player = response.substring(8);
+                    if (player.equals("playerOne")){
+                        opponentPlayer = "playerTwo";
+                    }else {
+                        opponentPlayer = "playerOne";
+                    }
+                    frame.setTitle("Quiz Game " + player);
                 }
                 if (response.equals("Waiting for opponent to connect")){
                     infoLabel.setText("Waiting for opponent to connect");
@@ -74,7 +77,22 @@ public class Client extends JFrame implements ActionListener {
                 if (response.equals("All players connected")){
                     infoLabel.setText("All players connected");
                     //give category and start game
-                    //maybe implement a game protocol
+                }
+                if (response.equals("yourTurn")) {
+                    //newRoundMethod
+                    if (player.equals("playerTwo")) {
+                        continueButton.setEnabled(false);
+                    } else {
+                        continueButton.setEnabled(true);
+                    }
+                    if (response.equals("opponentTurn")) {
+                        //newRoundMethod
+                        if (player.equals("playerTwo")) {
+                            continueButton.setEnabled(false);
+                        } else {
+                            continueButton.setEnabled(true);
+                        }
+                    }
                 }
             }
         } catch (Exception e) {
