@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -44,6 +46,7 @@ public class Client extends JFrame implements ActionListener {
         backpanel.setBackground(Color.lightGray);
         userNamePanel.add(usernamePromptLabel);
         userNamePanel.add(userNameTextField);
+        submitUsernameButton.setEnabled(false);
         submitUsernameButton.addActionListener(this);
         userNamePanel.add(submitUsernameButton);
         backpanel.add(userNamePanel,BorderLayout.WEST);
@@ -55,7 +58,17 @@ public class Client extends JFrame implements ActionListener {
         frame.getContentPane().add(backpanel, "Center");
         continueButton.addActionListener(this);
 
-
+        userNameTextField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (userNameTextField.getText().equals("")) {
+                    submitUsernameButton.setEnabled(false);
+                } else {
+                    submitUsernameButton.setEnabled(true);
+                    frame.repaint();
+                }
+            }
+        });
 
     }
 
@@ -95,6 +108,7 @@ public class Client extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+
         if (e.getSource() == submitUsernameButton) {
             userName = userNameTextField.getText();
             userNamePanel.removeAll();
