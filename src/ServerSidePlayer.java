@@ -44,7 +44,12 @@ public class ServerSidePlayer extends Thread {
             output.println("All players connected");
             while (true){
                 String command = input.readLine();
-                if (command.equals("MOVE")){
+
+                String username;
+                if (command.contains("player")){
+                    username = command.replace("player ", "");
+                    this.player = username;
+                }else if (command.equals("MOVE")){
                     System.out.println(player + " connected");
                 }else {
                     System.out.println("not yey"); // skriver ut ifall nåt skulle gå fel
@@ -52,7 +57,7 @@ public class ServerSidePlayer extends Thread {
             }
         } catch (IOException e) {
             System.out.println("Player died: " + e);
-        }finally {
+        } finally {
             try {
                 socket.close();
             } catch (IOException e) {

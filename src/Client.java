@@ -16,6 +16,8 @@ public class Client extends JFrame implements ActionListener {
     private BufferedReader in;
     private PrintWriter out;
 
+    String userName;
+
     JFrame frame = new JFrame("Quiz Game");
     JPanel backpanel = new JPanel(new BorderLayout());
     JPanel headerPanel = new JPanel(new BorderLayout());
@@ -42,7 +44,7 @@ public class Client extends JFrame implements ActionListener {
         backpanel.setBackground(Color.lightGray);
         userNamePanel.add(usernamePromptLabel);
         userNamePanel.add(userNameTextField);
-        submitUsernameButton.addActionListener(e ->{out.println("MOVE");});
+        submitUsernameButton.addActionListener(this);
         userNamePanel.add(submitUsernameButton);
         backpanel.add(userNamePanel,BorderLayout.WEST);
         headerPanel.add(headerLabel,BorderLayout.NORTH);
@@ -93,6 +95,17 @@ public class Client extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        if (e.getSource() == submitUsernameButton) {
+            userName = userNameTextField.getText();
+            userNamePanel.removeAll();
+            usernamePromptLabel.setText(userName);
+            usernamePromptLabel.setVerticalAlignment(SwingConstants.CENTER);
+            usernamePromptLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            userNamePanel.add(usernamePromptLabel);
+            userNamePanel.revalidate();
+            out.println( "player " + userName);
+            out.println("MOVE");
+            System.out.println(userName + " is connected.");
+        }
     }
 }
