@@ -16,6 +16,12 @@ public class ServerSidePlayer extends Thread {
     ServerSideGame game;
     int score;
 
+    public int getCurrentScore() {
+        return currentScore;
+    }
+
+    int currentScore = 0;
+
     public ServerSidePlayer(Socket socket, String player, ServerSideGame game, int score) {
         this.socket = socket;
         this.player = player;
@@ -39,15 +45,14 @@ public class ServerSidePlayer extends Thread {
         this.opponent = opponent;
     }
 
-
-
     public void run(){
         try{
             output.println("All players connected");
             while (true){
                 String command = input.readLine();
-                if (command.equals("MOVE")){
-                    System.out.println(player + " connected");
+                if (command.equals("start")){
+                    game.newRound();
+                    output.println("SCORE" + game.currentPlayer.score);
                 }else {
                     System.out.println("not yey"); // skriver ut ifall nåt skulle gå fel
                 }

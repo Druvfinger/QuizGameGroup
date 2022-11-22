@@ -1,3 +1,5 @@
+import com.sun.source.tree.UsesTree;
+
 import javax.management.StringValueExp;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -11,6 +13,7 @@ public class ServerSideGame {
     ServerSidePlayer currentPlayer;
     GameScreen gameScreen;
     Database database;
+
 
     public boolean isWinner() {
         if (isLastRound() && isInTheLead()) ;
@@ -31,8 +34,8 @@ public class ServerSideGame {
     public void drawUpQuestion() {
         gameScreen = new GameScreen();
         for (int i = 0; i < 4; i++) {
-            gameScreen.buttonList.get(i).setText(String.valueOf(getAnswers.get(i)));
-            gameScreen.questionLabel.setText(getQuestion());
+            gameScreen.buttonList.get(i).setText(String.valueOf(database.getAnswers().get(i)));
+            gameScreen.questionLabel.setText(database.getQuestion());
             gameScreen.repaint();
             gameScreen.revalidate();
         }
@@ -57,7 +60,7 @@ public class ServerSideGame {
         } else if (isLastQuestion()) {
             newQuestion();
             gameScreen.currentQuestion = 0;
-
+            currentPlayer.currentScore = 0;
         }
     }
 
@@ -65,18 +68,23 @@ public class ServerSideGame {
         gameScreen.questionLabel.setText("What Category do you want to choose");
         for (int i = 0; i < 4; i++) {
             gameScreen.buttonList.get(i).setText(String.valueOf(database.getCategories()));
+            gameScreen = new GameScreen();
             gameScreen.repaint();
             gameScreen.revalidate();
         }
     }
 
+    public ServerSidePlayer getCurrentPlayer() {
+        return currentPlayer;
+    }
 
     public void newQuestion() {
         while (gameScreen.isAnswered) {
+            drawUpQuestion();
             if (gameScreen.isAnswerCorrect){
                 currentPlayer.score++; // funkar detta ?
+                currentPlayer.currentScore++;
             }
-            drawUpQuestion();
             gameScreen.isAnswered = false;
         }
     }
@@ -100,11 +108,6 @@ public class ServerSideGame {
     }
 
     public void showResults(){
-        /*
-        * How do we keep track of score is it something that is
-        *
-        *
-         */
 
     }
     public void showFinalResults(){}

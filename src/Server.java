@@ -14,8 +14,8 @@ public class Server {
 
                 ServerSideGame game = new ServerSideGame();
 
-                ServerSidePlayer player1 = new ServerSidePlayer(ss.accept(), "Player1", game);
-                ServerSidePlayer player2 = new ServerSidePlayer(ss.accept(), "Player2", game);
+                ServerSidePlayer player1 = new ServerSidePlayer(ss.accept(), "Player1", game, 0);
+                ServerSidePlayer player2 = new ServerSidePlayer(ss.accept(), "Player2", game,0);
 
                 player1.setOpponent(player2);
                 player2.setOpponent(player1);

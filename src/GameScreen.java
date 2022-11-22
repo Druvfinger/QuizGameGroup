@@ -12,10 +12,14 @@ public class GameScreen extends JFrame{
 
     Boolean isAnswerCorrect = false;
     Boolean isAnswered = false;
-
-    ServerSideGame game = new ServerSideGame();
     int currentQuestion = 0;
     int currentRound = 0;
+
+    public int getCurrentRound() {
+        return currentRound;
+    }
+
+    ServerSideGame game = new ServerSideGame();
 
     String question = "Här kommer det visas fråga";
     String userNameA = "Player A";

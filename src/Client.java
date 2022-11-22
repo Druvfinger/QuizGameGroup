@@ -17,8 +17,10 @@ public class Client extends JFrame implements ActionListener {
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
+    GameScreen gameScreen;
+    ResultsScreen resultsScreen;
 
-    JFrame frame = new JFrame("Quiz Game");
+   /* JFrame frame = new JFrame("Quiz Game");
     JPanel backpanel = new JPanel(new BorderLayout());
     JPanel headerPanel = new JPanel(new BorderLayout());
     JPanel centerHeaderPanel = new JPanel(new BorderLayout());
@@ -30,6 +32,7 @@ public class Client extends JFrame implements ActionListener {
     JButton submitUsernameButton = new JButton("Submit!");
     JTextField userNameTextField = new JTextField(15);
     JLabel usernamePromptLabel = new JLabel("Enter username:");
+    */
 
 
     public Client() throws IOException {
@@ -40,6 +43,7 @@ public class Client extends JFrame implements ActionListener {
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
 
+        /*
         infoLabel.setBackground(Color.white);
         backpanel.setBackground(Color.lightGray);
         userNamePanel.add(usernamePromptLabel);
@@ -54,6 +58,8 @@ public class Client extends JFrame implements ActionListener {
         frame.getContentPane().add(infoLabel, "South");
         frame.getContentPane().add(backpanel, "Center");
         continueButton.addActionListener(this);
+        */
+
 
 
 
@@ -63,21 +69,25 @@ public class Client extends JFrame implements ActionListener {
         String response;
         String player = "1";
         String opponentPlayer = "2";
+
+
         try {
             while (true) {
                 response = in.readLine();
                 if (response.startsWith("WELCOME")) {
-                    player = response.substring(8,response.length()-1);
-                    frame.setTitle("Quiz Game" + player);
                 }
-                if (response.equals("Waiting for opponent to connect")){
-                    infoLabel.setText("Waiting for opponent to connect");
+                else if (response.equals("Waiting for opponent to connect")){
                 }
-                if (response.equals("All players connected")){
-                    infoLabel.setText("All players connected");
+                else if (response.equals("All players connected")){
+                    out.println("start");
+                    gameScreen = new GameScreen();
                     game.chooseCategory();
-                    game.newRound();
-                    game.chooseCategory();
+                } else if (response.startsWith("SCORE")) {
+                    int score = Integer.parseInt(response.substring(5));
+                    int temp = gameScreen.currentRound;
+                    if (temp ==  1){
+                        //resultsScreen.player1ResultLabel.setText(score);
+                    }
 
                 }
             }
@@ -87,17 +97,20 @@ public class Client extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) throws IOException {
-        Client client = new Client();
+       /* Client client = new Client();
         client.frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         client.frame.setVisible(true);
         client.frame.setLocationRelativeTo(null);
         client.frame.setSize(500, 200);
-        client.play();
+        client.play();*/
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        GameScreen gameScreen = new GameScreen();
         game.newRound();
+    }
+    public void makeLabelForScoreEachRound(){
+        String name = "Round " +  gameScreen.getCurrentRound() + ": " + game.getCurrentPlayer().getCurrentScore();
+    //Try make label for scorekeeping
     }
 }
