@@ -2,12 +2,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class GameScreen extends JFrame{
     String answerA = "Svar A";
     String answerB = "Svar B";
     String answerC = "Svar C";
     String answerD = "Svar D";
+
+    Boolean isAnswerCorrect = false;
+    Boolean isAnswered = false;
+
+    ServerSideGame game = new ServerSideGame();
+    int currentQuestion = 0;// öka i ae för varje clickad knapp
+
     String question = "Här kommer det visas fråga";
     String userNameA = "Player A";
     String userNameB = "Player B";
@@ -32,6 +40,8 @@ public class GameScreen extends JFrame{
     JButton answerButtonC = new JButton(answerC);
     JButton answerButtonD = new JButton(answerD);
     JButton goOnButton = new JButton("Fortsätt");
+
+    List<JButton> buttonList = List.of(answerButtonA,answerButtonB,answerButtonC,answerButtonD);
 
     JLabel playerEmojiLabelA = new JLabel(new ImageIcon());
     JLabel playerEmojiLabelB = new JLabel(new ImageIcon());
@@ -105,6 +115,8 @@ public class GameScreen extends JFrame{
     ActionListener listener = new ActionListener() { // anonym klass
         @Override
         public void actionPerformed(ActionEvent e) {
+            currentQuestion++;
+            isAnswered = true;
         }
     };
 
