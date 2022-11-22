@@ -1,16 +1,16 @@
+import javax.management.StringValueExp;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.Properties;
 
 public class ServerSideGame {
-import javax.swing.*;
-
-public class ServerSideGame extends Thread {
 
     ServerSidePlayer currentPlayer;
     GameScreen gameScreen;
+    Database database;
 
     public boolean isWinner() {
         if (isLastRound() && isInTheLead()) ;
@@ -18,24 +18,23 @@ public class ServerSideGame extends Thread {
             return true;
         }
     }
-    public boolean isLastRound(){
-        return false;
-    }
-    public boolean isInTheLead(){
-        return false;
-    }
-    public void chooseCategory(){
 
+    public boolean isLastRound() {
+        int numRounds = getNumberOfRounds();
+        return gameScreen.currentRound == numRounds;
     }
-    public String getRandomQuestionFromCategory(){
-        return null;
+
+    public boolean isInTheLead() {
+        return false;
     }
 
     public void drawUpQuestion() {
         gameScreen = new GameScreen();
         for (int i = 0; i < 4; i++) {
             gameScreen.buttonList.get(i).setText(String.valueOf(getAnswers.get(i)));
-            gameScreen.questionLabel.setText(getRandomQuestionFromCategory());
+            gameScreen.questionLabel.setText(getQuestion());
+            gameScreen.repaint();
+            gameScreen.revalidate();
         }
     }
 
@@ -50,20 +49,33 @@ public class ServerSideGame extends Thread {
      * }
      */
 
-    public void newRound() { // repetera baserat på hur många frågor som inställda
-       //set isAnswered to true when new game is pressed
+    public void newRound() {
+        gameScreen.currentRound++;
         if (!isLastQuestion()) {
             newQuestion();
-        }
-        else if (isLastQuestion()){
+            gameScreen.currentQuestion++;
+        } else if (isLastQuestion()) {
             newQuestion();
             gameScreen.currentQuestion = 0;
-            ResultsScreen resultsScreen = new ResultsScreen();
+
         }
     }
 
+    public void chooseCategory() {
+        gameScreen.questionLabel.setText("What Category do you want to choose");
+        for (int i = 0; i < 4; i++) {
+            gameScreen.buttonList.get(i).setText(String.valueOf(database.getCategories()));
+            gameScreen.repaint();
+            gameScreen.revalidate();
+        }
+    }
+
+
     public void newQuestion() {
         while (gameScreen.isAnswered) {
+            if (gameScreen.isAnswerCorrect){
+                currentPlayer.score++; // funkar detta ?
+            }
             drawUpQuestion();
             gameScreen.isAnswered = false;
         }
@@ -84,6 +96,29 @@ public class ServerSideGame extends Thread {
             return Integer.parseInt(prop.getProperty("numberOfQuestions", "3"));
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public void showResults(){
+        /*
+        * How do we keep track of score is it something that is
+        *
+        *
+         */
+
+    }
+    public void showFinalResults(){}
+
+    public void gameTest(){
+        WelcomeScreen welcomeScreen = new WelcomeScreen();
+        if (!isLastRound()){
+            chooseCategory();
+            newRound();
+            showResults();
+        } else if (isLastRound()) {
+            chooseCategory();
+            newRound();
+            showFinalResults();
         }
     }
 }

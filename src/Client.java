@@ -75,6 +75,9 @@ public class Client extends JFrame implements ActionListener {
                 }
                 if (response.equals("All players connected")){
                     infoLabel.setText("All players connected");
+                    game.chooseCategory();
+                    game.newRound();
+                    game.chooseCategory();
 
                 }
             }

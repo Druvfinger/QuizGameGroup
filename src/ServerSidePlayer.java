@@ -14,11 +14,13 @@ public class ServerSidePlayer extends Thread {
     String player;
 
     ServerSideGame game;
+    int score;
 
-    public ServerSidePlayer(Socket socket, String player, ServerSideGame game) {
+    public ServerSidePlayer(Socket socket, String player, ServerSideGame game, int score) {
         this.socket = socket;
         this.player = player;
         this.game = game;
+        this.score = score;// testing this out for keeping track of score
         try {
 
             input = new BufferedReader(new InputStreamReader(socket.getInputStream()));

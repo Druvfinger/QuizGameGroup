@@ -14,7 +14,8 @@ public class GameScreen extends JFrame{
     Boolean isAnswered = false;
 
     ServerSideGame game = new ServerSideGame();
-    int currentQuestion = 0;// öka i ae för varje clickad knapp
+    int currentQuestion = 0;
+    int currentRound = 0;
 
     String question = "Här kommer det visas fråga";
     String userNameA = "Player A";
