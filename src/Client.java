@@ -12,6 +12,8 @@ public class Client extends JFrame implements ActionListener {
     protected final String host = "127.0.0.1";
     protected final int port = 54321;
 
+    ServerSideGame game;
+
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
@@ -73,8 +75,7 @@ public class Client extends JFrame implements ActionListener {
                 }
                 if (response.equals("All players connected")){
                     infoLabel.setText("All players connected");
-                    //give category and start game
-                    //maybe implement a game protocol
+
                 }
             }
         } catch (Exception e) {
@@ -93,6 +94,7 @@ public class Client extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        GameScreen gameScreen = new GameScreen();
+        game.newRound();
     }
 }
