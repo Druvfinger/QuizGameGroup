@@ -70,7 +70,7 @@ public class ServerSidePlayer extends Thread {
                 }
             }
         } catch (IOException e) {
-            System.out.println( player + " died: " + e);
+            System.out.println(player + " died: " + e);
         } finally {
             try {
                 socket.close();
@@ -79,4 +79,4 @@ public class ServerSidePlayer extends Thread {
             }
         }
     }
-    }
+}
