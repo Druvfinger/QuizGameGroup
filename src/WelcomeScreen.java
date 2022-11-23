@@ -113,6 +113,7 @@ public class WelcomeScreen extends JFrame implements ActionListener {
                 } else if (response.equals("All players connected")) {
                 } else if (response.equals("start")) {
                     game.newRound();
+                    System.out.println("Hit kom vi");
                 }
             }
         } catch (Exception e) {
@@ -130,7 +131,6 @@ public class WelcomeScreen extends JFrame implements ActionListener {
         if (e.getSource() == newGameButton) {
             if (userName != null) {
                 setVisible(false);
-                game.newRound();
                 out.println("start");
             } else JOptionPane.showMessageDialog(null, "Please enter your username before you proceed.");
         }
