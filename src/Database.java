@@ -7,6 +7,8 @@ public class Database {
     private int randIndex;
     private int indexAnswer;
 
+    private List<Integer> duplicates = List.of();
+
     private String currentCategory;
 
     List<String> categories = List.of("Technology", "Pop culture", "Geography", "Science");
@@ -123,7 +125,13 @@ public class Database {
     }
 
     public String getQuestion(){
-        randIndex = (int) (Math.random() * technologyQuestions.size());
+        while (true) {
+            randIndex = (int) (Math.random() * technologyQuestions.size());
+            if (!duplicates.contains(randIndex)) {
+                break;
+            }
+        }
+        duplicates.add(randIndex);
         if (currentCategory.equals("Technology")) {
             return technologyQuestions.get(randIndex);
         }
@@ -160,6 +168,7 @@ public class Database {
     }
 
     public void setQuestionCategory(String a) {
+        duplicates.clear();
         currentCategory = a;
     }
 
