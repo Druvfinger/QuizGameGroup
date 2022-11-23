@@ -33,9 +33,9 @@ public class ServerSideGame {
 
     public void drawUpQuestion() {
         gameScreen = new GameScreen();
+        gameScreen.questionLabel.setText(database.getQuestion());
         for (int i = 0; i < 4; i++) {
             gameScreen.buttonList.get(i).setText(String.valueOf(database.getAnswers().get(i)));
-            gameScreen.questionLabel.setText(database.getQuestion());
             gameScreen.repaint();
             gameScreen.revalidate();
         }
