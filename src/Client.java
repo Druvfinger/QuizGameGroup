@@ -88,7 +88,6 @@ public class Client extends JFrame implements ActionListener {
                     if (temp ==  1){
                         //resultsScreen.player1ResultLabel.setText(score);
                     }
-
                 }
             }
         } catch (Exception e) {
