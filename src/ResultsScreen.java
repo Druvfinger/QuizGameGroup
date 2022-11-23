@@ -27,7 +27,7 @@ public class ResultsScreen extends JFrame {
     JLabel playerEmojiLabelB;
     JLabel userNameLabelA;
     JLabel userNameLabelB = new JLabel("Player B");
-    JTextField infoField = new JTextField("Här kommer det skrivas ut info till användare",40);
+    JTextField infoField = new JTextField("Waiting for opponent",40);
     GameScreen gameScreen;
 
     ServerSideGame game;
@@ -39,7 +39,7 @@ public class ResultsScreen extends JFrame {
     ImageIcon image;
     ImageIcon image2;
     String userName = "Player A";
-    int numberOfCategories = game.getNumberOfRounds();
+    int numberOfCategories = 3;
     List<JLabel> listOfLabelsPlayerA = new LinkedList<>();
     List<JLabel> listOfLabelsPlayerB = new LinkedList<>();
 
@@ -76,6 +76,7 @@ public class ResultsScreen extends JFrame {
         goOnButton.setPreferredSize(new Dimension(250,40));
         goOnButton.setBorder(new LineBorder(Color.WHITE, 3));
         goOnButton.setBackground(LIGHT_GREEN);
+        goOnButton.setEnabled(false);
 
         goOnPanel.add(goOnButton);
         goOnPanel.add(infoField);

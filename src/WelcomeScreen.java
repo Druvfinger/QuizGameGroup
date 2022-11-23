@@ -25,7 +25,7 @@ public class WelcomeScreen extends JFrame implements ActionListener {
     JButton userNameSubmitButton = new JButton("Submit");
     JButton newGameButton = new JButton("New Game");
     private String userName;
-    ResultsScreen results;
+
     public static final Color LIGHT_BLUE = new Color(51, 153, 255);
     public static final Color VERY_LIGHT_BLUE = new Color(51, 204, 255);
     public static final Color VERY_LIGHT_GREEN = new Color(102, 255, 102);
@@ -106,11 +106,18 @@ public class WelcomeScreen extends JFrame implements ActionListener {
         try {
             while (true) {
                 response = in.readLine();
+                System.out.println(response + " C");
                 if (response.startsWith("WELCOME")) {
-                    player = response.substring(8, response.length() - 1);
-                    //frame.setTitle("Quiz Game" + player);
-                } else if (response.equals("Waiting for opponent to connect")) {
+                    player = response.substring(8);
+
                 } else if (response.equals("All players connected")) {
+                    resultsScreen.infoField.setText("All players connected");
+                    if (player.equals("Player1")) {
+                        resultsScreen.goOnButton.setEnabled(true);
+                    } else {
+                        resultsScreen.infoField.setText("Waiting for opponent to play the round");
+                    }
+
                 } else if (response.equals("start")) {
                     game.newRound();
                     System.out.println("Hit kom vi");
@@ -124,14 +131,17 @@ public class WelcomeScreen extends JFrame implements ActionListener {
 
     public static void main(String[] args) throws IOException {
         WelcomeScreen welcomeScreen = new WelcomeScreen();
+        welcomeScreen.play();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == newGameButton) {
             if (userName != null) {
+                resultsScreen = new ResultsScreen();
                 setVisible(false);
-                out.println("start");
+                out.println("READY");
+
             } else JOptionPane.showMessageDialog(null, "Please enter your username before you proceed.");
         }
         if (e.getSource() == userNameSubmitButton) {

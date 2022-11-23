@@ -32,7 +32,6 @@ public class ServerSidePlayer extends Thread {
             input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             output = new PrintWriter(socket.getOutputStream(), true);
             output.println("WELCOME " + player);
-            output.println("Waiting for opponent to connect");
 
 
         } catch (IOException e) {
@@ -51,22 +50,24 @@ public class ServerSidePlayer extends Thread {
 
     public void run(){
         try{
-            output.println("All players connected");
+
             while (true) {
                 String command = input.readLine();
-                if (command.equals("start")) {
-                    output.println("start");
+                System.out.println(command);
+                if (command.equals("READY")) {
+                    output.println("All players connected");
+
                     //output.println("SCORE" + game.currentPlayer.score);
 
-                    String username;
-                    if (command.contains("player")) { // ??
-                        username = command.replace("player ", "");
-                        this.player = username;
-                    } else if (command.equals("MOVE")) {
-                        System.out.println(player + " connected");
-                    } else {
-                        System.out.println("not yey"); // skriver ut ifall nåt skulle gå fel
-                    }
+//                    String username;
+//                    if (command.contains("player")) { // ??
+//                        username = command.replace("player ", "");
+//                        this.player = username;
+//                    } else if (command.equals("MOVE")) {
+//                        System.out.println(player + " connected");
+//                    } else {
+//                        System.out.println("not yey"); // skriver ut ifall nåt skulle gå fel
+//                    }
                 }
             }
         } catch (IOException e) {
