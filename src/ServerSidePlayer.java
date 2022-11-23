@@ -55,8 +55,8 @@ public class ServerSidePlayer extends Thread {
             while (true) {
                 String command = input.readLine();
                 if (command.equals("start")) {
-                    game.newRound();
-                    output.println("SCORE" + game.currentPlayer.score);
+                    output.println("start");
+                    //output.println("SCORE" + game.currentPlayer.score);
 
                     String username;
                     if (command.contains("player")) { // ??

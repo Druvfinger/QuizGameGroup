@@ -4,10 +4,15 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 
 public class WelcomeScreen extends JFrame implements ActionListener {
 
-    //klass för en välkomstskärmen
+    //klass för en välkomstskärmen (detta måste vara klient)
     JPanel backPanel = new JPanel(new BorderLayout());
     JPanel userPanel = new JPanel(new BorderLayout());
     JPanel emptyPanel = new JPanel();
@@ -35,7 +40,26 @@ public class WelcomeScreen extends JFrame implements ActionListener {
         this.userName = userName;
     }
 
-    public WelcomeScreen() {
+    protected final String host = "127.0.0.1";
+    protected final int port = 54321;
+
+    ServerSideGame game = new ServerSideGame();
+
+    private Socket socket;
+    private BufferedReader in;
+    private PrintWriter out;
+    GameScreen gameScreen;
+    ResultsScreen resultsScreen;
+
+    //String userName;
+
+    public WelcomeScreen() throws IOException {
+
+        socket = new Socket(host, port);
+        out = new PrintWriter(socket.getOutputStream(), true);
+        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+
         setTitle("QuizGame");
         add(backPanel);
         backPanel.add(userPanel, BorderLayout.NORTH);
@@ -75,7 +99,29 @@ public class WelcomeScreen extends JFrame implements ActionListener {
         setVisible(true);
     }
 
-    public static void main(String[] args) {
+    public void play() throws IOException {
+        String response;
+        String player = "1";
+        String opponentPlayer = "2";
+        try {
+            while (true) {
+                response = in.readLine();
+                if (response.startsWith("WELCOME")) {
+                    player = response.substring(8, response.length() - 1);
+                    //frame.setTitle("Quiz Game" + player);
+                } else if (response.equals("Waiting for opponent to connect")) {
+                } else if (response.equals("All players connected")) {
+                } else if (response.equals("start")) {
+                    game.newRound();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static void main(String[] args) throws IOException {
         WelcomeScreen welcomeScreen = new WelcomeScreen();
     }
 
@@ -84,7 +130,8 @@ public class WelcomeScreen extends JFrame implements ActionListener {
         if (e.getSource() == newGameButton) {
             if (userName != null) {
                 setVisible(false);
-                results = new ResultsScreen();
+                game.newRound();
+                out.println("start");
             } else JOptionPane.showMessageDialog(null, "Please enter your username before you proceed.");
         }
         if (e.getSource() == userNameSubmitButton) {

@@ -1,11 +1,6 @@
-import com.sun.source.tree.UsesTree;
-
-import javax.management.StringValueExp;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.List;
 import java.util.Properties;
 
 public class ServerSideGame {
@@ -13,6 +8,16 @@ public class ServerSideGame {
     ServerSidePlayer currentPlayer;
     GameScreen gameScreen;
     Database database;
+
+    Boolean isAnswerCorrect = false;
+    Boolean isAnswered = false;
+    int currentQuestion = 0;
+    int currentRound = 0;
+
+    public int getCurrentRound() {
+        return currentRound;
+    }
+
 
 
     public boolean isWinner() {
@@ -24,7 +29,7 @@ public class ServerSideGame {
 
     public boolean isLastRound() {
         int numRounds = getNumberOfRounds();
-        return gameScreen.currentRound == numRounds;
+        return currentRound == numRounds;
     }
 
     public boolean isInTheLead() {
@@ -32,7 +37,7 @@ public class ServerSideGame {
     }
 
     public void drawUpQuestion() {
-        gameScreen = new GameScreen();
+        //gameScreen = new GameScreen();
         gameScreen.questionLabel.setText(database.getQuestion());
         for (int i = 0; i < 4; i++) {
             gameScreen.buttonList.get(i).setText(String.valueOf(database.getAnswers().get(i)));
@@ -43,7 +48,7 @@ public class ServerSideGame {
 
     public Boolean isLastQuestion() {
         int numQuestions = getNumberOfQuestions();
-        return gameScreen.currentQuestion == numQuestions; // true if currentQuestion == numQuestions
+        return currentQuestion == numQuestions; // true if currentQuestion == numQuestions
     }
 
     /* actionperformed
@@ -52,14 +57,15 @@ public class ServerSideGame {
      * }
      */
 
-    public void newRound() {
-        gameScreen.currentRound++;
+    public void newRound() { // should this be synchronized??
+        gameScreen = new GameScreen();
+        currentRound++;
         if (!isLastQuestion()) {
             newQuestion();
-            gameScreen.currentQuestion++;
+            currentQuestion++;
         } else if (isLastQuestion()) {
             newQuestion();
-            gameScreen.currentQuestion = 0;
+            currentQuestion = 0;
             currentPlayer.currentScore = 0; // sätts den om innan vi får tag på den ?
         }
     }
@@ -79,13 +85,13 @@ public class ServerSideGame {
     }
 
     public void newQuestion() {
-        while (gameScreen.isAnswered) {
+        while (isAnswered) {
             drawUpQuestion();
-            if (gameScreen.isAnswerCorrect){
+            if (isAnswerCorrect) {
                 currentPlayer.score++; // funkar detta ?
                 currentPlayer.currentScore++;
             }
-            gameScreen.isAnswered = false;
+            isAnswered = false;
         }
     }
 
@@ -107,14 +113,16 @@ public class ServerSideGame {
         }
     }
 
-    public void showResults(){
+    public void showResults() {
 
     }
-    public void showFinalResults(){}
 
-    public void gameTest(){
+    public void showFinalResults() {
+    }
+
+    public void gameTest() throws IOException {
         WelcomeScreen welcomeScreen = new WelcomeScreen();
-        if (!isLastRound()){
+        if (!isLastRound()) {
             chooseCategory();
             newRound();
             showResults();
@@ -125,4 +133,5 @@ public class ServerSideGame {
         }
     }
 }
+
 

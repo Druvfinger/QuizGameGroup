@@ -15,15 +15,6 @@ public class GameScreen extends JFrame{
     String answerC = "Svar C";
     String answerD = "Svar D";
 
-    Boolean isAnswerCorrect = false;
-    Boolean isAnswered = false;
-    int currentQuestion = 0;
-    int currentRound = 0;
-
-    public int getCurrentRound() {
-        return currentRound;
-    }
-
     ServerSideGame game = new ServerSideGame();
 
     String question = "Här kommer det visas fråga";
@@ -141,8 +132,8 @@ public class GameScreen extends JFrame{
     ActionListener listener = new ActionListener() { // anonym klass
         @Override
         public void actionPerformed(ActionEvent e) {
-            currentQuestion++;
-            isAnswered = true;
+            game.currentQuestion++;
+            game.isAnswered = true;
         }
     };
 

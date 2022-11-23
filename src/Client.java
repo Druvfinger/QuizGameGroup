@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class Client extends JFrame implements ActionListener {
+/*public class Client extends JFrame implements ActionListener {
     protected final String host = "127.0.0.1";
     protected final int port = 54321;
 
@@ -84,19 +84,17 @@ public class Client extends JFrame implements ActionListener {
                 response = in.readLine();
                 if (response.startsWith("WELCOME")) {
                     player = response.substring(8,response.length()-1);
-                    frame.setTitle("Quiz Game" + player);
+                    //frame.setTitle("Quiz Game" + player);
                 }
                 else if (response.equals("Waiting for opponent to connect")){
                 }
                 else if (response.equals("All players connected")){
-                    out.println("start");
-                    gameScreen = new GameScreen();
                 } else if (response.startsWith("SCORE")) {
                     int temp = gameScreen.currentRound;
                     int score = Integer.parseInt(response.substring(5));
-                    if (){}
+                    //if (){}
                     if (temp ==  1){
-                        resultsScreen.p1r1.setText(score);
+                        //resultsScreen.p1r1.setText(score);
                     }
                 }
             }
@@ -130,8 +128,4 @@ public class Client extends JFrame implements ActionListener {
             System.out.println(userName + " is connected.");
         }
         }
-    public void makeLabelForScoreEachRound(){
-        String name = "Round " +  gameScreen.getCurrentRound() + ": " + game.getCurrentPlayer().getCurrentScore();
-        //Try make label for scorekeeping
-    }
-}
+}*/
