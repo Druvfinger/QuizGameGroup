@@ -1,7 +1,12 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class GameScreen extends JFrame{
     String answerA = "Svar A";
@@ -25,7 +30,7 @@ public class GameScreen extends JFrame{
     JPanel lowerPanel = new JPanel();
     JPanel lowerNorthPanel = new JPanel(new GridLayout(1,2,10,10));
     JPanel lowerCenterPanel = new JPanel(new GridLayout(1,2,10,10));
-    JPanel lowerSouthPanel = new JPanel(new GridLayout(2,1));
+    JPanel lowerSouthPanel = new JPanel();
 
     JButton answerButtonA = new JButton(answerA);
     JButton answerButtonB = new JButton(answerB);
@@ -39,14 +44,19 @@ public class GameScreen extends JFrame{
     JLabel categoryTextLabel = new JLabel();
     JPanel userNamePointsPanelA = new JPanel(new BorderLayout());
     JPanel userNamePointsPanelB = new JPanel(new BorderLayout());
+    JTextField infoField = new JTextField("Här kommer det skrivas ut info till användare",40);
+
+    public static final Color LIGHT_BLUE = new Color(51,153,255);
+    public static final Color VERY_LIGHT_BLUE = new Color(51,204,255);
+    public static final Color LIGHT_GREEN = new Color(0, 255, 51);
 
     public GameScreen(){
         setTitle("QuizGame");
         add(basePanel);
         basePanel.add(upperPanel);
-        upperPanel.setBackground(Color.pink); // hjälpverktyg
+        upperPanel.setBackground(LIGHT_BLUE); // hjälpverktyg
         basePanel.add(lowerPanel);
-        lowerPanel.setBackground(Color.CYAN); // hjälpverktyg
+        lowerPanel.setBackground(LIGHT_BLUE); // hjälpverktyg
 
         lowerPanel.setLayout(new BoxLayout(lowerPanel, BoxLayout.Y_AXIS));
 
@@ -57,9 +67,15 @@ public class GameScreen extends JFrame{
         lowerPanel.add(Box.createRigidArea(new Dimension(1,5)));
         lowerPanel.add(lowerSouthPanel);
 
-        lowerNorthPanel.setBackground(Color.CYAN);// hjälpverktyg
-        lowerCenterPanel.setBackground(Color.CYAN);// hjälpverktyg
-        lowerSouthPanel.setBackground(Color.LIGHT_GRAY);// hjälpverktyg
+        lowerNorthPanel.setBackground(LIGHT_BLUE);// hjälpverktyg
+        lowerCenterPanel.setBackground(LIGHT_BLUE);// hjälpverktyg
+        lowerSouthPanel.setBackground(LIGHT_BLUE);// hjälpverktyg
+        emptyPanel.setBackground(LIGHT_BLUE);
+        emptyPanel.setPreferredSize(new Dimension(400,25));
+
+        goOnButton.setPreferredSize(new Dimension(250,40));
+        goOnButton.setBorder(new LineBorder(Color.WHITE, 3));
+        goOnButton.setBackground(LIGHT_GREEN);
 
         lowerNorthPanel.add(answerButtonA);
         lowerNorthPanel.add(answerButtonB);
@@ -67,10 +83,11 @@ public class GameScreen extends JFrame{
         lowerCenterPanel.add(answerButtonD);
         lowerSouthPanel.add(emptyPanel);
         lowerSouthPanel.add(goOnButton);
+        lowerSouthPanel.add(infoField);
 
-        leftUserInfoPanel.setBackground(Color.LIGHT_GRAY);//hjälpverktyg
-        categoryInfoPanel.setBackground(Color.PINK);//hjälpverktyg
-        rightUserInfoPanel.setBackground(Color.LIGHT_GRAY);//hjälpverktyg
+        leftUserInfoPanel.setBackground(Color.WHITE);//hjälpverktyg
+        categoryInfoPanel.setBackground(LIGHT_BLUE);//hjälpverktyg
+        rightUserInfoPanel.setBackground(Color.WHITE);//hjälpverktyg
         questionLabel.setOpaque(true);
         questionLabel.setBackground(Color.WHITE);
 
@@ -88,7 +105,11 @@ public class GameScreen extends JFrame{
         rightUserInfoPanel.add(playerEmojiLabelB);
         rightUserInfoPanel.add(userNamePointsPanelB);
 
-        goOnButton.setVisible(false); // sätta till synlig när man har spelat klart tre rundor
+        //goOnButton.setVisible(false); // sätta till synlig när man har spelat klart tre rundor
+
+        //questionLabel.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
+        //questionLabel.setBorder(new CompoundBorder(new LineBorder(Color.WHITE,10), new EtchedBorder(EtchedBorder.RAISED)));
+        questionLabel.setBorder(new CompoundBorder(new LineBorder(LIGHT_BLUE,10), new EtchedBorder(EtchedBorder.RAISED)));
 
         answerButtonA.addActionListener(listener);
         answerButtonB.addActionListener(listener);
@@ -107,6 +128,18 @@ public class GameScreen extends JFrame{
         public void actionPerformed(ActionEvent e) {
         }
     };
+
+    public ImageIcon setSizeToFitLabel(JLabel label, String imagePath){
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(new File(imagePath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Image resizedImage = image.getScaledInstance(label.getWidth(), label.getHeight(),
+                Image.SCALE_SMOOTH);
+        return new ImageIcon(resizedImage);
+    }
 
     public static void main(String[] args) {
         GameScreen game = new GameScreen();
