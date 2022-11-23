@@ -84,9 +84,9 @@ public class ResultsScreen extends JFrame {
         image = new ImageIcon("C:\\Users\\46762\\Desktop\\Pictures\\CuteHipster.png");
         image2 = new ImageIcon("C:\\Users\\46762\\Desktop\\Pictures\\CuteHeadphones.png");
 
-        leftPlayerAnswersPanel = createDesiredNumberOfLabels(leftPlayerAnswersPanel,numberOfCategories);
-        rightPlayerAnswersPanel = createDesiredNumberOfLabels(rightPlayerAnswersPanel,numberOfCategories);
-        middleCategoryPanel = createDesiredNumberOfLabels(middleCategoryPanel,numberOfCategories);
+        leftPlayerAnswersPanel = createDesiredNumberOfLabels(leftPlayerAnswersPanel);
+        rightPlayerAnswersPanel = createDesiredNumberOfLabels(rightPlayerAnswersPanel);
+        middleCategoryPanel = createDesiredNumberOfLabels(middleCategoryPanel);
 
         leftPlayerPanel.add(leftUserInfoPanel, BorderLayout.NORTH);
         leftPlayerPanel.add(leftPlayerAnswersPanel, BorderLayout.CENTER);
