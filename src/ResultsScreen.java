@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ResultsScreen extends JFrame {
     String theirTurn = "Deras tur"; //översta panel
@@ -35,7 +37,11 @@ public class ResultsScreen extends JFrame {
     ImageIcon image;
     ImageIcon image2;
     String userName = "Player A";
-    int numberOfCategories = 5;
+    int numberOfCategories = 3;
+    List<JLabel> listOfLabelsPlayerA = new LinkedList<>();
+    List<JLabel> listOfLabelsPlayerB = new LinkedList<>();
+
+
 
     public ResultsScreen(){
         setTitle("QuizGame");
@@ -150,6 +156,7 @@ public class ResultsScreen extends JFrame {
             label.setBackground(LIGHT_BLUE);
             label.setBorder(new LineBorder(VERY_LIGHT_BLUE,1));
             panelToFill.add(label);
+            listOfLabelsPlayerA.add(label);
         }
         return panelToFill;
     }

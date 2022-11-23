@@ -46,9 +46,8 @@ public class ServerSidePlayer extends Thread {
     }
 
 
-
-    public void run(){
-        try{
+    public void run() {
+        try {
             output.println("All players connected");
             while (true) {
                 String command = input.readLine();
@@ -68,7 +67,7 @@ public class ServerSidePlayer extends Thread {
                 }
             }
         } catch (IOException e) {
-            System.out.println( player + " died: " + e);
+            System.out.println(player + " died: " + e);
         } finally {
             try {
                 socket.close();
@@ -77,4 +76,4 @@ public class ServerSidePlayer extends Thread {
             }
         }
     }
-    }
+}
