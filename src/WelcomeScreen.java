@@ -5,35 +5,27 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class WelcomeScreen extends JFrame implements ActionListener {
+public class WelcomeScreen extends JFrame {
 
-    //klass för en välkomstskärmen
+    //klass för en välkomstskärm
     JPanel backPanel = new JPanel(new BorderLayout());
     JPanel userPanel = new JPanel(new BorderLayout());
     JPanel emptyPanel = new JPanel();
-    JLabel welcomeText = new JLabel("Welcome to our Quiz Game!");
-    //JLabel emojiLabel = new JLabel(new ImageIcon("C:\\Users\\46762\\Desktop\\Pictures\\BlueFaceSmileSuddig.png"));
-    JLabel emojiLabel = new JLabel(new ImageIcon("C:\\Users\\46762\\Desktop\\Pictures\\YellowSmart.png"));
+    JLabel welcomeText = new JLabel("Welcome to our Quiz Game!", SwingConstants.CENTER);
+    JLabel emojiLabel = new JLabel(new ImageIcon("Pictures/YellowSmart.png"));
     JPanel userNamePanel = new JPanel(new GridLayout(1, 3));
-    JLabel userNameLabel = new JLabel("Write your username:");
+    JLabel userNameLabel = new JLabel("Write your username:", SwingConstants.CENTER);
     JTextField userNameTextField = new JTextField(20);
     JButton userNameSubmitButton = new JButton("Submit");
     JButton newGameButton = new JButton("New Game");
-    private String userName;
-    ResultsScreen results;
+    static String userName;
+    static String quizTitle;
+    ChooseCategoryScreen categoryScreen;
     public static final Color LIGHT_BLUE = new Color(51, 153, 255);
     public static final Color VERY_LIGHT_BLUE = new Color(51, 204, 255);
     public static final Color VERY_LIGHT_GREEN = new Color(102, 255, 102);
     public static final Color LIGHT_GREEN = new Color(0, 255, 51);
     public static final Color GOLD = new Color(255, 204, 51);
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
 
     public WelcomeScreen() {
         setTitle("QuizGame");
@@ -46,8 +38,6 @@ public class WelcomeScreen extends JFrame implements ActionListener {
         userPanel.add(emojiLabel, BorderLayout.CENTER);
         userPanel.add(userNamePanel, BorderLayout.SOUTH);
 
-        welcomeText.setVerticalAlignment(SwingConstants.CENTER);
-        welcomeText.setHorizontalAlignment(SwingConstants.CENTER);
         welcomeText.setForeground(GOLD);
         welcomeText.setFont(new Font("Sans Serif", Font.BOLD, 20));
 
@@ -66,8 +56,8 @@ public class WelcomeScreen extends JFrame implements ActionListener {
         newGameButton.setBorder(new LineBorder(Color.WHITE, 5));
         newGameButton.setBackground(VERY_LIGHT_BLUE);
 
-        userNameSubmitButton.addActionListener(this);
-        newGameButton.addActionListener(this);
+        userNameSubmitButton.addActionListener(listener);
+        newGameButton.addActionListener(listener);
 
         setSize(410, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -75,29 +65,35 @@ public class WelcomeScreen extends JFrame implements ActionListener {
         setVisible(true);
     }
 
+    ActionListener listener = new ActionListener() { // anonym klass
+        public void actionPerformed(ActionEvent e) {
+            if (e.getSource() == newGameButton) {
+                if (userName != null) {
+                    setVisible(false);
+                    categoryScreen = new ChooseCategoryScreen();
+                } else JOptionPane.showMessageDialog(null, "Please enter your username before you proceed.");
+            }
+            if (e.getSource() == userNameSubmitButton) {
+                userName = userNameTextField.getText();
+                GameScreen.userName = userName;
+                ResultsScreen.userName = userName;
+                quizTitle = "Quiz Game " + userName;
+                ChooseCategoryScreen.quizTitle = quizTitle;
+                GameScreen.quizTitle = quizTitle;
+                ResultsScreen.quizTitle = quizTitle;
+                userNamePanel.removeAll();
+                userNameLabel.setText("Welcome " + userName + " and Good Luck!");
+                userNameLabel.setFont(new Font("Sans Serif", Font.PLAIN, 20));
+                userNameLabel.setBorder(new EmptyBorder(2, 20, 5, 20));
+                userNamePanel.add(userNameLabel);
+                userNamePanel.revalidate();
+                System.out.println(userName + " is connected.");
+            }
+        }
+    };
+
+
     public static void main(String[] args) {
         WelcomeScreen welcomeScreen = new WelcomeScreen();
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == newGameButton) {
-            if (userName != null) {
-                setVisible(false);
-                results = new ResultsScreen();
-            } else JOptionPane.showMessageDialog(null, "Please enter your username before you proceed.");
-        }
-        if (e.getSource() == userNameSubmitButton) {
-            userName = userNameTextField.getText();
-            userNamePanel.removeAll();
-            userNameLabel.setText("Welcome " + userName + " and Good Luck!");
-            userNameLabel.setVerticalAlignment(SwingConstants.CENTER);
-            userNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            userNameLabel.setFont(new Font("Sans Serif", Font.PLAIN, 20));
-            userNameLabel.setBorder(new EmptyBorder(2, 20, 5, 20));
-            userNamePanel.add(userNameLabel);
-            userNamePanel.revalidate();
-            System.out.println(userName + " is connected.");
-        }
     }
 }

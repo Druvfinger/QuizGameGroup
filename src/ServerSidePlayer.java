@@ -10,17 +10,17 @@ public class ServerSidePlayer extends Thread {
     Socket socket;
     BufferedReader input;
     PrintWriter output;
-
     String player;
 
-    ServerSideGame game;
+    ServerSideGame game; // protokoll
     int score;
+
+    int currentScore = 0;
 
     public int getCurrentScore() {
         return currentScore;
     }
 
-    int currentScore = 0;
 
     public ServerSidePlayer(Socket socket, String player, ServerSideGame game, int score) {
         this.socket = socket;
@@ -31,15 +31,15 @@ public class ServerSidePlayer extends Thread {
 
             input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             output = new PrintWriter(socket.getOutputStream(), true);
-            output.println("WELCOME " + player);
-            output.println("Waiting for opponent to connect");
+            output.println("WELCOME " + player); // skickas till klienten
+            output.println("Waiting for opponent to connect"); // skickas till klienten
+            System.out.println("Waiting for opponent to connect.");
 
 
         } catch (IOException e) {
             System.out.println("Player died: " + e);
         }
     }
-
 
     public void setOpponent(ServerSidePlayer opponent) {
         this.opponent = opponent;
@@ -49,7 +49,8 @@ public class ServerSidePlayer extends Thread {
     public void run() {
         try {
             output.println("All players connected");
-            while (true) {
+            System.out.println("All players connected");
+            /*while (true) {
                 String command = input.readLine();
                 if (command.equals("start")) {
                     game.newRound();
@@ -67,7 +68,7 @@ public class ServerSidePlayer extends Thread {
                 }
             }
         } catch (IOException e) {
-            System.out.println(player + " died: " + e);
+            System.out.println(player + " died: " + e);*/
         } finally {
             try {
                 socket.close();

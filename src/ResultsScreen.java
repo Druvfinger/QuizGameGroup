@@ -11,9 +11,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ResultsScreen extends JFrame {
-    String theirTurn = "Deras tur"; //översta panel
     JPanel basePanel = new JPanel(new BorderLayout());
-    JLabel theirTurnLabel = new JLabel(theirTurn);
+    JLabel theirTurnLabel = new JLabel("Deras tur",SwingConstants.CENTER);
     JPanel goOnPanel = new JPanel();
     JButton goOnButton = new JButton("Fortsätt");
     JPanel leftPlayerPanel = new JPanel(new BorderLayout());
@@ -26,9 +25,11 @@ public class ResultsScreen extends JFrame {
     JLabel playerEmojiLabelA;
     JLabel playerEmojiLabelB;
     JLabel userNameLabelA;
-    JLabel userNameLabelB = new JLabel("Player B");
+    JLabel userNameLabelB = new JLabel("Player B",SwingConstants.CENTER );
     JTextField infoField = new JTextField("Här kommer det skrivas ut info till användare",40);
-    GameScreen game;
+    GameScreen gameScreen;
+    ServerSideGame game;
+    static String quizTitle;
     public static final Color LIGHT_BLUE = new Color(51,153,255);
     public static final Color VERY_LIGHT_BLUE = new Color(51,204,255);
     public static final Color VERY_LIGHT_GREEN = new Color(102,255,102);
@@ -36,15 +37,16 @@ public class ResultsScreen extends JFrame {
     public static final Color GOLD = new Color(255,204, 51);
     ImageIcon image;
     ImageIcon image2;
-    String userName = "Player A";
-    int numberOfCategories = 3;
+    static String userName = "David"; // testName
+    //int numberOfCategories = game.getNumberOfRounds();
+    int numberOfCategories = 5;
     List<JLabel> listOfLabelsPlayerA = new LinkedList<>();
     List<JLabel> listOfLabelsPlayerB = new LinkedList<>();
 
 
 
     public ResultsScreen(){
-        setTitle("QuizGame");
+        setTitle(quizTitle);
         add(basePanel);
 
         theirTurnLabel.setPreferredSize(new Dimension(300,75));
@@ -55,8 +57,6 @@ public class ResultsScreen extends JFrame {
         leftUserInfoPanel.setPreferredSize(new Dimension(110,125));
         rightUserInfoPanel.setPreferredSize(new Dimension(110,125));
 
-        theirTurnLabel.setVerticalAlignment(SwingConstants.CENTER);
-        theirTurnLabel.setHorizontalAlignment(SwingConstants.CENTER);
         theirTurnLabel.setForeground(GOLD);
         theirTurnLabel.setFont(new Font("Sans Serif", Font.BOLD,25));
 
@@ -85,8 +85,8 @@ public class ResultsScreen extends JFrame {
 
         //image = getRandomImageIcon();
         //image2 = getRandomImageIcon();
-        image = new ImageIcon("C:\\Users\\46762\\Desktop\\Pictures\\CuteHipster.png");
-        image2 = new ImageIcon("C:\\Users\\46762\\Desktop\\Pictures\\CuteHeadphones.png");
+        image = new ImageIcon("Pictures/CuteHipster.png");
+        image2 = new ImageIcon("Pictures/CuteHeadphones.png");
 
         leftPlayerAnswersPanel = createDesiredNumberOfLabels(leftPlayerAnswersPanel,numberOfCategories);
         rightPlayerAnswersPanel = createDesiredNumberOfLabels(rightPlayerAnswersPanel,numberOfCategories);
@@ -98,9 +98,7 @@ public class ResultsScreen extends JFrame {
         rightPlayerPanel.add(rightPlayerAnswersPanel, BorderLayout.CENTER);
 
         playerEmojiLabelA = new JLabel(image);
-        userNameLabelA = new JLabel(userName);
-        userNameLabelA.setVerticalAlignment(SwingConstants.CENTER);
-        userNameLabelA.setHorizontalAlignment(SwingConstants.CENTER);
+        userNameLabelA = new JLabel(userName,SwingConstants.CENTER);
         userNameLabelA.setForeground(Color.WHITE);
         userNameLabelA.setFont(new Font("Sans Serif", Font.PLAIN, 20));
         playerEmojiLabelA.setOpaque(true);
@@ -112,8 +110,6 @@ public class ResultsScreen extends JFrame {
         leftUserInfoPanel.add(userNameLabelA, BorderLayout.SOUTH);
 
         playerEmojiLabelB = new JLabel(image2);
-        userNameLabelB.setVerticalAlignment(SwingConstants.CENTER);
-        userNameLabelB.setHorizontalAlignment(SwingConstants.CENTER);
         userNameLabelB.setForeground(Color.WHITE);
         userNameLabelB.setFont(new Font("Sans Serif", Font.PLAIN, 20));
         playerEmojiLabelB.setOpaque(true);
@@ -126,7 +122,7 @@ public class ResultsScreen extends JFrame {
 
         goOnButton.addActionListener(listener);
 
-        setSize(400,600);
+        setSize(410,600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
@@ -137,7 +133,7 @@ public class ResultsScreen extends JFrame {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == goOnButton){
                 setVisible(false);
-                game = new GameScreen();
+                gameScreen = new GameScreen();
             }
         }
     };

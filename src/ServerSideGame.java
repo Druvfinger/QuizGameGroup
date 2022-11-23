@@ -1,10 +1,8 @@
-import com.sun.source.tree.UsesTree;
 
-import javax.management.StringValueExp;
+import javax.swing.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Properties;
 
@@ -12,7 +10,7 @@ public class ServerSideGame {
 
     ServerSidePlayer currentPlayer;
     GameScreen gameScreen;
-    Database database;
+    Database database = new Database();
 
 
     public boolean isWinner() {
@@ -31,13 +29,12 @@ public class ServerSideGame {
         return false;
     }
 
-    public void drawUpQuestion() {
-        gameScreen = new GameScreen();
-        gameScreen.questionLabel.setText(database.getQuestion());
+    public void drawUpQuestion(JLabel questionLabel, List<JButton> buttonList) {
+        questionLabel.setText(database.getQuestion());
         for (int i = 0; i < 4; i++) {
-            gameScreen.buttonList.get(i).setText(String.valueOf(database.getAnswers().get(i)));
-            gameScreen.repaint();
-            gameScreen.revalidate();
+            buttonList.get(i).setText(String.valueOf(database.getAnswers().get(i)));
+            /*gameScreen.repaint();
+            gameScreen.revalidate();*/
         }
     }
 
@@ -80,7 +77,7 @@ public class ServerSideGame {
 
     public void newQuestion() {
         while (gameScreen.isAnswered) {
-            drawUpQuestion();
+            //drawUpQuestion();
             if (gameScreen.isAnswerCorrect){
                 currentPlayer.score++; // funkar detta ?
                 currentPlayer.currentScore++;

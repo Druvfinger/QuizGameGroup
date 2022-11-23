@@ -1,4 +1,6 @@
+import javax.swing.*;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Database {
@@ -124,34 +126,34 @@ public class Database {
 
     public String getQuestion(){
         randIndex = (int) (Math.random() * technologyQuestions.size());
-        if (currentCategory.equals("Technology")) {
+        if (GameScreen.currentCategory.equals("Technology")) {
             return technologyQuestions.get(randIndex);
         }
-        else if (currentCategory.equals("Pop culture")) {
+        else if (GameScreen.currentCategory.equals("Pop culture")) {
             return popcoultureQuestions.get(randIndex);
         }
-        else if (currentCategory.equals("Geography")) {
+        else if (GameScreen.currentCategory.equals("Geography")) {
             return geographyQuestions.get(randIndex);
         }
-        else if (currentCategory.equals("Science")) {
+        else if (GameScreen.currentCategory.equals("Science")) {
             return scienceQuestions.get(randIndex);
         }
         return null;
     }
 
     public List<String> getAnswers() {
-        List<String> answers = List.of();
+        List<String> answers = new LinkedList<>();
         for (int i = randIndex; i < (randIndex + 4); i++) {
-            if (currentCategory.equals("Technology")) {
+            if (GameScreen.currentCategory.equals("Technology")) {
                 answers.add(technologyAnswers.get(i));
             }
-            else if (currentCategory.equals("Pop culture")) {
+            else if (GameScreen.currentCategory.equals("Pop culture")) {
                 answers.add(popcultureAnswers.get(i));
             }
-            else if (currentCategory.equals("Geography")) {
+            else if (GameScreen.currentCategory.equals("Geography")) {
                 answers.add(geographyAnswers.get(i));
             }
-            else if (currentCategory.equals("Science")) {
+            else if (GameScreen.currentCategory.equals("Science")) {
                 answers.add(scienceAnswers.get(i));
             }
         }
@@ -164,16 +166,16 @@ public class Database {
     }
 
     public String getCorrectAnswer() {
-        if (currentCategory.equals("Technology")) {
+        if (GameScreen.currentCategory.equals("Technology")) {
             return technologyAnswers.get(4 * randIndex);
         }
-        else if (currentCategory.equals("Pop culture")) {
+        else if (GameScreen.currentCategory.equals("Pop culture")) {
             return popcultureAnswers.get(4 * randIndex);
         }
-        else if (currentCategory.equals("Geography")) {
+        else if (GameScreen.currentCategory.equals("Geography")) {
             return geographyAnswers.get(4 * randIndex);
         }
-        else if (currentCategory.equals("Science")) {
+        else if (GameScreen.currentCategory.equals("Science")) {
             return scienceAnswers.get(4 * randIndex);
         }
         return null;
