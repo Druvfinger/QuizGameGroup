@@ -45,6 +45,8 @@ public class ServerSidePlayer extends Thread {
         this.opponent = opponent;
     }
 
+
+
     public void run(){
         try{
             output.println("All players connected");
@@ -53,13 +55,20 @@ public class ServerSidePlayer extends Thread {
                 if (command.equals("start")){
                     game.newRound();
                     output.println("SCORE" + game.currentPlayer.score);
+
+                String username;
+                if (command.contains("player")){
+                    username = command.replace("player ", "");
+                    this.player = username;
+                }else if (command.equals("MOVE")){
+                    System.out.println(player + " connected");
                 }else {
                     System.out.println("not yey"); // skriver ut ifall nåt skulle gå fel
                 }
             }
         } catch (IOException e) {
-            System.out.println("Player died: " + e);
-        }finally {
+            System.out.println( player + " died: " + e);
+        } finally {
             try {
                 socket.close();
             } catch (IOException e) {

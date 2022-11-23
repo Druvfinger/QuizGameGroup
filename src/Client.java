@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,7 +22,9 @@ public class Client extends JFrame implements ActionListener {
     GameScreen gameScreen;
     ResultsScreen resultsScreen;
 
-   /* JFrame frame = new JFrame("Quiz Game");
+    String userName;
+
+    JFrame frame = new JFrame("Quiz Game");
     JPanel backpanel = new JPanel(new BorderLayout());
     JPanel headerPanel = new JPanel(new BorderLayout());
     JPanel centerHeaderPanel = new JPanel(new BorderLayout());
@@ -32,7 +36,6 @@ public class Client extends JFrame implements ActionListener {
     JButton submitUsernameButton = new JButton("Submit!");
     JTextField userNameTextField = new JTextField(15);
     JLabel usernamePromptLabel = new JLabel("Enter username:");
-    */
 
 
     public Client() throws IOException {
@@ -43,12 +46,12 @@ public class Client extends JFrame implements ActionListener {
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
 
-        /*
         infoLabel.setBackground(Color.white);
         backpanel.setBackground(Color.lightGray);
         userNamePanel.add(usernamePromptLabel);
         userNamePanel.add(userNameTextField);
-        submitUsernameButton.addActionListener(e ->{out.println("MOVE");});
+        submitUsernameButton.setEnabled(false);
+        submitUsernameButton.addActionListener(this);
         userNamePanel.add(submitUsernameButton);
         backpanel.add(userNamePanel,BorderLayout.WEST);
         headerPanel.add(headerLabel,BorderLayout.NORTH);
@@ -58,10 +61,17 @@ public class Client extends JFrame implements ActionListener {
         frame.getContentPane().add(infoLabel, "South");
         frame.getContentPane().add(backpanel, "Center");
         continueButton.addActionListener(this);
-        */
-
-
-
+        userNameTextField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (userNameTextField.getText().equals("")) {
+                    submitUsernameButton.setEnabled(false);
+                } else {
+                    submitUsernameButton.setEnabled(true);
+                    frame.repaint();
+                }
+            }
+        });
 
     }
 
@@ -69,12 +79,12 @@ public class Client extends JFrame implements ActionListener {
         String response;
         String player = "1";
         String opponentPlayer = "2";
-
-
         try {
             while (true) {
                 response = in.readLine();
                 if (response.startsWith("WELCOME")) {
+                    player = response.substring(8,response.length()-1);
+                    frame.setTitle("Quiz Game" + player);
                 }
                 else if (response.equals("Waiting for opponent to connect")){
                 }
@@ -96,20 +106,32 @@ public class Client extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) throws IOException {
-       /* Client client = new Client();
+        Client client = new Client();
         client.frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         client.frame.setVisible(true);
         client.frame.setLocationRelativeTo(null);
         client.frame.setSize(500, 200);
-        client.play();*/
+        client.play();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         game.newRound();
-    }
+        if (e.getSource() == submitUsernameButton) {
+            userName = userNameTextField.getText();
+            userNamePanel.removeAll();
+            usernamePromptLabel.setText(userName);
+            usernamePromptLabel.setVerticalAlignment(SwingConstants.CENTER);
+            usernamePromptLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            userNamePanel.add(usernamePromptLabel);
+            userNamePanel.revalidate();
+            out.println("player " + userName);
+            out.println("MOVE");
+            System.out.println(userName + " is connected.");
+        }
+        }
     public void makeLabelForScoreEachRound(){
         String name = "Round " +  gameScreen.getCurrentRound() + ": " + game.getCurrentPlayer().getCurrentScore();
-    //Try make label for scorekeeping
+        //Try make label for scorekeeping
     }
 }
