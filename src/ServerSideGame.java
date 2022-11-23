@@ -60,7 +60,7 @@ public class ServerSideGame {
         } else if (isLastQuestion()) {
             newQuestion();
             gameScreen.currentQuestion = 0;
-            currentPlayer.currentScore = 0;
+            currentPlayer.currentScore = 0; // sätts den om innan vi får tag på den ?
         }
     }
 

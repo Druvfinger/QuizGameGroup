@@ -26,7 +26,9 @@ public class ResultsScreen extends JFrame {
     JLabel userNameLabelA;
     JLabel userNameLabelB = new JLabel("Player B");
     JTextField infoField = new JTextField("Här kommer det skrivas ut info till användare",40);
-    GameScreen game;
+    GameScreen gameScreen;
+
+    ServerSideGame game;
     public static final Color LIGHT_BLUE = new Color(51,153,255);
     public static final Color VERY_LIGHT_BLUE = new Color(51,204,255);
     public static final Color VERY_LIGHT_GREEN = new Color(102,255,102);
@@ -35,7 +37,7 @@ public class ResultsScreen extends JFrame {
     ImageIcon image;
     ImageIcon image2;
     String userName = "Player A";
-    int numberOfCategories = 5;
+    int numberOfCategories = game.getNumberOfRounds();
 
     public ResultsScreen(){
         setTitle("QuizGame");
@@ -131,7 +133,7 @@ public class ResultsScreen extends JFrame {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == goOnButton){
                 setVisible(false);
-                game = new GameScreen();
+                gameScreen = new GameScreen();
             }
         }
     };
@@ -142,9 +144,9 @@ public class ResultsScreen extends JFrame {
         return new ImageIcon(filePath);
     }
 
-    public JPanel createDesiredNumberOfLabels(JPanel panelToFill, int numberOfLabels){
-        panelToFill.setLayout(new GridLayout(numberOfLabels,1));
-        for (int i = 0; i < numberOfLabels; i++){
+    public JPanel createDesiredNumberOfLabels(JPanel panelToFill){
+        panelToFill.setLayout(new GridLayout(numberOfCategories,1));
+        for (int i = 0; i < numberOfCategories; i++){
             JLabel label = new JLabel();
             label.setOpaque(true);
             label.setBackground(LIGHT_BLUE);

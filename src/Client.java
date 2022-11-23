@@ -91,12 +91,12 @@ public class Client extends JFrame implements ActionListener {
                 else if (response.equals("All players connected")){
                     out.println("start");
                     gameScreen = new GameScreen();
-                    game.chooseCategory();
                 } else if (response.startsWith("SCORE")) {
-                    int score = Integer.parseInt(response.substring(5));
                     int temp = gameScreen.currentRound;
+                    int score = Integer.parseInt(response.substring(5));
+                    if (){}
                     if (temp ==  1){
-                        //resultsScreen.player1ResultLabel.setText(score);
+                        resultsScreen.p1r1.setText(score);
                     }
                 }
             }

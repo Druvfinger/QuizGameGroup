@@ -45,7 +45,9 @@ public class ServerSidePlayer extends Thread {
         this.opponent = opponent;
     }
 
-
+    public void setCurrentScore(int currentScore) {
+        this.currentScore = currentScore;
+    }
 
     public void run(){
         try{
@@ -57,7 +59,7 @@ public class ServerSidePlayer extends Thread {
                     output.println("SCORE" + game.currentPlayer.score);
 
                     String username;
-                    if (command.contains("player")) {
+                    if (command.contains("player")) { // ??
                         username = command.replace("player ", "");
                         this.player = username;
                     } else if (command.equals("MOVE")) {
