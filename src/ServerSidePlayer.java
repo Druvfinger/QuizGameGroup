@@ -50,20 +50,21 @@ public class ServerSidePlayer extends Thread {
     public void run(){
         try{
             output.println("All players connected");
-            while (true){
+            while (true) {
                 String command = input.readLine();
-                if (command.equals("start")){
+                if (command.equals("start")) {
                     game.newRound();
                     output.println("SCORE" + game.currentPlayer.score);
 
-                String username;
-                if (command.contains("player")){
-                    username = command.replace("player ", "");
-                    this.player = username;
-                }else if (command.equals("MOVE")){
-                    System.out.println(player + " connected");
-                }else {
-                    System.out.println("not yey"); // skriver ut ifall nåt skulle gå fel
+                    String username;
+                    if (command.contains("player")) {
+                        username = command.replace("player ", "");
+                        this.player = username;
+                    } else if (command.equals("MOVE")) {
+                        System.out.println(player + " connected");
+                    } else {
+                        System.out.println("not yey"); // skriver ut ifall nåt skulle gå fel
+                    }
                 }
             }
         } catch (IOException e) {
@@ -75,7 +76,5 @@ public class ServerSidePlayer extends Thread {
                 throw new RuntimeException(e);
             }
         }
-    } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    }
     }
