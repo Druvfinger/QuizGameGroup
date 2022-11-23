@@ -129,6 +129,19 @@ public class GameScreen extends JFrame{
         setVisible(true);
     }
 
+//    public void play(){
+//        if (roundCount == 1) {
+//            //Write up questions from database
+//        } else if (roundCount == 2) {
+//
+//        } else if (roundCount == 3) {
+//
+//        } else if (roundCount == 4) {
+//
+//        }
+//
+//    }
+
     ActionListener listener = new ActionListener() { // anonym klass
         @Override
         public void actionPerformed(ActionEvent e) {

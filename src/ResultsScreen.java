@@ -11,9 +11,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ResultsScreen extends JFrame {
-    String theirTurn = "Deras tur"; //översta panel
     JPanel basePanel = new JPanel(new BorderLayout());
-    JLabel theirTurnLabel = new JLabel(theirTurn);
+    JLabel theirTurnLabel = new JLabel();
     JPanel goOnPanel = new JPanel();
     JButton goOnButton = new JButton("Fortsätt");
     JPanel leftPlayerPanel = new JPanel(new BorderLayout());
@@ -29,8 +28,8 @@ public class ResultsScreen extends JFrame {
     JLabel userNameLabelB = new JLabel("Player B");
     JTextField infoField = new JTextField("Waiting for opponent",40);
     GameScreen gameScreen;
+GameSettings gameSettings = new GameSettings();
 
-    ServerSideGame game;
     public static final Color LIGHT_BLUE = new Color(51,153,255);
     public static final Color VERY_LIGHT_BLUE = new Color(51,204,255);
     public static final Color VERY_LIGHT_GREEN = new Color(102,255,102);
@@ -39,7 +38,7 @@ public class ResultsScreen extends JFrame {
     ImageIcon image;
     ImageIcon image2;
     String userName = "Player A";
-    int numberOfCategories = 3;
+    int numberOfCategories = gameSettings.getNumberOfRounds();
     List<JLabel> listOfLabelsPlayerA = new LinkedList<>();
     List<JLabel> listOfLabelsPlayerB = new LinkedList<>();
 
@@ -139,6 +138,7 @@ public class ResultsScreen extends JFrame {
             if (e.getSource() == goOnButton){
                 setVisible(false);
                 gameScreen = new GameScreen();
+//                gameScreen.play();
             }
         }
     };

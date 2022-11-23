@@ -15,7 +15,10 @@ public class Server {
                 ServerSideGame game = new ServerSideGame();
 
                 ServerSidePlayer player1 = new ServerSidePlayer(ss.accept(), "Player1", game, 0);
+                System.out.println("Player 1 connected.");
                 ServerSidePlayer player2 = new ServerSidePlayer(ss.accept(), "Player2", game,0);
+                System.out.println("Player 2 connected.");
+
 
                 player1.setOpponent(player2);
                 player2.setOpponent(player1);
