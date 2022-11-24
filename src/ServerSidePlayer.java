@@ -55,7 +55,6 @@ public class ServerSidePlayer extends Thread {
                 if (command.equals("start")) {
                     game.newRound();
                     output.println("SCORE" + game.currentPlayer.score);
-
                     String username;
                     if (command.contains("player")) {
                         username = command.replace("player ", "");

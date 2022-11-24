@@ -15,6 +15,7 @@ public class ChooseCategoryScreen extends JFrame {
     Database database = new Database();
     GameScreen gameScreen;
     static String quizTitle = "Quiz Game"; // Test title
+    List<String> shuffledCategoryList;
     public static final Color LIGHT_BLUE = new Color(51, 153, 255);
     public static final Color VERY_LIGHT_BLUE = new Color(51, 204, 255);
     public static final Color VERY_LIGHT_GREEN = new Color(102, 255, 102);
@@ -33,9 +34,11 @@ public class ChooseCategoryScreen extends JFrame {
         basePanel.add(categoryPanel, BorderLayout.CENTER);
         basePanel.add(emptyPanel, BorderLayout.SOUTH);
 
+        shuffledCategoryList = new LinkedList<>(database.getCategories());
+        Collections.shuffle(shuffledCategoryList);
         for (int i = 0; i < 3; i++) {
             JButton button = new JButton();
-            button.setText(String.valueOf(database.getCategories().get(i)));
+            button.setText(String.valueOf(shuffledCategoryList.get(i)));
             button.addActionListener(listener);
             buttonList.add(button);
             categoryPanel.add(button);

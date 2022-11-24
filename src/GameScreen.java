@@ -4,6 +4,8 @@ import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -17,7 +19,8 @@ public class GameScreen extends JFrame{
 
     Boolean isAnswerCorrect = false;
     Boolean isAnswered = false;
-    int currentQuestion = 0;
+    int currentQuestion = 1;
+    int currentPoint = 0;
     int currentRound = 0;
     static String userName = "David"; // testnamn
     static String quizTitle;
@@ -66,7 +69,7 @@ public class GameScreen extends JFrame{
     JLabel userNameLabelB = new JLabel(userNameB,SwingConstants.CENTER);
     JLabel pointsLabelA = new JLabel("Points:", SwingConstants.CENTER);
     JLabel pointsLabelB = new JLabel("Points:", SwingConstants.CENTER);
-    JTextField infoField = new JTextField("Här kommer det skrivas ut info till användare",40);
+    JTextField infoField = new JTextField("Fråga " + currentQuestion,40);
     Database database = new Database();
 
     public static final Color LIGHT_BLUE = new Color(51, 153, 255);
@@ -74,8 +77,10 @@ public class GameScreen extends JFrame{
     public static final Color VERY_LIGHT_GREEN = new Color(102, 255, 102);
     public static final Color LIGHT_GREEN = new Color(0, 255, 51);
     public static final Color GOLD = new Color(255, 204, 51);
+    public static final Color VERY_LIGHT_RED = new Color(255,102,102);
 
     public GameScreen(){
+
         categoryTextLabel = new JLabel(currentCategory,SwingConstants.CENTER);
         categoryTextLabel.setPreferredSize(new Dimension(135,50));
 
@@ -176,17 +181,26 @@ public class GameScreen extends JFrame{
 
     ActionListener listener = new ActionListener() { // anonym klass
         public void actionPerformed(ActionEvent e) {
-            currentQuestion++;
-            isAnswered = true;
+
+
             if (e.getSource() == answerButtonA || e.getSource() == answerButtonB || e.getSource() == answerButtonC ||
             e.getSource() == answerButtonD){
-                System.out.println(isRightAnswer((JButton) e.getSource()));
+                if (currentQuestion <= 3) {
+                    changeScore(isRightAnswer((JButton) e.getSource()));
+                    paintRightOrFalseAnswer((JButton) e.getSource());
+                    currentQuestion++;
+                }
 
+                //isAnswered = true;
             }
 
             if (e.getSource() == goOnButton){
-                setVisible(false);
-                ResultsScreen resultsScreen = new ResultsScreen();
+                changeInfoField();
+                game.drawUpQuestion(questionLabel, buttonList);
+                for (JButton button : buttonList){
+                    button.setBackground(new JButton().getBackground());
+                }
+                revalidate();
             }
         }
     };
@@ -206,6 +220,46 @@ public class GameScreen extends JFrame{
     public boolean isRightAnswer (JButton clickedButton){
         String givenAnswer = clickedButton.getText();
         return givenAnswer.equalsIgnoreCase(database.getCorrectAnswer());
+    }
+
+    public void paintRightOrFalseAnswer(JButton clickedButton){
+        if (isRightAnswer(clickedButton)){
+            clickedButton.setBackground(VERY_LIGHT_GREEN);
+        }
+        else {
+            clickedButton.setBackground(VERY_LIGHT_RED);
+            findButtonWithRightAnswer().setBackground(VERY_LIGHT_GREEN);
+        }
+    }
+
+    public JButton findButtonWithRightAnswer(){
+        JButton correctButton = new JButton();
+        String rightAnswer = database.getCorrectAnswer();
+        for (JButton button : buttonList){
+            if (button.getText().equals(rightAnswer)){
+                correctButton = button;
+                return correctButton;
+            }
+        }
+        return correctButton;
+    }
+
+    public void changeScore(boolean isCorrectAnswer){
+        if (isCorrectAnswer){
+            pointsLabelA.setText("Points: " + ++currentPoint + "/3");
+            pointsLabelA.revalidate();
+        }
+        else {
+            pointsLabelA.setText("Points: " + currentPoint + "/3");
+            pointsLabelA.revalidate();
+        }
+    }
+
+    public void changeInfoField(){
+        if (currentQuestion <= 3) {
+            infoField.setText("Fråga " + currentQuestion);
+            infoField.revalidate();
+        }
     }
 
     public static void main(String[] args) {

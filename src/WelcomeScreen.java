@@ -20,6 +20,7 @@ public class WelcomeScreen extends JFrame {
     JButton newGameButton = new JButton("New Game");
     static String userName;
     static String quizTitle;
+    static String player;
     ChooseCategoryScreen categoryScreen;
     public static final Color LIGHT_BLUE = new Color(51, 153, 255);
     public static final Color VERY_LIGHT_BLUE = new Color(51, 204, 255);

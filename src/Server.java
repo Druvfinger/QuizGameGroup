@@ -18,6 +18,8 @@ public class Server {
                 player1.setOpponent(player2);
                 player2.setOpponent(player1);
                 game.currentPlayer = player1;
+                System.out.println(game.currentPlayer.player);
+                System.out.println(game.currentPlayer.opponent.player);
                 player1.start();
                 player2.start();
             }

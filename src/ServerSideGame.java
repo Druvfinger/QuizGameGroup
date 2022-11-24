@@ -31,8 +31,9 @@ public class ServerSideGame {
 
     public void drawUpQuestion(JLabel questionLabel, List<JButton> buttonList) {
         questionLabel.setText(database.getQuestion());
-        for (int i = 0; i < 4; i++) {
-            buttonList.get(i).setText(String.valueOf(database.getAnswers().get(i)));
+        List<String> answers = database.getAnswers();
+        for (int i = 0; i < answers.size(); i++) {
+            buttonList.get(i).setText(String.valueOf(answers.get(i)));
             /*gameScreen.repaint();
             gameScreen.revalidate();*/
         }
@@ -122,4 +123,3 @@ public class ServerSideGame {
         }
     }
 }
-
