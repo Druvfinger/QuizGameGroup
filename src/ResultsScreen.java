@@ -39,7 +39,8 @@ public class ResultsScreen extends JFrame {
     ImageIcon image2;
     static String userName = "David"; // testName
     //int numberOfCategories = game.getNumberOfRounds();
-    int numberOfCategories = 5;
+    GameSettings gameSettings = new GameSettings();
+    int numberOfCategories = gameSettings.numberOfRounds;
     List<JLabel> listOfLabelsPlayerA = new LinkedList<>();
     List<JLabel> listOfLabelsPlayerB = new LinkedList<>();
 
