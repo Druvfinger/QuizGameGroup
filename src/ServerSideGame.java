@@ -20,7 +20,6 @@ public class ServerSideGame {
     }
 
 
-
     public boolean isWinner() {
         if (isLastRound() && isInTheLead()) ;
         {
@@ -97,9 +96,6 @@ public class ServerSideGame {
     }
 
 
-
-
-
     public void showResults() {
 
     }
@@ -119,6 +115,16 @@ public class ServerSideGame {
             showFinalResults();
         }
     }
+
+    public boolean howIsCurrentPlayer(ServerSidePlayer player) {
+        if (currentPlayer == player) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
 }
 
 

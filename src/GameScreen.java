@@ -15,7 +15,12 @@ public class GameScreen extends JFrame{
     String answerC = "Svar C";
     String answerD = "Svar D";
 
+    List<String> listOfAnswers;
+
     ServerSideGame game = new ServerSideGame();
+    int roundCount = 1;
+    Database database = new Database();
+    boolean sameQuestionsForEachPlayer = false;
 
     String question = "Här kommer det visas fråga";
     String userNameA = "Player A";
@@ -129,18 +134,30 @@ public class GameScreen extends JFrame{
         setVisible(true);
     }
 
-//    public void play(){
-//        if (roundCount == 1) {
-//            //Write up questions from database
-//        } else if (roundCount == 2) {
-//
-//        } else if (roundCount == 3) {
-//
-//        } else if (roundCount == 4) {
-//
-//        }
-//
-//    }
+    public void play(){
+
+        if (roundCount == 1) {
+            if (!sameQuestionsForEachPlayer){
+                database.setQuestionCategory("Technology");
+                question = database.getQuestion();
+                listOfAnswers = database.getAnswers();
+                answerA = listOfAnswers.get(0);
+                answerB = listOfAnswers.get(1);
+                answerC = listOfAnswers.get(2);
+                answerD = listOfAnswers.get(3);
+
+            }
+
+
+        } else if (roundCount == 2) {
+
+        } else if (roundCount == 3) {
+
+        } else if (roundCount == 4) {
+
+        }
+
+    }
 
     ActionListener listener = new ActionListener() { // anonym klass
         @Override
