@@ -31,7 +31,7 @@ public class Client {
         String opponentPlayer = "2";
         try {
 
-            while (response != null) {
+            while (true) {
 
                 response = in.readLine();
                 if (response.startsWith("WELCOME")) {
@@ -44,7 +44,7 @@ public class Client {
                 }
                 else if (response.equals("All players connected")){
                     System.out.println("All players connected. We are set to go.");
-                    break;
+                    if (game.currentPlayer == player);
                     /*System.out.println(userName);
                     /*out.println("start");
                     gameScreen = new GameScreen();
