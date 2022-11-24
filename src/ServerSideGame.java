@@ -11,6 +11,7 @@ public class ServerSideGame {
     ServerSidePlayer currentPlayer;
     GameScreen gameScreen;
     Database database = new Database();
+    GameSettings gameSettings = new GameSettings();
 
 
     public boolean isWinner() {
@@ -21,7 +22,7 @@ public class ServerSideGame {
     }
 
     public boolean isLastRound() {
-        int numRounds = getNumberOfRounds();
+        int numRounds = gameSettings.getNumberOfRounds();
         return gameScreen.currentRound == numRounds;
     }
 
@@ -40,7 +41,7 @@ public class ServerSideGame {
     }
 
     public Boolean isLastQuestion() {
-        int numQuestions = getNumberOfQuestions();
+        int numQuestions = gameSettings.getNumberOfQuestions();
         return gameScreen.currentQuestion == numQuestions; // true if currentQuestion == numQuestions
     }
 
@@ -87,23 +88,6 @@ public class ServerSideGame {
         }
     }
 
-    public int getNumberOfRounds() {
-        try (InputStream input = new FileInputStream("src/Settings.properties")) {
-            Properties prop = new Properties();
-            return Integer.parseInt(prop.getProperty("numberOfRounds", "3"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public int getNumberOfQuestions() {
-        try (InputStream input = new FileInputStream("src/Settings.properties")) {
-            Properties prop = new Properties();
-            return Integer.parseInt(prop.getProperty("numberOfQuestions", "3"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public void showResults(){
 
