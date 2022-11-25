@@ -28,6 +28,8 @@ public class WelcomeScreen extends JFrame {
     public static final Color LIGHT_GREEN = new Color(0, 255, 51);
     public static final Color GOLD = new Color(255, 204, 51);
 
+    ServerSideGame game;
+
     public WelcomeScreen() {
         setTitle("QuizGame");
         add(backPanel);

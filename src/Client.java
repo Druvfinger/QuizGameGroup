@@ -44,7 +44,6 @@ public class Client {
                 }
                 else if (response.equals("All players connected")){
                     System.out.println("All players connected. We are set to go.");
-                    if (game.currentPlayer == player);
                     /*System.out.println(userName);
                     /*out.println("start");
                     gameScreen = new GameScreen();
