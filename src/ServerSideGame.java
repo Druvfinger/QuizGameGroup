@@ -12,12 +12,19 @@ public class ServerSideGame {
     GameScreen gameScreen;
     Database database = new Database();
 
-
-    public boolean isWinner() {
-        if (isLastRound() && isInTheLead()) ;
-        {
+    boolean isCategoryChosen = false;
+    public boolean hasWinner() {
+        if (isLastRound() && isLastQuestion() && currentPlayer.score > currentPlayer.getOpponent().score
+                || currentPlayer.score > currentPlayer.getOpponent().score){
             return true;
         }
+        return false;
+    }
+    public boolean isTie(){
+        if (isLastRound() && isLastQuestion() && currentPlayer.score == currentPlayer.getOpponent().score){
+            return true;
+        }
+        return false;
     }
 
     public boolean isLastRound() {
@@ -25,41 +32,35 @@ public class ServerSideGame {
         return gameScreen.currentRound == numRounds;
     }
 
-    public boolean isInTheLead() {
-        return false;
-    }
-
-    public void drawUpQuestion(JLabel questionLabel, List<JButton> buttonList) {
-        questionLabel.setText(database.getQuestion());
+    public void drawUpQuestion(GameScreen gameScreen, Database database) {
+        gameScreen.questionLabel.setText(database.getQuestion());
         List<String> answers = database.getAnswers();
         for (int i = 0; i < answers.size(); i++) {
-            buttonList.get(i).setText(String.valueOf(answers.get(i)));
-            /*gameScreen.repaint();
-            gameScreen.revalidate();*/
+            gameScreen.buttonList.get(i).setText(String.valueOf(answers.get(i)));
         }
+        gameScreen.revalidate();
     }
+
 
     public Boolean isLastQuestion() {
         int numQuestions = getNumberOfQuestions();
         return gameScreen.currentQuestion == numQuestions; // true if currentQuestion == numQuestions
     }
 
-    /* actionperformed
-     * if !(isLastQuestion){
-     * new Question();
-     * }
-     */
-
     public void newRound() {
-        gameScreen.currentRound++;
-        if (!isLastQuestion()) {
-            newQuestion();
-            gameScreen.currentQuestion++;
-        } else if (isLastQuestion()) {
-            newQuestion();
-            gameScreen.currentQuestion = 0;
-            currentPlayer.currentScore = 0;
+        ChooseCategoryScreen categoryScreen = new ChooseCategoryScreen();
+        if (isCategoryChosen){
+            gameScreen = new GameScreen();
+            if (!isLastQuestion()) {
+                newQuestion(gameScreen);
+                gameScreen.currentQuestion++;
+            } else if (isLastQuestion()) {
+                newQuestion(gameScreen);
+                gameScreen.currentQuestion = 0;
+                currentPlayer.currentScore = 0;
+            }
         }
+
     }
 
     public void chooseCategory() {
@@ -76,15 +77,26 @@ public class ServerSideGame {
         return currentPlayer;
     }
 
-    public void newQuestion() {
+    public void newQuestion(GameScreen gameScreen) {
         while (gameScreen.isAnswered) {
-            //drawUpQuestion();
+            drawUpQuestion(gameScreen,database);
             if (gameScreen.isAnswerCorrect){
                 currentPlayer.score++; // funkar detta ?
                 currentPlayer.currentScore++;
             }
             gameScreen.isAnswered = false;
+            gameScreen.repaint();
+            gameScreen.revalidate();
         }
+    }
+    public synchronized boolean hasPlayedRound(ServerSidePlayer player){
+        if (player == currentPlayer){
+            newRound();
+            currentPlayer = currentPlayer.getOpponent();
+            currentPlayer.otherPlayerMoved(currentPlayer.score);
+            return true;
+        }
+        return false;
     }
 
     public int getNumberOfRounds() {

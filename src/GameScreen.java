@@ -16,7 +16,6 @@ public class GameScreen extends JFrame{
     String answerB = "Svar B";
     String answerC = "Svar C";
     String answerD = "Svar D";
-
     Boolean isAnswerCorrect = false;
     Boolean isAnswered = false;
     int currentQuestion = 1;
@@ -110,7 +109,7 @@ public class GameScreen extends JFrame{
         goOnButton.setBorder(new LineBorder(Color.WHITE, 3));
         goOnButton.setBackground(LIGHT_GREEN);
 
-        game.drawUpQuestion(questionLabel,buttonList);
+        //game.drawUpQuestion(questionLabel,buttonList);
 
         lowerNorthPanel.add(answerButtonA);
         lowerNorthPanel.add(answerButtonB);
@@ -190,17 +189,24 @@ public class GameScreen extends JFrame{
                     paintRightOrFalseAnswer((JButton) e.getSource());
                     currentQuestion++;
                 }
-
-                //isAnswered = true;
-            }
-
-            if (e.getSource() == goOnButton){
+                isAnswered = true;
+            } else if (!isAnswered) {
+                goOnButton.setEnabled(false);
+            } else if (e.getSource() == goOnButton && isAnswered){
                 changeInfoField();
-                game.drawUpQuestion(questionLabel, buttonList);
-                for (JButton button : buttonList){
-                    button.setBackground(new JButton().getBackground());
+                isAnswered = false;
+                if (currentQuestion == game.getNumberOfQuestions()+1){
+                    setVisible(false);
+                    currentQuestion = 0;
+                    ResultsScreen resultsScreen1 = new ResultsScreen();
                 }
-                revalidate();
+                else {
+                    //game.drawUpQuestion(questionLabel, buttonList);
+                    for (JButton button : buttonList) {
+                        button.setBackground(new JButton().getBackground());
+                    }
+                    revalidate();
+                }
             }
         }
     };

@@ -59,6 +59,7 @@ public class WelcomeScreen extends JFrame {
         newGameButton.setBorder(new LineBorder(Color.WHITE, 5));
         newGameButton.setBackground(VERY_LIGHT_BLUE);
 
+
         userNameSubmitButton.addActionListener(listener);
         newGameButton.addActionListener(listener);
 

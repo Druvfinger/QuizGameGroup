@@ -77,6 +77,7 @@ public class ResultsScreen extends JFrame {
         goOnButton.setPreferredSize(new Dimension(250,40));
         goOnButton.setBorder(new LineBorder(Color.WHITE, 3));
         goOnButton.setBackground(LIGHT_GREEN);
+        goOnButton.setEnabled(false);
 
         goOnPanel.add(goOnButton);
         goOnPanel.add(infoField);

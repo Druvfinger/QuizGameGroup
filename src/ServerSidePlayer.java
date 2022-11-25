@@ -12,7 +12,7 @@ public class ServerSidePlayer extends Thread {
     PrintWriter output;
     String player;
 
-    ServerSideGame game; // protokoll
+    ServerSideGame game;
     int score;
 
     int currentScore = 0;
@@ -20,6 +20,7 @@ public class ServerSidePlayer extends Thread {
     public int getCurrentScore() {
         return currentScore;
     }
+
 
 
     public ServerSidePlayer(Socket socket, String player, ServerSideGame game, int score) {
@@ -45,29 +46,43 @@ public class ServerSidePlayer extends Thread {
         this.opponent = opponent;
     }
 
+    public int getScore() {
+        return score;
+    }
+
+    public ServerSidePlayer getOpponent() {
+        return opponent;
+    }
+    public void otherPlayerMoved(int score){
+        output.println("Opponent played " + score);
+
+        if (game.hasWinner()){
+            output.println("You lost!");
+        }else {
+            if (game.isTie()){
+                output.println("You tied");
+            }else {output.println("How did we get here?!");}
+        }
+    }
+
 
     public void run() {
         try {
             output.println("All players connected");
             System.out.println("All players connected");
-            /*while (true) {
+            while (true) {
                 String command = input.readLine();
-                if (command.equals("start")) {
-                    game.newRound();
-                    output.println("SCORE" + game.currentPlayer.score);
-                    String username;
-                    if (command.contains("player")) {
-                        username = command.replace("player ", "");
-                        this.player = username;
-                    } else if (command.equals("MOVE")) {
-                        System.out.println(player + " connected");
-                    } else {
-                        System.out.println("not yey"); // skriver ut ifall nåt skulle gå fel
-                    }
+                if (command.startsWith("MOVE")){
+                     if (game.hasPlayedRound(this)){
+                         output.println("Round Played");
+                         output.println(game.hasWinner() ? "Victory" : game.isTie() ? "Tie"
+                                 : "");
+                     }
                 }
+
             }
         } catch (IOException e) {
-            System.out.println(player + " died: " + e);*/
+            System.out.println(player + " died: " + e);
         } finally {
             try {
                 socket.close();

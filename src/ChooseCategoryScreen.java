@@ -14,6 +14,7 @@ public class ChooseCategoryScreen extends JFrame {
     List<JButton> buttonList = new LinkedList<>();
     Database database = new Database();
     GameScreen gameScreen;
+    ServerSideGame game = new ServerSideGame();
     static String quizTitle = "Quiz Game"; // Test title
     List<String> shuffledCategoryList;
     public static final Color LIGHT_BLUE = new Color(51, 153, 255);
@@ -64,6 +65,8 @@ public class ChooseCategoryScreen extends JFrame {
                 GameScreen.currentCategory = ((JButton) e.getSource()).getText();
                 setVisible(false);
                 gameScreen = new GameScreen();
+                game.isCategoryChosen = true;
+
             }
         }
     };
