@@ -7,6 +7,7 @@ import java.net.Socket;
 public class ServerSidePlayer extends Thread {
 
     ServerSidePlayer opponent;
+    ServerSidePlayer currentPlayer;
     Socket socket;
     BufferedReader input;
     PrintWriter output;
@@ -45,11 +46,57 @@ public class ServerSidePlayer extends Thread {
         this.opponent = opponent;
     }
 
+    public ServerSidePlayer getOpponent() {
+        return opponent;
+    }
+
+    public ServerSidePlayer getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(ServerSidePlayer currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    /*public void otherPlayerDoneHisMove(int location) {
+        output.println("OPPONENT_MOVED " + location);
+
+        if (game.hasWinner()) {
+            output.println("DEFEAT");
+        } else {
+            if (game.boardFilledUp()) {
+                output.println("TIE");
+            } else {
+                output.println("");
+            }
+        }
+    }*/
 
     public void run() {
         try {
             output.println("All players connected");
             System.out.println("All players connected");
+
+
+            // Repeatedly get commands from the client and process them.
+           /* while (true) {
+                String command = input.readLine();
+                if (command.startsWith("MOVE")) {
+
+
+
+                    int location = Integer.parseInt(command.substring(5));
+                    if (game.legalMove(location, this)) {
+                        output.println("VALID_MOVE");
+                        output.println(game.hasWinner() ? "VICTORY"
+                                : game.boardFilledUp() ? "TIE"
+                                : "");
+                    } else {
+                        output.println("MESSAGE ?");
+                    }
+                } else if (command.startsWith("QUIT")) {
+                    return;
+                }
             /*while (true) {
                 String command = input.readLine();
                 if (command.equals("start")) {
@@ -75,5 +122,6 @@ public class ServerSidePlayer extends Thread {
                 throw new RuntimeException(e);
             }
         }
+
     }
 }

@@ -8,10 +8,26 @@ import java.util.Properties;
 
 public class ServerSideGame {
 
-    ServerSidePlayer currentPlayer;
+    static ServerSidePlayer currentPlayer;
+    static ServerSidePlayer opponentPlayer;
     GameScreen gameScreen;
     Database database = new Database();
 
+    public ServerSidePlayer getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(ServerSidePlayer currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    public ServerSidePlayer getOpponentPlayer() {
+        return opponentPlayer;
+    }
+
+    public void setOpponentPlayer(ServerSidePlayer opponentPlayer) {
+        this.opponentPlayer = opponentPlayer;
+    }
 
     public boolean isWinner() {
         if (isLastRound() && isInTheLead()) ;
@@ -66,15 +82,13 @@ public class ServerSideGame {
         gameScreen.questionLabel.setText("What Category do you want to choose");
         for (int i = 0; i < 4; i++) {
             gameScreen.buttonList.get(i).setText(String.valueOf(database.getCategories()));
-            gameScreen = new GameScreen();
+            gameScreen = new GameScreen(currentPlayer.player);// ändrat i metoden
             gameScreen.repaint();
             gameScreen.revalidate();
         }
     }
 
-    public ServerSidePlayer getCurrentPlayer() {
-        return currentPlayer;
-    }
+
 
     public void newQuestion() {
         while (gameScreen.isAnswered) {
@@ -111,7 +125,7 @@ public class ServerSideGame {
     public void showFinalResults(){}
 
     public void gameTest(){
-        WelcomeScreen welcomeScreen = new WelcomeScreen();
+        WelcomeScreen welcomeScreen = new WelcomeScreen(null); // ändrade i metoden
         if (!isLastRound()){
             chooseCategory();
             newRound();

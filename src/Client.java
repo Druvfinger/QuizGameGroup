@@ -9,15 +9,20 @@ public class Client {
     protected final String host = "127.0.0.1";
     protected final int port = 54321;
 
-    ServerSideGame game;
-
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
+    static String player;
 
     WelcomeScreen welcomeScreen;
-    ResultsScreen resultsScreen;
+
     GameScreen gameScreen;
+    ServerSideGame game;
+
+    private static final int SHOW_WELCOME_SCREEN = 0;
+
+    private int state;
+
 
     public Client() throws IOException {
         socket = new Socket(host, port);
@@ -27,17 +32,15 @@ public class Client {
 
     public void play() throws IOException {
         String response = "";
-        String player = "1";
-        String opponentPlayer = "2";
         try {
-
-            while (response != null) {
-
+            while (true) {
                 response = in.readLine();
                 if (response.startsWith("WELCOME")) {
-                    player = response.substring(8, response.length() - 1);
-                    welcomeScreen = new WelcomeScreen();
+                    state = SHOW_WELCOME_SCREEN;
+                    player = response.substring(8, response.length());
+                    welcomeScreen = new WelcomeScreen(player);
                     System.out.println(response);
+                    System.out.println(player);
                 }
                 else if (response.equals("Waiting for opponent to connect")){
                     System.out.println("Waiting for opponent to connect.");
@@ -63,13 +66,13 @@ public class Client {
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        Client client = new Client();
-        client.play();
-    }
+            public static void main (String[]args) throws IOException {
+                Client client = new Client();
+                client.play();
+            }
 
-    public void makeLabelForScoreEachRound() {
-        String name = "Round " + gameScreen.getCurrentRound() + ": " + game.getCurrentPlayer().getCurrentScore();
-        //Try to make label for score keeping
-    }
-}
+            public void makeLabelForScoreEachRound () {
+                String name = "Round " + gameScreen.getCurrentRound() + ": " + game.getCurrentPlayer().getCurrentScore();
+                //Try to make label for score keeping
+            }
+        }

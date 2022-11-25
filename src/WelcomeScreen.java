@@ -20,15 +20,19 @@ public class WelcomeScreen extends JFrame {
     JButton newGameButton = new JButton("New Game");
     static String userName;
     static String quizTitle;
-    static String player;
+    static String playerNumber;
     ChooseCategoryScreen categoryScreen;
+    GameScreen gameScreen;
+    ServerSideGame game = new ServerSideGame();
     public static final Color LIGHT_BLUE = new Color(51, 153, 255);
     public static final Color VERY_LIGHT_BLUE = new Color(51, 204, 255);
     public static final Color VERY_LIGHT_GREEN = new Color(102, 255, 102);
     public static final Color LIGHT_GREEN = new Color(0, 255, 51);
     public static final Color GOLD = new Color(255, 204, 51);
 
-    public WelcomeScreen() {
+    public WelcomeScreen(String player) {
+        playerNumber = player;
+
         setTitle("QuizGame");
         add(backPanel);
         backPanel.add(userPanel, BorderLayout.NORTH);
@@ -70,13 +74,20 @@ public class WelcomeScreen extends JFrame {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == newGameButton) {
                 if (userName != null) {
-                    setVisible(false);
-                    categoryScreen = new ChooseCategoryScreen();
+                    System.out.println(playerNumber);
+                    if (playerNumber.equals("Player1")) {
+                        setVisible(false);
+                        categoryScreen = new ChooseCategoryScreen(playerNumber);
+                    }
+                    else if (playerNumber.equals("Player2")){
+                        setVisible(false);
+                        gameScreen = new GameScreen(playerNumber);
+                    }
                 } else JOptionPane.showMessageDialog(null, "Please enter your username before you proceed.");
             }
             if (e.getSource() == userNameSubmitButton) {
                 userName = userNameTextField.getText();
-                GameScreen.userName = userName;
+                GameScreen.userName = userName; //
                 ResultsScreen.userName = userName;
                 quizTitle = "Quiz Game " + userName;
                 ChooseCategoryScreen.quizTitle = quizTitle;
@@ -95,6 +106,6 @@ public class WelcomeScreen extends JFrame {
 
 
     public static void main(String[] args) {
-        WelcomeScreen welcomeScreen = new WelcomeScreen();
+        WelcomeScreen welcomeScreen = new WelcomeScreen(playerNumber);
     }
 }

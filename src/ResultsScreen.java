@@ -26,7 +26,7 @@ public class ResultsScreen extends JFrame {
     JLabel playerEmojiLabelB;
     JLabel userNameLabelA;
     JLabel userNameLabelB = new JLabel("Player B",SwingConstants.CENTER );
-    JTextField infoField = new JTextField("Här kommer det skrivas ut info till användare",40);
+    JTextField infoField = new JTextField("Här kommer det skrivas ut info till användare",43);
     GameScreen gameScreen;
     ServerSideGame game;
     static String quizTitle;
@@ -39,6 +39,8 @@ public class ResultsScreen extends JFrame {
     ImageIcon image2;
     static String userName = "David"; // testName
     //int numberOfCategories = game.getNumberOfRounds();
+    static String playerNumber;
+    static int finalScore;
     GameSettings gameSettings = new GameSettings();
     int numberOfCategories = gameSettings.numberOfRounds;
     List<JLabel> listOfLabelsPlayerA = new LinkedList<>();
@@ -46,7 +48,9 @@ public class ResultsScreen extends JFrame {
 
 
 
-    public ResultsScreen(){
+    public ResultsScreen(String player){
+        playerNumber=player;
+
         setTitle(quizTitle);
         add(basePanel);
 
@@ -134,7 +138,7 @@ public class ResultsScreen extends JFrame {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == goOnButton){
                 setVisible(false);
-                gameScreen = new GameScreen();
+                gameScreen = new GameScreen(playerNumber);
             }
         }
     };
@@ -183,6 +187,6 @@ public class ResultsScreen extends JFrame {
     }
 
     public static void main(String[] args) {
-        ResultsScreen results = new ResultsScreen();
+        ResultsScreen results = new ResultsScreen(playerNumber);
     }
 }
