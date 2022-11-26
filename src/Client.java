@@ -98,16 +98,15 @@ public class Client extends JFrame{
         String opponentPlayer = "";
         try {
 
-            while (response != null) {
+            while (true) {
                 response = in.readLine();
+                if (isActive()){}
                 if (response.equals("Round Played")){
                     resultsScreen = new ResultsScreen();
                     resultsScreen.infoField.setText("Opponents turn");
                     resultsScreen.userNameLabelA.setText(String.valueOf(game.getCurrentPlayer().getScore()));
                 } else if (response.startsWith("Opponent played")) {
                     String opponentScore = (response.substring(14));
-                    resultsScreen.infoField.setText("opponent played, your turn");
-
                 }
 
                /* if (response.startsWith("WELCOME")) {
@@ -138,7 +137,7 @@ public class Client extends JFrame{
     }
 
     public void makeLabelForScoreEachRound() {
-        String name = "Round " + gameScreen.getCurrentRound() + ": " + game.getCurrentPlayer().getCurrentScore();
+        String name = "Round " + game.getCurrentRound() + ": " + game.getCurrentPlayer().getCurrentScore();
         //Try to make label for score keeping
     }
 
@@ -151,7 +150,7 @@ public class Client extends JFrame{
                 if (userName != null) {
                     //setVisible(false);
                     out.println("MOVE");
-                    //if (){} try to make surte that setVisible(false) bara händer för player1
+                    //if (){} try to make sure that setVisible(false) bara händer för player1
                 } else JOptionPane.showMessageDialog(null, "Please enter your username before you proceed.");
             }
             if (e.getSource() == userNameSubmitButton) {

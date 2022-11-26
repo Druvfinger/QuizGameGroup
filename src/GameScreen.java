@@ -4,8 +4,6 @@ import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -18,18 +16,12 @@ public class GameScreen extends JFrame{
     String answerD = "Svar D";
     Boolean isAnswerCorrect = false;
     Boolean isAnswered = false;
-    int currentQuestion = 1;
-    int currentPoint = 0;
-    int currentRound = 0;
+    //int currentQuestion = 1;
+    //int currentPoint = 0;
+    //int currentRound = 0;
     static String userName = "David"; // testnamn
     static String quizTitle;
     static String currentCategory = "Geography"; // Testkategori
-    ResultsScreen resultsScreen;
-
-    public int getCurrentRound() {
-        return currentRound;
-    }
-
     ServerSideGame game = new ServerSideGame();
 
     String question = "Här kommer det visas fråga";
@@ -68,7 +60,7 @@ public class GameScreen extends JFrame{
     JLabel userNameLabelB = new JLabel(userNameB,SwingConstants.CENTER);
     JLabel pointsLabelA = new JLabel("Points:", SwingConstants.CENTER);
     JLabel pointsLabelB = new JLabel("Points:", SwingConstants.CENTER);
-    JTextField infoField = new JTextField("Fråga " + currentQuestion,40);
+    JTextField infoField = new JTextField("Fråga " + game.currentQuestion,40);
     Database database = new Database();
 
     public static final Color LIGHT_BLUE = new Color(51, 153, 255);
@@ -178,16 +170,17 @@ public class GameScreen extends JFrame{
         setVisible(true);
     }
 
+
     ActionListener listener = new ActionListener() { // anonym klass
         public void actionPerformed(ActionEvent e) {
 
 
             if (e.getSource() == answerButtonA || e.getSource() == answerButtonB || e.getSource() == answerButtonC ||
             e.getSource() == answerButtonD){
-                if (currentQuestion <= 3) {
+                if (game.currentQuestion <= 3) {
                     changeScore(isRightAnswer((JButton) e.getSource()));
                     paintRightOrFalseAnswer((JButton) e.getSource());
-                    currentQuestion++;
+                    game.currentQuestion++;
                 }
                 isAnswered = true;
             } else if (!isAnswered) {
@@ -195,13 +188,13 @@ public class GameScreen extends JFrame{
             } else if (e.getSource() == goOnButton && isAnswered){
                 changeInfoField();
                 isAnswered = false;
-                if (currentQuestion == game.getNumberOfQuestions()+1){
+                if (game.currentQuestion == game.getNumberOfQuestions()+1){
                     setVisible(false);
-                    currentQuestion = 0;
-                    ResultsScreen resultsScreen1 = new ResultsScreen();
+                    game.currentQuestion = 0;
+                    ResultsScreen resultsScreen = new ResultsScreen();
                 }
                 else {
-                    //game.drawUpQuestion(questionLabel, buttonList);
+                    game.drawUpQuestion(game.gameScreen,database);
                     for (JButton button : buttonList) {
                         button.setBackground(new JButton().getBackground());
                     }
@@ -252,18 +245,18 @@ public class GameScreen extends JFrame{
 
     public void changeScore(boolean isCorrectAnswer){
         if (isCorrectAnswer){
-            pointsLabelA.setText("Points: " + ++currentPoint + "/3");
+            pointsLabelA.setText("Points: " + game.currentScore + "/3");
             pointsLabelA.revalidate();
         }
         else {
-            pointsLabelA.setText("Points: " + currentPoint + "/3");
+            pointsLabelA.setText("Points: " + game.currentScore + "/3");
             pointsLabelA.revalidate();
         }
     }
 
     public void changeInfoField(){
-        if (currentQuestion <= 3) {
-            infoField.setText("Fråga " + currentQuestion);
+        if (game.currentQuestion <= 3) {
+            infoField.setText("Fråga " + game.currentQuestion);
             infoField.revalidate();
         }
     }

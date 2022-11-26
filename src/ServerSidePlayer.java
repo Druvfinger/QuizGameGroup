@@ -4,14 +4,14 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class ServerSidePlayer extends Thread {
+public class
+ServerSidePlayer extends Thread {
 
     ServerSidePlayer opponent;
     Socket socket;
     BufferedReader input;
     PrintWriter output;
     String player;
-
     ServerSideGame game;
     int score;
 
@@ -73,6 +73,7 @@ public class ServerSidePlayer extends Thread {
             while (true) {
                 String command = input.readLine();
                 if (command.startsWith("MOVE")){
+                    game.isFirstRound(this);
                      if (game.hasPlayedRound(this)){
                          output.println("Round Played");
                          output.println(game.hasWinner() ? "Victory" : game.isTie() ? "Tie"

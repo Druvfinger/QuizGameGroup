@@ -1,5 +1,4 @@
 
-import javax.swing.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,6 +10,14 @@ public class ServerSideGame {
     ServerSidePlayer currentPlayer;
     GameScreen gameScreen;
     Database database = new Database();
+
+    int currentRound = 0;
+    int currentScore = 0;
+    int currentQuestion;
+
+    public int getCurrentRound() {
+        return currentRound;
+    }
 
     boolean isCategoryChosen = false;
     public boolean hasWinner() {
@@ -29,7 +36,7 @@ public class ServerSideGame {
 
     public boolean isLastRound() {
         int numRounds = getNumberOfRounds();
-        return gameScreen.currentRound == numRounds;
+        return currentRound == numRounds; // can't do through gamescreen
     }
 
     public void drawUpQuestion(GameScreen gameScreen, Database database) {
@@ -44,7 +51,7 @@ public class ServerSideGame {
 
     public Boolean isLastQuestion() {
         int numQuestions = getNumberOfQuestions();
-        return gameScreen.currentQuestion == numQuestions; // true if currentQuestion == numQuestions
+        return currentQuestion == numQuestions; // true if currentQuestion == numQuestions
     }
 
     public void newRound() {
@@ -53,10 +60,10 @@ public class ServerSideGame {
             gameScreen = new GameScreen();
             if (!isLastQuestion()) {
                 newQuestion(gameScreen);
-                gameScreen.currentQuestion++;
+                currentQuestion++;
             } else if (isLastQuestion()) {
                 newQuestion(gameScreen);
-                gameScreen.currentQuestion = 0;
+                currentQuestion = 0;
                 currentPlayer.currentScore = 0;
             }
         }
@@ -89,9 +96,14 @@ public class ServerSideGame {
             gameScreen.revalidate();
         }
     }
-    public synchronized boolean hasPlayedRound(ServerSidePlayer player){
+    public synchronized void isFirstRound(ServerSidePlayer player){
         if (player == currentPlayer){
             newRound();
+        }
+    }
+    public synchronized boolean hasPlayedRound(ServerSidePlayer player){
+        if (player == currentPlayer){
+            //set score and so on
             currentPlayer = currentPlayer.getOpponent();
             currentPlayer.otherPlayerMoved(currentPlayer.score);
             return true;
