@@ -10,56 +10,50 @@ public class Client {
     protected final int port = 54321;
 
     private Socket socket;
-    private BufferedReader in;
-    private PrintWriter out;
+    static BufferedReader inReader;
+    static PrintWriter outWriter;
     static String player;
 
-    WelcomeScreen welcomeScreen;
-
+    WelcomeScreen currentWelcomeScreen;
     GameScreen gameScreen;
     ServerSideGame game;
 
-    private static final int SHOW_WELCOME_SCREEN = 0;
-
-    private int state;
-
-
     public Client() throws IOException {
         socket = new Socket(host, port);
-        out = new PrintWriter(socket.getOutputStream(), true);
-        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        outWriter = new PrintWriter(socket.getOutputStream(), true);
+        inReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
 
     public void play() throws IOException {
         String response = "";
         try {
             while (true) {
-                response = in.readLine();
+                response = inReader.readLine();
                 if (response.startsWith("WELCOME")) {
-                    state = SHOW_WELCOME_SCREEN;
-                    player = response.substring(8, response.length());
-                    welcomeScreen = new WelcomeScreen(player);
+                    player = response.substring(8);
                     System.out.println(response);
                     System.out.println(player);
+                    currentWelcomeScreen = new WelcomeScreen(player);
+                    currentWelcomeScreen.userInfoTextField.setText("Just one moment " + player + "! We are waiting for your opponent to connect.");
+
                 }
-                else if (response.equals("Waiting for opponent to connect")){
+                else if (response.startsWith("WAITING")){
                     System.out.println("Waiting for opponent to connect.");
                 }
-                else if (response.equals("All players connected")){
+                else if (response.equals("PLAYERS_CONNECTED")) {
                     System.out.println("All players connected. We are set to go.");
-                    break;
-                    /*System.out.println(userName);
-                    /*out.println("start");
-                    gameScreen = new GameScreen();
-                    game.chooseCategory();
-                } else if (response.startsWith("SCORE")) {
-                    int score = Integer.parseInt(response.substring(5));
-                    int temp = gameScreen.currentRound;
-                    if (temp ==  1){
-                        //resultsScreen.player1ResultLabel.setText(score);
-                    }*/
                 }
-                else System.out.println("Something fishy is going on.");
+                else if (response.equals("PLAYERS_READY")){
+                    System.out.println(response);
+                    currentWelcomeScreen.newGameButton.setBackground(WelcomeScreen.VERY_LIGHT_GREEN);
+                    currentWelcomeScreen.newGameButton.setVisible(true);
+                    currentWelcomeScreen.userInfoTextField.setText("We are set to go. Please continue to the game.");
+                    currentWelcomeScreen.repaint();
+                    currentWelcomeScreen.revalidate();
+                }
+
+                //else System.out.println("Something fishy is going on.");
+                else System.out.println("We are missing something.");
             }
         } catch (Exception e) {
             e.printStackTrace();

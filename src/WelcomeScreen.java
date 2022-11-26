@@ -11,11 +11,13 @@ public class WelcomeScreen extends JFrame {
     JPanel backPanel = new JPanel(new BorderLayout());
     JPanel userPanel = new JPanel(new BorderLayout());
     JPanel emptyPanel = new JPanel();
+    JPanel newGameButtonAndInfoFieldPanel = new JPanel(new BorderLayout());
     JLabel welcomeText = new JLabel("Welcome to our Quiz Game!", SwingConstants.CENTER);
     JLabel emojiLabel = new JLabel(new ImageIcon("Pictures/YellowSmart.png"));
     JPanel userNamePanel = new JPanel(new GridLayout(1, 3));
     JLabel userNameLabel = new JLabel("Write your username:", SwingConstants.CENTER);
     JTextField userNameTextField = new JTextField(20);
+    JTextField userInfoTextField = new JTextField("");
     JButton userNameSubmitButton = new JButton("Submit");
     JButton newGameButton = new JButton("New Game");
     static String userName;
@@ -37,7 +39,7 @@ public class WelcomeScreen extends JFrame {
         add(backPanel);
         backPanel.add(userPanel, BorderLayout.NORTH);
         backPanel.add(emptyPanel, BorderLayout.CENTER);
-        backPanel.add(newGameButton, BorderLayout.SOUTH);
+        backPanel.add(newGameButtonAndInfoFieldPanel, BorderLayout.SOUTH);
 
         userPanel.add(welcomeText, BorderLayout.NORTH);
         userPanel.add(emojiLabel, BorderLayout.CENTER);
@@ -54,6 +56,7 @@ public class WelcomeScreen extends JFrame {
 
         userPanel.setBackground(LIGHT_BLUE);
         emptyPanel.setBackground(LIGHT_BLUE);
+        newGameButtonAndInfoFieldPanel.setBackground(LIGHT_BLUE);
         userNameLabel.setOpaque(true);
         userNameLabel.setBackground(Color.WHITE);
 
@@ -61,8 +64,13 @@ public class WelcomeScreen extends JFrame {
         newGameButton.setBorder(new LineBorder(Color.WHITE, 5));
         newGameButton.setBackground(VERY_LIGHT_BLUE);
 
+        newGameButtonAndInfoFieldPanel.add(newGameButton, BorderLayout.NORTH);
+        newGameButtonAndInfoFieldPanel.add(userInfoTextField, BorderLayout.SOUTH);
+
         userNameSubmitButton.addActionListener(listener);
         newGameButton.addActionListener(listener);
+
+        newGameButton.setVisible(false);
 
         setSize(410, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -73,33 +81,29 @@ public class WelcomeScreen extends JFrame {
     ActionListener listener = new ActionListener() { // anonym klass
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == newGameButton) {
-                if (userName != null) {
-                    System.out.println(playerNumber);
-                    if (playerNumber.equals("Player1")) {
-                        setVisible(false);
-                        categoryScreen = new ChooseCategoryScreen(playerNumber);
-                    }
-                    else if (playerNumber.equals("Player2")){
-                        setVisible(false);
-                        gameScreen = new GameScreen(playerNumber);
-                    }
-                } else JOptionPane.showMessageDialog(null, "Please enter your username before you proceed.");
+
             }
             if (e.getSource() == userNameSubmitButton) {
                 userName = userNameTextField.getText();
                 GameScreen.userName = userName; //
                 ResultsScreen.userName = userName;
+
                 quizTitle = "Quiz Game " + userName;
                 ChooseCategoryScreen.quizTitle = quizTitle;
                 GameScreen.quizTitle = quizTitle;
                 ResultsScreen.quizTitle = quizTitle;
+
+                //Client.numberPLayersEnteredName++;
                 userNamePanel.removeAll();
                 userNameLabel.setText("Welcome " + userName + " and Good Luck!");
                 userNameLabel.setFont(new Font("Sans Serif", Font.PLAIN, 20));
                 userNameLabel.setBorder(new EmptyBorder(2, 20, 5, 20));
                 userNamePanel.add(userNameLabel);
                 userNamePanel.revalidate();
+
                 System.out.println(userName + " is connected.");
+
+                Client.outWriter.println("READY_TO_PLAY " + playerNumber);
             }
         }
     };
