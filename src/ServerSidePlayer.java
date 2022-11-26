@@ -11,13 +11,15 @@ public class ServerSidePlayer extends Thread {
     Socket socket;
     BufferedReader input;
     PrintWriter output;
+
     String player;
 
     ServerSideGame game; // protokoll
+    private MultiWriter multiWriter;
     int score;
 
     int currentScore = 0;
-    static int playersReady = 0;
+    boolean playerReady = false;
     int numberPLayersEnteredName;
 
     public int getCurrentScore() {
@@ -25,20 +27,22 @@ public class ServerSidePlayer extends Thread {
     }
 
 
-    public ServerSidePlayer(Socket socket, String player, ServerSideGame game, int score) throws IOException {
+    public ServerSidePlayer(Socket socket, String player, ServerSideGame game, MultiWriter multiWriter) throws IOException {
         this.socket = socket;
         this.player = player;
         this.game = game;
-        this.score = score;// testing this out for keeping track of score
+        this.multiWriter = multiWriter;// testing this out
         try {
             input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             output = new PrintWriter(socket.getOutputStream(), true);
+            multiWriter.addWriter(output);
             output.println("WELCOME " + player); // skickas till klienten
             output.println("WAITING " + player); // skickas till klienten
             System.out.println("Waiting for opponent to connect.");
         } catch (IOException e) {
             System.out.println("Player died: " + e);
         }
+
     }
 
     public void setOpponent(ServerSidePlayer opponent) {
@@ -57,30 +61,45 @@ public class ServerSidePlayer extends Thread {
         this.currentPlayer = currentPlayer;
     }
 
-    public void run() {
+    public synchronized void run() {
         try {
             output.println("PLAYERS_CONNECTED");
             System.out.println("All players connected");
 
             String fromClient, toClient;
             while ((fromClient = input.readLine()) != null) { // kommunicerar med klienten
-                if (fromClient.startsWith("READY_TO_PLAY ")){
+                if (fromClient.startsWith("READY_TO_PLAY ")) {
                     player = fromClient.substring(14);
                     System.out.println(fromClient);
                     System.out.println(player);
                     System.out.println(player + " is ready to play");
-                    playersReady++;
-                    System.out.println(playersReady);
-                    if (playersReady == 2){
-                        toClient = "PLAYERS_READY";
-                        output.println(toClient);
+                    this.playerReady = true;
+                    System.out.println(playerReady);
+                    if (playerReady && this.getOpponent().playerReady) {
                         System.out.println("PLAYERS_READY");
+                        toClient = "PLAYERS_READY";
+                        for (PrintWriter writer : multiWriter.getWriters()) {
+                            writer.println(toClient);
+                        }
                     }
                 }
             }
+        } catch (RuntimeException ex) {
+            System.out.println("Klienten har avbrutit programmet.");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                socket.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+}
 
 
-            // Repeatedly get commands from the client and process them.
+// Repeatedly get commands from the client and process them.
            /* while (true) {
                 String command = input.readLine();
                 if (command.startsWith("MOVE")) {
@@ -116,15 +135,3 @@ public class ServerSidePlayer extends Thread {
                 }
             }
         */
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                socket.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-    }
-}

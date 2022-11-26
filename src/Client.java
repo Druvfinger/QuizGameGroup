@@ -34,14 +34,14 @@ public class Client {
                     System.out.println(response);
                     System.out.println(player);
                     currentWelcomeScreen = new WelcomeScreen(player);
-                    currentWelcomeScreen.userInfoTextField.setText("Just one moment " + player + "! We are waiting for your opponent to connect.");
-
+                    currentWelcomeScreen.userInfoTextField.setText("Just one moment " + player + "! We are waiting for your opponent.");
                 }
                 else if (response.startsWith("WAITING")){
                     System.out.println("Waiting for opponent to connect.");
                 }
                 else if (response.equals("PLAYERS_CONNECTED")) {
                     System.out.println("All players connected. We are set to go.");
+
                 }
                 else if (response.equals("PLAYERS_READY")){
                     System.out.println(response);
