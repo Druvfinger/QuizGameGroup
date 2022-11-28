@@ -65,7 +65,7 @@ public class Client {
 
                 // väntar tills både spelare skrivit in sitt namn, sedan gör "Fortsätt" knapp synlig
                 else if (response.equals("ENTERED_NAME_BOTH")) {
-                    welcomeScreen.newGameButton.setBackground(WelcomeScreen.VERY_LIGHT_GREEN);
+                    welcomeScreen.newGameButton.setBackground(Constants.VERY_LIGHT_GREEN);
                     welcomeScreen.newGameButton.setVisible(true);
                     welcomeScreen.userInfoTextField.setText("We are set to go. Please continue to the game.");
                     welcomeScreen.repaint();
@@ -117,7 +117,7 @@ public class Client {
                 } else if (response.startsWith("QUESTION: ")) {
                     String question = response.substring(10);
                     System.out.println(question);// för att kontrollera att det fungerar korrekt
-                    gameScreen = new GameScreen(player, currentPlayerName, opponentName, chosenCategory);
+                    gameScreen = new GameScreen(player, currentPlayerName, opponentName, chosenCategory, game.database);
                     gameScreen.currentCategory = chosenCategory;
                     gameScreen.questionLabel.setText(question);
                     gameScreen.revalidate();
@@ -126,15 +126,15 @@ public class Client {
                     String answers = response.substring(9);
                     System.out.println(answers);// för att kontrollera att det fungerar korrekt
                     String[] answersArray = answers.split(",");
-                    for (int i = 0; i < answersArray.length; i++){
+                    for (int i = 0; i < answersArray.length; i++) {
                         System.out.println(answersArray[i]);// för att kontrollera att det fungerar korrekt
                         gameScreen.buttonList.get(i).setText(answersArray[i]);
                     }
                     gameScreen.revalidate();
-                }
 
-                //else System.out.println("Something fishy is going on.");
-                else System.out.println("We are missing out on something. " + response);
+
+                    //else System.out.println("Something fishy is going on.");
+                }else System.out.println("We are missing out on something. " + response);
 
             }
         } catch (Exception e) {

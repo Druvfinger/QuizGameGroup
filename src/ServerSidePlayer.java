@@ -3,7 +3,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.List;
 
 public class ServerSidePlayer extends Thread {
 
@@ -22,9 +21,11 @@ public class ServerSidePlayer extends Thread {
     int currentScore = 0;
     boolean playerEnteredName = false;
     boolean playerReadyToPlay = false;
-    static String category; // går det bra att göra denna variabel statisk? Hur ska den påverka om man spelar flera par???
-    static String question; // går det bra att göra denna variabel statisk? Hur ska den påverka om man spelar flera par???
-    static StringBuilder builderWithAnswers; // går det bra att göra denna variabel statisk? Hur ska den påverka om man spelar flera par???
+    String category; // går det bra att göra denna variabel statisk? Hur ska den påverka om man spelar flera par???
+    String question; // går det bra att göra denna variabel statisk? Hur ska den påverka om man spelar flera par???
+    StringBuilder builderWithAnswers; // går det bra att göra denna variabel statisk? Hur ska den påverka om man spelar flera par???
+
+    static String answer;
 
     public int getCurrentScore() {
         return currentScore;
@@ -128,17 +129,10 @@ public class ServerSidePlayer extends Thread {
                     for (PrintWriter writer : multiWriter.getWriters()) {
                         writer.println(fromClient);
                     }
-                    question = game.getQuestionText();
-                    System.out.println(question);// för att kontrollera att det fungerar korrekt
-                    List<String> answers = game.getAnswersText();
-                    builderWithAnswers = new StringBuilder();
-                    for (String answer : answers) {
-                        builderWithAnswers.append(answer).append(",");
-                    }
-                    System.out.println(builderWithAnswers);// för att kontrollera att det fungerar korrekt
-                }
+                    game.getQuestionTest(); // does the exact same as before it is just contained in method to keep clean
 
-                else if (fromClient.startsWith("READY_TO_ANSWER ")) {
+
+                }else if (fromClient.startsWith("READY_TO_ANSWER ")) {
                     System.out.println(fromClient);
                     output.println(fromClient);
                 }

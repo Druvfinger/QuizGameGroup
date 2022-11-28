@@ -11,7 +11,7 @@ public class Database {
 
     private List<Integer> duplicates = new ArrayList<>();
 
-    final private String currentCategory = "Technology";
+    final private String currentCategory = "Technology"; // for testing
 
     List<String> categories = List.of("Technology", "Pop culture", "Geography", "Science");
 

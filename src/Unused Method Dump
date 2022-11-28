@@ -1,0 +1,30 @@
+ public ImageIcon getRandomImageIcon() {
+        int randomImage = (int) (Math.random() * 20 + 1);
+        String filePath = "C:\\Users\\46762\\Desktop\\Pictures\\Bild" + randomImage + ".png";
+        return new ImageIcon(filePath);
+    }
+
+
+        public JPanel createDesiredNumberOfPanels(JPanel panelToFill, int numberOfPanels) {
+            panelToFill.setLayout(new GridLayout(numberOfPanels, 1));
+            for (int i = 0; i < numberOfPanels; i++) {
+                JPanel panel = new JPanel();
+                panel.setOpaque(true);
+                panel.setBackground(Constants.VERY_LIGHT_BLUE);
+                panel.setBorder(new LineBorder(Constants.LIGHT_BLUE, 1));
+                panelToFill.add(panel);
+            }
+            return panelToFill;
+        }
+
+         public ImageIcon setSizeToFitLabel(JLabel label, String imagePath) {
+                BufferedImage image = null;
+                try {
+                    image = ImageIO.read(new File(imagePath));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Image resizedImage = image.getScaledInstance(label.getWidth(), label.getHeight(),
+                        Image.SCALE_SMOOTH);
+                return new ImageIcon(resizedImage);
+            }

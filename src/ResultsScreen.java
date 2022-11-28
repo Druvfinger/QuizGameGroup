@@ -37,11 +37,6 @@ public class ResultsScreen extends JFrame {
     static String quizTitle;
     static String playerNumber;
     static String userName; // livsviktigt för att det ska fungera
-    public static final Color LIGHT_BLUE = new Color(51, 153, 255);
-    public static final Color VERY_LIGHT_BLUE = new Color(51, 204, 255);
-    public static final Color VERY_LIGHT_GREEN = new Color(102, 255, 102);
-    public static final Color LIGHT_GREEN = new Color(0, 255, 51);
-    public static final Color GOLD = new Color(255, 204, 51);
 
     static int finalScore;
     GameSettings gameSettings = new GameSettings();
@@ -54,17 +49,12 @@ public class ResultsScreen extends JFrame {
     boolean myTurnToChoose = false;
     int currentRoundNumber = 1;
 
-
-    public ResultsScreen(String player, String currentPlayerName, String opponentName) {
-        playerNumber = player;
-        this.currentPlayerName = currentPlayerName;
-        this.opponentName = opponentName;
-
+    public void setUpResultScreenGUI(){
         setTitle(quizTitle);
         add(basePanel);
 
         theirTurnLabel.setPreferredSize(new Dimension(300, 75));
-        theirTurnLabel.setForeground(GOLD);
+        theirTurnLabel.setForeground(Constants.GOLD);
         theirTurnLabel.setFont(new Font("Sans Serif", Font.BOLD, 25));
 
         leftPlayerPanel.setPreferredSize(new Dimension(110, 400));
@@ -75,12 +65,12 @@ public class ResultsScreen extends JFrame {
         rightUserInfoPanel.setPreferredSize(new Dimension(110, 125));
 
         theirTurnLabel.setOpaque(true); //hjälpverktyg
-        theirTurnLabel.setBackground(LIGHT_BLUE); //hjälpverktyg
+        theirTurnLabel.setBackground(Constants.LIGHT_BLUE); //hjälpverktyg
         leftPlayerPanel.setBackground(Color.WHITE); //hjälpverktyg
-        middlePanel.setBackground(LIGHT_BLUE);
-        categoryPanel.setBackground(VERY_LIGHT_BLUE); //hjälpverktyg
+        middlePanel.setBackground(Constants.LIGHT_BLUE);
+        categoryPanel.setBackground(Constants.VERY_LIGHT_BLUE); //hjälpverktyg
         rightPlayerPanel.setBackground(Color.WHITE); //hjälpverktyg
-        goOnPanel.setBackground(LIGHT_BLUE); //hjälpverktyg
+        goOnPanel.setBackground(Constants.LIGHT_BLUE); //hjälpverktyg
 
         basePanel.add(theirTurnLabel, BorderLayout.NORTH);
         basePanel.add(leftPlayerPanel, BorderLayout.WEST);
@@ -97,7 +87,7 @@ public class ResultsScreen extends JFrame {
 
         goOnButton.setPreferredSize(new Dimension(250, 40));
         goOnButton.setBorder(new LineBorder(Color.WHITE, 3));
-        goOnButton.setBackground(LIGHT_GREEN);
+        goOnButton.setBackground(Constants.LIGHT_GREEN);
 
         goOnPanel.add(goOnButton, BorderLayout.CENTER);
         goOnPanel.add(infoField, BorderLayout.SOUTH);
@@ -118,8 +108,8 @@ public class ResultsScreen extends JFrame {
         userNameLabelA.setFont(new Font("Sans Serif", Font.PLAIN, 20));
         playerEmojiLabelA.setOpaque(true);
         userNameLabelA.setOpaque(true);
-        userNameLabelA.setBackground(LIGHT_BLUE);
-        playerEmojiLabelA.setBackground(LIGHT_BLUE);
+        userNameLabelA.setBackground(Constants.LIGHT_BLUE);
+        playerEmojiLabelA.setBackground(Constants.LIGHT_BLUE);
 
         leftUserInfoPanel.add(playerEmojiLabelA, BorderLayout.CENTER);
         leftUserInfoPanel.add(userNameLabelA, BorderLayout.SOUTH);
@@ -128,8 +118,8 @@ public class ResultsScreen extends JFrame {
         userNameLabelB.setFont(new Font("Sans Serif", Font.PLAIN, 20));
         playerEmojiLabelB.setOpaque(true);
         userNameLabelB.setOpaque(true);
-        userNameLabelB.setBackground(LIGHT_BLUE);
-        playerEmojiLabelB.setBackground(LIGHT_BLUE);
+        userNameLabelB.setBackground(Constants.LIGHT_BLUE);
+        playerEmojiLabelB.setBackground(Constants.LIGHT_BLUE);
 
         rightUserInfoPanel.add(playerEmojiLabelB, BorderLayout.CENTER);
         rightUserInfoPanel.add(userNameLabelB, BorderLayout.SOUTH);
@@ -146,6 +136,16 @@ public class ResultsScreen extends JFrame {
         setVisible(true);
     }
 
+
+    public ResultsScreen(String player, String currentPlayerName, String opponentName) {
+        playerNumber = player;
+        this.currentPlayerName = currentPlayerName;
+        this.opponentName = opponentName;
+        setUpResultScreenGUI();
+
+
+    }
+
     ActionListener listener = new ActionListener() { // anonym klass
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -157,47 +157,19 @@ public class ResultsScreen extends JFrame {
         }
     };
 
-    public ImageIcon getRandomImageIcon() {
-        int randomImage = (int) (Math.random() * 20 + 1);
-        String filePath = "C:\\Users\\46762\\Desktop\\Pictures\\Bild" + randomImage + ".png";
-        return new ImageIcon(filePath);
-    }
+
 
     public JPanel createDesiredNumberOfLabels(JPanel panelToFill, int numberOfLabels, List<JLabel> lista) {
         panelToFill.setLayout(new GridLayout(numberOfLabels, 1));
         for (int i = 0; i < numberOfLabels; i++) {
             JLabel label = new JLabel("", SwingConstants.CENTER);
             label.setOpaque(true);
-            label.setBackground(LIGHT_BLUE);
-            label.setBorder(new LineBorder(VERY_LIGHT_BLUE, 1));
+            label.setBackground(Constants.LIGHT_BLUE);
+            label.setBorder(new LineBorder(Constants.VERY_LIGHT_BLUE, 1));
             panelToFill.add(label);
             lista.add(label);
         }
         return panelToFill;
-    }
-
-    public JPanel createDesiredNumberOfPanels(JPanel panelToFill, int numberOfPanels) {
-        panelToFill.setLayout(new GridLayout(numberOfPanels, 1));
-        for (int i = 0; i < numberOfPanels; i++) {
-            JPanel panel = new JPanel();
-            panel.setOpaque(true);
-            panel.setBackground(VERY_LIGHT_BLUE);
-            panel.setBorder(new LineBorder(LIGHT_BLUE, 1));
-            panelToFill.add(panel);
-        }
-        return panelToFill;
-    }
-
-    public ImageIcon setSizeToFitLabel(JLabel label, String imagePath) {
-        BufferedImage image = null;
-        try {
-            image = ImageIO.read(new File(imagePath));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Image resizedImage = image.getScaledInstance(label.getWidth(), label.getHeight(),
-                Image.SCALE_SMOOTH);
-        return new ImageIcon(resizedImage);
     }
 
     public static void main(String[] args) {

@@ -10,94 +10,94 @@ import java.io.File;
 import java.io.IOException;
 
 public class GameScreen extends JFrame {
-    String answerA = "Svar A";
-    String answerB = "Svar B";
-    String answerC = "Svar C";
-    String answerD = "Svar D";
 
 
-    JPanel basePanel = new JPanel(new GridLayout(2, 1));
-    JPanel upperPanel = new JPanel(new GridLayout(2, 1));
-    JPanel infoPanel = new JPanel(new GridLayout(1, 3));
-    JPanel emptyPanel = new JPanel();
-
-
-    JPanel leftUserInfoPanel = new JPanel(new GridLayout(2, 1));
-    JPanel categoryInfoPanel = new JPanel(new BorderLayout());
-    JPanel rightUserInfoPanel = new JPanel(new GridLayout(2, 1));
-    JLabel questionLabel = new JLabel("", SwingConstants.CENTER);
-
-    JPanel lowerPanel = new JPanel();
-    JPanel lowerNorthPanel = new JPanel(new GridLayout(1, 2, 10, 10));
-    JPanel lowerCenterPanel = new JPanel(new GridLayout(1, 2, 10, 10));
-    JPanel lowerSouthPanel = new JPanel();
-
-    JButton answerButtonA = new JButton(answerA);
-    JButton answerButtonB = new JButton(answerB);
-    JButton answerButtonC = new JButton(answerC);
-    JButton answerButtonD = new JButton(answerD);
-    JButton goOnButton = new JButton("Fortsätt");
-
-    List<JButton> buttonList = List.of(answerButtonA, answerButtonB, answerButtonC, answerButtonD);
-
-    JLabel playerEmojiLabelA = new JLabel(new ImageIcon("Pictures/CuteHipster.png"));
-    JLabel playerEmojiLabelB = new JLabel(new ImageIcon("Pictures/CuteHeadphones.png"));
-    JLabel categoryImageLabel = new JLabel(new ImageIcon());
-    JLabel categoryTextLabel;
-    JPanel userNamePointsPanelA = new JPanel(new GridLayout(2, 1));
-    JPanel userNamePointsPanelB = new JPanel(new GridLayout(2, 1));
-
-    String userNameA = "PLayer A";
-    JLabel userNameLabelA = new JLabel(userNameA, SwingConstants.CENTER);
-    String userNameB = "Player B";
-    JLabel userNameLabelB = new JLabel(userNameB, SwingConstants.CENTER);
-
-    JLabel pointsLabelA = new JLabel("Points:", SwingConstants.CENTER);
-    JLabel pointsLabelB = new JLabel("Points:", SwingConstants.CENTER);
-    int currentQuestion = 1;
-    JTextField infoField = new JTextField("Fråga " + currentQuestion, 43);
-
-    ServerSideGame game = new ServerSideGame();
-    Database serverDatabase;
-    GameSettings settings = new GameSettings();
-    ResultsScreen resultsScreen;
-
+    public int getCurrentRound() {
+        return currentRound;
+    }
     int numberOfQuestions;
     int onlyOneAnswerPressed = 1;
 
-    static String playerNumber;
+    String playerNumber;
     Boolean isAnswerCorrect = false; // testa
     Boolean isAnswered = false; // testa
     int currentPoint = 0;
     int currentRound = 0; // testa
     static String userName; // livsviktigt för att det ska fungera
+    final Color LIGHT_BLUE = new Color(51, 153, 255);
+    final Color VERY_LIGHT_BLUE = new Color(51, 204, 255);
+    final Color VERY_LIGHT_GREEN = new Color(102, 255, 102);
+    final Color LIGHT_GREEN = new Color(0, 255, 51);
+    final Color GOLD = new Color(255, 204, 51);
+    final Color VERY_LIGHT_RED = new Color(255, 102, 102);
 
-    static String quizTitle;
+    static String quizTitle; // when do you use static ??
     String currentCategory;
-    static int finalScore;
-    int goOnButtonNumberClicked = 0;
+    int finalScore;
     String currentPlayerName;
     String opponentName;
+    String answerA = "Svar A";
+    String answerB = "Svar B";
+    String answerC = "Svar C";
+    String answerD = "Svar D";
+    int currentQuestion = 1;
+    List<JButton> buttonList;
+    ServerSideGame game = new ServerSideGame();
+    Database serverDatabase;
+    GameSettings settings = new GameSettings();
+    JButton answerButtonA;
+    JButton answerButtonB;
+    JButton answerButtonC;
+    JButton answerButtonD;
+    JButton goOnButton;
+    JLabel questionLabel;
+    JLabel pointsLabelA;
+    JLabel pointsLabelB;
+    JTextField infoField;
+    public void setUpGameScreenGUI(){
 
-    public int getCurrentRound() {
-        return currentRound;
-    }
 
-    public static final Color LIGHT_BLUE = new Color(51, 153, 255);
-    public static final Color VERY_LIGHT_BLUE = new Color(51, 204, 255);
-    public static final Color VERY_LIGHT_GREEN = new Color(102, 255, 102);
-    public static final Color LIGHT_GREEN = new Color(0, 255, 51);
-    public static final Color GOLD = new Color(255, 204, 51);
-    public static final Color VERY_LIGHT_RED = new Color(255, 102, 102);
 
-    public GameScreen(String player, String currentPlayerName, String opponentName, String currentCategory, Database database) {
-        playerNumber = player;
-        this.currentPlayerName = currentPlayerName;
-        this.opponentName = opponentName;
-        this.currentCategory = currentCategory;
-        this.serverDatabase = database;
+        JPanel basePanel = new JPanel(new GridLayout(2, 1));
+        JPanel upperPanel = new JPanel(new GridLayout(2, 1));
+        JPanel infoPanel = new JPanel(new GridLayout(1, 3));
+        JPanel emptyPanel = new JPanel();
 
-        numberOfQuestions = settings.getNumberOfQuestions(); // nuvarande 3
+
+        JPanel leftUserInfoPanel = new JPanel(new GridLayout(2, 1));
+        JPanel categoryInfoPanel = new JPanel(new BorderLayout());
+        JPanel rightUserInfoPanel = new JPanel(new GridLayout(2, 1));
+        questionLabel = new JLabel("", SwingConstants.CENTER);
+
+        JPanel lowerPanel = new JPanel();
+        JPanel lowerNorthPanel = new JPanel(new GridLayout(1, 2, 10, 10));
+        JPanel lowerCenterPanel = new JPanel(new GridLayout(1, 2, 10, 10));
+        JPanel lowerSouthPanel = new JPanel();
+
+        answerButtonA = new JButton(answerA);
+        answerButtonB = new JButton(answerB);
+        answerButtonC = new JButton(answerC);
+        answerButtonD = new JButton(answerD);
+        JButton goOnButton = new JButton("Fortsätt");
+
+        buttonList = List.of(answerButtonA, answerButtonB, answerButtonC, answerButtonD);
+
+        JLabel playerEmojiLabelA = new JLabel(new ImageIcon("Pictures/CuteHipster.png"));
+        JLabel playerEmojiLabelB = new JLabel(new ImageIcon("Pictures/CuteHeadphones.png"));
+        JLabel categoryImageLabel = new JLabel(new ImageIcon());
+        JLabel categoryTextLabel;
+        JPanel userNamePointsPanelA = new JPanel(new GridLayout(2, 1));
+        JPanel userNamePointsPanelB = new JPanel(new GridLayout(2, 1));
+
+        String userNameA = "PLayer A";
+        JLabel userNameLabelA = new JLabel(userNameA, SwingConstants.CENTER);
+        String userNameB = "Player B";
+        JLabel userNameLabelB = new JLabel(userNameB, SwingConstants.CENTER);
+
+        pointsLabelA = new JLabel("Points:", SwingConstants.CENTER);
+        pointsLabelB = new JLabel("Points:", SwingConstants.CENTER);
+
+        infoField = new JTextField("Fråga " + currentQuestion, 43);
 
         categoryTextLabel = new JLabel(currentCategory, SwingConstants.CENTER);
         categoryTextLabel.setPreferredSize(new Dimension(135, 50));
@@ -199,6 +199,19 @@ public class GameScreen extends JFrame {
         setVisible(true);
     }
 
+    public GameScreen(String player, String currentPlayerName, String opponentName, String currentCategory, Database database) {
+        playerNumber = player;
+        this.currentPlayerName = currentPlayerName;
+        this.opponentName = opponentName;
+        this.currentCategory = currentCategory;
+        this.serverDatabase = database;
+
+        numberOfQuestions = settings.getNumberOfQuestions(); // nuvarande 3
+        setUpGameScreenGUI();
+
+
+        }
+
     ActionListener listener = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
 
@@ -236,24 +249,16 @@ public class GameScreen extends JFrame {
                         button.setText("");
                         button.setEnabled(false);
                     }
-                    Client.outWriter.println( playerNumber + finalScore);  //??
                     JOptionPane.showMessageDialog(null, "Du har nu svarat på alla 3 frågorna. " +
                             "Click på Fortsätt för att gå vidare.");
                     revalidate();
-
-                }/*
-//                }
-                else {
-                    ResultsScreen.finalScore = finalScore;
-                    setVisible(false);
-                    //resultsScreen = new ResultsScreen(playerNumber);
-                }*/
+                }
             }
         }
     };
 
     // Test metod, måste testas noggrant
-    public ImageIcon setSizeToFitLabel(JLabel label, String imagePath) {
+    /*public ImageIcon setSizeToFitLabel(JLabel label, String imagePath) { // Method setSizeToFitLabel never used
         BufferedImage image = null;
         try {
             image = ImageIO.read(new File(imagePath));
@@ -263,9 +268,10 @@ public class GameScreen extends JFrame {
         Image resizedImage = image.getScaledInstance(label.getWidth(), label.getHeight(),
                 Image.SCALE_SMOOTH);
         return new ImageIcon(resizedImage);
-    }
+    }*/
 
     // kontrollerar om svaret på den valda knappen är korrekt
+    //-- Kolla att denna stämmer har en känsla att den spökar
     public boolean isRightAnswer(JButton clickedButton) {
         String givenAnswer = clickedButton.getText();
         return givenAnswer.equalsIgnoreCase(serverDatabase.getCorrectAnswer());
