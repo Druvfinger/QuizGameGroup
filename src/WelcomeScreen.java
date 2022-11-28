@@ -24,7 +24,7 @@ public class WelcomeScreen extends JFrame {
         JPanel newGameButtonAndInfoFieldPanel = new JPanel(new BorderLayout());
         JLabel welcomeText = new JLabel("Welcome to our Quiz Game!", SwingConstants.CENTER);
         JLabel emojiLabel = new JLabel(new ImageIcon("Pictures/YellowSmart.png"));
-        userNamePanel = new JPanel(new GridLayout(1, 3));
+        userNamePanel = new JPanel(new GridLayout(1, 3)); //
         userNameLabel = new JLabel("Write your username:", SwingConstants.CENTER);
         userNameTextField = new JTextField(20);
         userInfoTextField = new JTextField("");
@@ -92,15 +92,15 @@ public class WelcomeScreen extends JFrame {
         setUpWelcomeScreenGUI();
     }
 
-    ActionListener listener = new ActionListener() { // anonym klass
+    ActionListener listener = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == newGameButton) {
                 Client.outWriter.println("READY_TO_PLAY " + playerNumber);
             }
             if (e.getSource() == userNameSubmitButton) {
                 userName = userNameTextField.getText();
-                GameScreen.userName = userName; //
-                ResultsScreen.userName = userName;
+                GameScreen.userName = userName; // testa om man tar bort det
+                ResultsScreen.userName = userName; // testa om man tar bort det
 
                 rePaintWelcomeScreenIfNameSubmitted();
 

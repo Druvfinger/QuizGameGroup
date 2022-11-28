@@ -1,26 +1,18 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 public class GameScreen extends JFrame {
 
-
-    public int getCurrentRound() {
-        return currentRound;
-    }
     int numberOfQuestions;
     int onlyOneAnswerPressed = 1;
-
-    String playerNumber;
+    static String playerNumber;
     Boolean isAnswerCorrect = false; // testa
     Boolean isAnswered = false; // testa
+
     int currentPoint = 0;
     int currentRound = 0; // testa
     static String userName; // livsviktigt för att det ska fungera
@@ -33,7 +25,7 @@ public class GameScreen extends JFrame {
 
     static String quizTitle; // when do you use static ??
     String currentCategory;
-    int finalScore;
+    static int finalScore;
     String currentPlayerName;
     String opponentName;
     String answerA = "Svar A";
@@ -43,7 +35,8 @@ public class GameScreen extends JFrame {
     int currentQuestion = 1;
     List<JButton> buttonList;
     ServerSideGame game = new ServerSideGame();
-    Database serverDatabase;
+    Database database = new Database();
+    ResultsScreen resultsScreen;
     GameSettings settings = new GameSettings();
     JButton answerButtonA;
     JButton answerButtonB;
@@ -54,10 +47,11 @@ public class GameScreen extends JFrame {
     JLabel pointsLabelA;
     JLabel pointsLabelB;
     JTextField infoField;
+    JLabel categoryTextLabel;
     String rightAnswer;
     boolean wantToGoForward = false;
-    public void setUpGameScreenGUI(){
 
+    public void setUpGameScreenGUI() {
 
 
         JPanel basePanel = new JPanel(new GridLayout(2, 1));
@@ -80,14 +74,13 @@ public class GameScreen extends JFrame {
         answerButtonB = new JButton(answerB);
         answerButtonC = new JButton(answerC);
         answerButtonD = new JButton(answerD);
-        JButton goOnButton = new JButton("Fortsätt");
+        goOnButton = new JButton("Fortsätt");
 
         buttonList = List.of(answerButtonA, answerButtonB, answerButtonC, answerButtonD);
 
         JLabel playerEmojiLabelA = new JLabel(new ImageIcon("Pictures/CuteHipster.png"));
         JLabel playerEmojiLabelB = new JLabel(new ImageIcon("Pictures/CuteHeadphones.png"));
         JLabel categoryImageLabel = new JLabel(new ImageIcon());
-        JLabel categoryTextLabel;
         JPanel userNamePointsPanelA = new JPanel(new GridLayout(2, 1));
         JPanel userNamePointsPanelB = new JPanel(new GridLayout(2, 1));
 
@@ -162,11 +155,9 @@ public class GameScreen extends JFrame {
         rightUserInfoPanel.add(playerEmojiLabelB);
         rightUserInfoPanel.add(userNamePointsPanelB);
 
-        //goOnButton.setVisible(false); // sätta till synlig när man har spelat klart tre rundor
-
         questionLabel.setBorder(new CompoundBorder(new LineBorder(LIGHT_BLUE, 10), new EtchedBorder(EtchedBorder.RAISED)));
 
-        for (JButton button : buttonList) { // kopplar lyssnaren till svar-knappar
+        for (JButton button : buttonList) {
             button.addActionListener(listener);
         }
 
@@ -202,23 +193,18 @@ public class GameScreen extends JFrame {
         setVisible(true);
     }
 
-    public GameScreen(String player, String currentPlayerName, String opponentName, String currentCategory, Database database) {
+    public GameScreen(String player, String currentPlayerName, String opponentName, String currentCategory) {
         playerNumber = player;
         this.currentPlayerName = currentPlayerName;
         this.opponentName = opponentName;
         this.currentCategory = currentCategory;
-        this.serverDatabase = database;
 
         numberOfQuestions = settings.getNumberOfQuestions(); // nuvarande 3
         setUpGameScreenGUI();
-
-
-        }
+    }
 
     ActionListener listener = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-
-            // Nedanstående action events (och metoder i dem) behöver anpassas till nuvarande spelmotor
 
             if (e.getSource() == answerButtonA || e.getSource() == answerButtonB || e.getSource() == answerButtonC ||
                     e.getSource() == answerButtonD) {
@@ -232,9 +218,8 @@ public class GameScreen extends JFrame {
 
                 if (currentQuestion <= numberOfQuestions) {
                     Client.outWriter.println("NEXT_QUESTION? " + playerNumber);
-                }
-                else if (!wantToGoForward){ // (currentQuestion > numberOfQuestions)
-                    changeInfoField(); // ???
+                } else if (!wantToGoForward) { // (currentQuestion > numberOfQuestions)
+                    changeInfoField();
                     questionLabel.setText("");
                     for (JButton button : buttonList) {
                         button.setVisible(false); // VIKTIGT!! Glöm inte att sätta tillbaka till synligt!
@@ -242,52 +227,16 @@ public class GameScreen extends JFrame {
                     revalidate();
                     Client.outWriter.println("BACK_TO_RESULTS " + playerNumber);
                     wantToGoForward = true;
-                }
-                else {
+                } else {
                     Client.outWriter.println("SHOW_ME_RESULTS " + playerNumber);
-                }
-
-                /*
-
-
-                    if (currentQuestion <= numberOfQuestions) {
-                        changeInfoField(); // ändrar information på info panelen längst ner
-                        game.drawUpQuestion(questionLabel, buttonList);
-                        for (JButton button : buttonList) {
-                            button.setBackground(new JButton().getBackground());
-                        }
-                        revalidate();
-                    } else { // (currentQuestion > numberOfQuestions)
-                        changeInfoField();
-                        questionLabel.setText("");
-                        for (JButton button : buttonList) {
-                            button.setBackground(new JButton().getBackground());
-                            button.setText("");
-                        }
-                        JOptionPane.showMessageDialog(null, "Du har nu svarat på alla 3 frågorna. " +
-                                "Click på Fortsätt för att gå vidare.");
-                        revalidate();
-                    }
                 }
             }
         }
     };
 
-    // Test metod, måste testas noggrant
-    /*public ImageIcon setSizeToFitLabel(JLabel label, String imagePath) { // Method setSizeToFitLabel never used
-        BufferedImage image = null;
-        try {
-            image = ImageIO.read(new File(imagePath));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Image resizedImage = image.getScaledInstance(label.getWidth(), label.getHeight(),
-                Image.SCALE_SMOOTH);
-        return new ImageIcon(resizedImage);
-    }*/
 
     // kontrollerar om svaret på den valda knappen är korrekt
-    //-- Kolla att denna stämmer har en känsla att den spökar
+    //-- Kolla att denna stämmer har en känsla att den spökar - Den spöKar inte! ;-P
     public boolean isRightAnswer(JButton clickedButton) {
         String givenAnswer = clickedButton.getText();
         return givenAnswer.equalsIgnoreCase(rightAnswer);

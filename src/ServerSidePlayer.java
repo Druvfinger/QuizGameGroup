@@ -34,7 +34,6 @@ public class ServerSidePlayer extends Thread {
         return currentScore;
     }
 
-
     public ServerSidePlayer(Socket socket, String player, ServerSideGame game, MultiWriter multiWriter, Database database) throws IOException {
         this.socket = socket;
         this.player = player;
@@ -111,6 +110,7 @@ public class ServerSidePlayer extends Thread {
                     System.out.println(player + " is ready to play.");// för att kontrollera att det fungerar korrekt
                     this.playerReadyToPlay = true;
                     output.println("READY_TO_PLAY");
+                    //Används inte?:
                 //    if (playerReadyToPlay && this.getOpponent().playerReadyToPlay) {
                 //        System.out.println("READY_TO_PLAY_BOTH");// för att kontrollera att det fungerar korrekt
                 //       toClient = "READY_TO_PLAY_BOTH";

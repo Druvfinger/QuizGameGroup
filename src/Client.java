@@ -20,6 +20,7 @@ public class Client {
     ResultsScreen resultsScreen;
     GameScreen gameScreen;
     ChooseCategoryScreen categoryScreen;
+    ServerSideGame game; //
     String currentPlayerName;
     String opponentName;
     String chosenCategory;
@@ -30,9 +31,10 @@ public class Client {
         socket = new Socket(host, port);
         outWriter = new PrintWriter(socket.getOutputStream(), true);
         inReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        game = new ServerSideGame(); //
     }
 
-    public void play() {
+    public void play() throws IOException {
         String response;
         try {
             while (true) {
@@ -186,17 +188,14 @@ public class Client {
                     }
                 }
 
-
-                    //else System.out.println("Something fishy is going on.");
-                }else System.out.println("We are missing out on something. " + response);
+                //else System.out.println("Something fishy is going on.");
+                else System.out.println("We are missing out on something. " + response);
 
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-
 
     public static void main(String[] args) throws IOException {
         Client client = new Client();

@@ -1,11 +1,9 @@
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Database {
     private static int randIndex;
-
     private String currentCategory;
 
     List<String> categories = List.of("Technology", "Pop culture", "Geography", "Science");
@@ -145,7 +143,6 @@ public class Database {
             }
         }
         Collections.shuffle(answers);
-        System.out.println("getting answers");
         return answers;
     }
 
@@ -154,7 +151,7 @@ public class Database {
     }
 
     public String getCorrectAnswer(String category) {
-        if (category.equals("Technology")) { // testa att det fungerar korrekt med currentCategory being static
+        if (category.equals("Technology")) {
             return technologyAnswers.get(4 * randIndex);
         } else if (category.equals("Pop culture")) {
             return popcultureAnswers.get(4 * randIndex);

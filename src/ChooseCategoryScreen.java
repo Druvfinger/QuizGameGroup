@@ -62,14 +62,13 @@ public class ChooseCategoryScreen extends JFrame {
         setUpCategoryScreenGUI();
     }
 
-    ActionListener listener = new ActionListener() { // anonym klass
+    ActionListener listener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() instanceof JButton){
                 String chosenCategory = ((JButton) e.getSource()).getText();
                 Client.outWriter.println("I_CHOSE " + chosenCategory);
-                System.out.println("KLIENTVALD KATEGORI: " + chosenCategory);
-                database.setQuestionCategory(chosenCategory);
+            //    database.setQuestionCategory(chosenCategory);  // Kontrollera om den spelar roll
             }
         }
     };

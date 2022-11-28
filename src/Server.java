@@ -12,10 +12,10 @@ public class Server {
             while (true) {
 
                 ServerSideGame game = new ServerSideGame();
-                Database database = new Database(); // NYTT
+                Database database = new Database();
 
-                ServerSidePlayer player1 = new ServerSidePlayer(ss.accept(), "Player1", game, multiWriter, database); // NYTT
-                ServerSidePlayer player2 = new ServerSidePlayer(ss.accept(), "Player2", game, multiWriter, database); // NYTT
+                ServerSidePlayer player1 = new ServerSidePlayer(ss.accept(), "Player1", game, multiWriter, database);
+                ServerSidePlayer player2 = new ServerSidePlayer(ss.accept(), "Player2", game, multiWriter, database);
 
                 player1.setOpponent(player2);
                 player2.setOpponent(player1);
@@ -23,7 +23,7 @@ public class Server {
                 game.setCurrentPlayer(player1);
                 game.setOpponentPlayer(player2);
 
-                System.out.println(game.getCurrentPlayer().player); // kan skriva ut namn
+                System.out.println(game.getCurrentPlayer().player);
                 System.out.println(game.getOpponentPlayer().player);
 
                 player1.start();
