@@ -126,8 +126,4 @@ public class WelcomeScreen extends JFrame {
         System.out.println(userName + " is connected.");
     }
 
-// At some point we need to remove Main from all classes except Client and Server
-    public static void main(String[] args) {
-        WelcomeScreen welcomeScreen = new WelcomeScreen(playerNumber);
-    }
 }

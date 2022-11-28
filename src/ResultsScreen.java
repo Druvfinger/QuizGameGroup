@@ -1,57 +1,62 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
 public class ResultsScreen extends JFrame {
-    JPanel basePanel = new JPanel(new BorderLayout());
-    JLabel theirTurnLabel = new JLabel("Spelarens tur", SwingConstants.CENTER); //
-    JPanel middlePanel = new JPanel(new BorderLayout());
-    JPanel goOnPanel = new JPanel(new BorderLayout());
-    JButton goOnButton = new JButton("Fortsätt");
-    JPanel leftPlayerPanel = new JPanel(new BorderLayout());
-    JLabel totalsLabel = new JLabel("0 - 0", SwingConstants.CENTER);
-    JPanel categoryPanel = new JPanel();
-    JPanel rightPlayerPanel = new JPanel(new BorderLayout());
-    JPanel leftUserInfoPanel = new JPanel(new BorderLayout());
-    JPanel rightUserInfoPanel = new JPanel(new BorderLayout());
-    JPanel leftPlayerAnswersPanel = new JPanel();
-    JPanel rightPlayerAnswersPanel = new JPanel();
-    JLabel playerEmojiLabelA = new JLabel(new ImageIcon("Pictures/CuteHipster.png"));
-    JLabel playerEmojiLabelB = new JLabel(new ImageIcon("Pictures/CuteHeadphones.png"));
-    String userNameA = "Player A"; //
-    JLabel userNameLabelA = new JLabel(userNameA,SwingConstants.CENTER);
-    String userNameB = "Player B"; //
-    JLabel userNameLabelB = new JLabel(userNameB, SwingConstants.CENTER);
 
-    JTextField infoField = new JTextField("Här kommer det skrivas ut info till användare", 43);
-    GameScreen gameScreen;
-    ServerSideGame game;
+    JButton goOnButton;
     static String quizTitle;
     static String playerNumber;
     static String userName; // livsviktigt för att det ska fungera
 
-    static int finalScore;
+    //static int finalScore;
     GameSettings gameSettings = new GameSettings();
     int numberOfCategories = gameSettings.getNumberOfRounds();
-    List<JLabel> listOfLabelsPlayerA = new LinkedList<>();
-    List<JLabel> listOfLabelsPlayerB = new LinkedList<>();
-    List<JLabel> listOfCategoryLabels = new LinkedList<>();
+
     String currentPlayerName;
     String opponentName;
-    boolean myTurnToChoose = false;
-    int currentRoundNumber = 1;
+
+    JLabel theirTurnLabel;
+    //boolean myTurnToChoose = false; // not Used?
+    //int currentRoundNumber = 1; //not Used?
 
     public void setUpResultScreenGUI(){
+
+        JPanel basePanel = new JPanel(new BorderLayout());
+        theirTurnLabel = new JLabel("Spelarens tur", SwingConstants.CENTER); //
+        JPanel middlePanel = new JPanel(new BorderLayout());
+        JPanel goOnPanel = new JPanel(new BorderLayout());
+        goOnButton = new JButton("Fortsätt");
+        JPanel leftPlayerPanel = new JPanel(new BorderLayout());
+        JLabel totalsLabel = new JLabel("0 - 0", SwingConstants.CENTER);
+        JPanel categoryPanel = new JPanel();
+        JPanel rightPlayerPanel = new JPanel(new BorderLayout());
+        JPanel leftUserInfoPanel = new JPanel(new BorderLayout());
+        JPanel rightUserInfoPanel = new JPanel(new BorderLayout());
+        JPanel leftPlayerAnswersPanel = new JPanel();
+        JPanel rightPlayerAnswersPanel = new JPanel();
+        JLabel playerEmojiLabelA = new JLabel(new ImageIcon("Pictures/CuteHipster.png"));
+        JLabel playerEmojiLabelB = new JLabel(new ImageIcon("Pictures/CuteHeadphones.png"));
+        String userNameA = "Player A"; //
+        JLabel userNameLabelA = new JLabel(userNameA,SwingConstants.CENTER);
+        String userNameB = "Player B"; //
+        JLabel userNameLabelB = new JLabel(userNameB, SwingConstants.CENTER);
+
+        JTextField infoField = new JTextField("Här kommer det skrivas ut info till användare", 43);
+
+
         setTitle(quizTitle);
         add(basePanel);
+
+
+
+        List<JLabel> listOfLabelsPlayerA = new LinkedList<>();
+        List<JLabel> listOfLabelsPlayerB = new LinkedList<>();
+        List<JLabel> listOfCategoryLabels = new LinkedList<>();
 
         theirTurnLabel.setPreferredSize(new Dimension(300, 75));
         theirTurnLabel.setForeground(Constants.GOLD);
@@ -104,25 +109,9 @@ public class ResultsScreen extends JFrame {
         rightPlayerPanel.add(rightUserInfoPanel, BorderLayout.NORTH);
         rightPlayerPanel.add(rightPlayerAnswersPanel, BorderLayout.CENTER);
 
-        userNameLabelA.setForeground(Color.WHITE);
-        userNameLabelA.setFont(new Font("Sans Serif", Font.PLAIN, 20));
-        playerEmojiLabelA.setOpaque(true);
-        userNameLabelA.setOpaque(true);
-        userNameLabelA.setBackground(Constants.LIGHT_BLUE);
-        playerEmojiLabelA.setBackground(Constants.LIGHT_BLUE);
+        reSetLabels(userNameLabelA, playerEmojiLabelA, leftUserInfoPanel);
 
-        leftUserInfoPanel.add(playerEmojiLabelA, BorderLayout.CENTER);
-        leftUserInfoPanel.add(userNameLabelA, BorderLayout.SOUTH);
-
-        userNameLabelB.setForeground(Color.WHITE);
-        userNameLabelB.setFont(new Font("Sans Serif", Font.PLAIN, 20));
-        playerEmojiLabelB.setOpaque(true);
-        userNameLabelB.setOpaque(true);
-        userNameLabelB.setBackground(Constants.LIGHT_BLUE);
-        playerEmojiLabelB.setBackground(Constants.LIGHT_BLUE);
-
-        rightUserInfoPanel.add(playerEmojiLabelB, BorderLayout.CENTER);
-        rightUserInfoPanel.add(userNameLabelB, BorderLayout.SOUTH);
+        reSetLabels(userNameLabelB, playerEmojiLabelB, rightUserInfoPanel);
 
         goOnButton.addActionListener(listener);
 
@@ -134,6 +123,18 @@ public class ResultsScreen extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
+    }
+
+    private void reSetLabels(JLabel userNameLabelA, JLabel playerEmojiLabelA, JPanel leftUserInfoPanel) {
+        userNameLabelA.setForeground(Color.WHITE);
+        userNameLabelA.setFont(new Font("Sans Serif", Font.PLAIN, 20));
+        playerEmojiLabelA.setOpaque(true);
+        userNameLabelA.setOpaque(true);
+        userNameLabelA.setBackground(Constants.LIGHT_BLUE);
+        playerEmojiLabelA.setBackground(Constants.LIGHT_BLUE);
+
+        leftUserInfoPanel.add(playerEmojiLabelA, BorderLayout.CENTER);
+        leftUserInfoPanel.add(userNameLabelA, BorderLayout.SOUTH);
     }
 
 
@@ -156,9 +157,6 @@ public class ResultsScreen extends JFrame {
             }
         }
     };
-
-
-
     public JPanel createDesiredNumberOfLabels(JPanel panelToFill, int numberOfLabels, List<JLabel> lista) {
         panelToFill.setLayout(new GridLayout(numberOfLabels, 1));
         for (int i = 0; i < numberOfLabels; i++) {
@@ -170,10 +168,5 @@ public class ResultsScreen extends JFrame {
             lista.add(label);
         }
         return panelToFill;
-    }
-
-    // At some point we need to remove Main from all classes except Client and Server
-    public static void main(String[] args) {
-        ResultsScreen results = new ResultsScreen("Player2", "David", "Anakin"); // OBS! Testparametrar
     }
 }

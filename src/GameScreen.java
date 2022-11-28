@@ -331,10 +331,4 @@ public class GameScreen extends JFrame {
             infoField.revalidate();
         }
     }
-
-    // At some point we need to remove Main from all classes except Client and Server
-    public static void main(String[] args) {
-        Database testDatabase = new Database();
-        GameScreen game = new GameScreen("Player2", "David", "Anakin", "Geography", testDatabase); // OBS! Testvariabler
-    }
 }
