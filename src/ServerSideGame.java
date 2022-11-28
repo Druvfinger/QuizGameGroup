@@ -54,10 +54,10 @@ public class ServerSideGame {
         return database.getAnswers(category);
     }
 
-    // Delat upp metoden i två separata delar
+    // Delat upp metoden i två separata delar flytta till gamescreen
     public void drawUpQuestion(JLabel questionLabel, List<JButton> buttonList) {
-        questionLabel.setText(database.getQuestion(null));                  // OBS!!!! Null parameter!!!
-        List<String> answers = database.getAnswers(null);                   // OBS!!!! Null parameter!!!
+        questionLabel.setText(database.getQuestion());                  // OBS!!!! Null parameter!!!
+        List<String> answers = database.getAnswers();                   // OBS!!!! Null parameter!!!
         for (int i = 0; i < answers.size(); i++) {
             buttonList.get(i).setText(String.valueOf(answers.get(i)));
             /*gameScreen.repaint();

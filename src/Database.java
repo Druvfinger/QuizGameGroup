@@ -10,7 +10,7 @@ public class Database {
 
     private List<Integer> duplicates = List.of();
 
-    private String currentCategory;
+    final private String currentCategory = "Technology";
 
     List<String> categories = List.of("Technology", "Pop culture", "Geography", "Science");
 
