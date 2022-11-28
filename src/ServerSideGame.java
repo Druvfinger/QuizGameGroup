@@ -1,4 +1,3 @@
-
 import javax.swing.*;
 import java.util.List;
 
@@ -8,7 +7,6 @@ public class ServerSideGame {
     static ServerSidePlayer opponentPlayer;
     GameScreen gameScreen;
     Database database = new Database();
-    GameSettings gameSettings = new GameSettings();
 
     public ServerSidePlayer getCurrentPlayer() {
         return currentPlayer;
@@ -26,70 +24,21 @@ public class ServerSideGame {
         this.opponentPlayer = opponentPlayer;
     }
 
-    public boolean isWinner() {
-        if (isLastRound() && isInTheLead()) ;
-        {
-            return true;
-        }
+
+
+    public String getQuestionText(String category) {
+        return database.getQuestion(category);
     }
 
-    public boolean isLastRound() {
-        int numRounds = gameSettings.getNumberOfRounds();
-        return gameScreen.currentRound == numRounds;
+    public List<String> getAnswersText(String category) {
+        return database.getAnswers(category);
     }
 
-    public boolean isInTheLead() {
-        return false;
-    }
-
-    public String getQuestionText() {
-        return database.getQuestion();
-    }
-
-    public List<String> getAnswersText() {
-        return database.getAnswers();
-    }
-    public String getCorrectAnswer(){
-        return database.getCorrectAnswer();
-    }
-
-    // Delat upp metoden i två separata delar flytta till gamescreen
-    public void drawUpQuestion(JLabel questionLabel, List<JButton> buttonList) {
-        questionLabel.setText(getQuestionText());
-        List<String> answers = getAnswersText();
-        for (int i = 0; i < answers.size(); i++) {
-            buttonList.get(i).setText(String.valueOf(answers.get(i)));
-            /*gameScreen.repaint();
-            gameScreen.revalidate();*/
-        }
-    }
-    public void getQuestionTest(){
-        String question = getQuestionText();
-        String correctAnswer = getCorrectAnswer();
-        List<String>answersText = getAnswersText();
-        StringBuilder builderWithAnswers = new StringBuilder();
-        for(String answer : answersText){
-            builderWithAnswers.append(answer).append(",");
-        }
-        System.out.println(builderWithAnswers);
-    }
-
-    public Boolean isLastQuestion() {
-        int numQuestions = gameSettings.getNumberOfQuestions();
+    /*public Boolean isLastQuestion() {
+        int numQuestions = getNumberOfQuestions();
         return gameScreen.currentQuestion == numQuestions; // true if currentQuestion == numQuestions
-    }
+    }*/
 
-    public void newRound() {
-        gameScreen.currentRound++;
-        if (!isLastQuestion()) {
-            newQuestion();
-            gameScreen.currentQuestion++;
-        } else if (isLastQuestion()) {
-            newQuestion();
-            gameScreen.currentQuestion = 0;
-            currentPlayer.currentScore = 0;
-        }
-    }
 
 
     public void chooseCategory() {
@@ -103,17 +52,23 @@ public class ServerSideGame {
     }
 
 
-    public void newQuestion() {
-        while (gameScreen.isAnswered) {
-            //drawUpQuestion();
-            if (gameScreen.isAnswerCorrect) {
-                currentPlayer.score++; // funkar detta ?
-                currentPlayer.currentScore++;
-            }
-            gameScreen.isAnswered = false;
+    /*public int getNumberOfRounds() {
+        try (InputStream input = new FileInputStream("src/Settings.properties")) {
+            Properties prop = new Properties();
+            return Integer.parseInt(prop.getProperty("numberOfRounds", "3"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
+    public int getNumberOfQuestions() {
+        try (InputStream input = new FileInputStream("src/Settings.properties")) {
+            Properties prop = new Properties();
+            return Integer.parseInt(prop.getProperty("numberOfQuestions", "3"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }*/
 
 
 }

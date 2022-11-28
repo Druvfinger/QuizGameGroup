@@ -5,11 +5,8 @@ import java.util.List;
 
 public class Database {
     private static int randIndex;
-     //private int indexAnswer; // används aldrig vad vill vi ha den till
 
-    private List<Integer> duplicates = new ArrayList<>();
-
-    final private String currentCategory = "Technology"; // for testing
+    private String currentCategory;
 
     List<String> categories = List.of("Technology", "Pop culture", "Geography", "Science");
 
@@ -120,38 +117,30 @@ public class Database {
         return categories;
     }
 
-    public String getQuestion(){
-        while (true) {
-            randIndex = (int) (Math.random() * technologyQuestions.size());
-            if (!duplicates.contains(randIndex)) {
-                break;
-            }
-        }
-        System.out.println("Getting questions");
-        System.out.println("NUVARANDE KATEGORI: " + currentCategory);
-        duplicates.add(randIndex);
-        if (currentCategory.equals("Technology")) {
+    public String getQuestion(String category) {
+        randIndex = (int) (Math.random() * technologyQuestions.size());
+        if (category.equals("Technology")) {
             return technologyQuestions.get(randIndex);
-        } else if (currentCategory.equals("Pop culture")) {
+        } else if (category.equals("Pop culture")) {
             return popcoultureQuestions.get(randIndex);
-        } else if (currentCategory.equals("Geography")) {
+        } else if (category.equals("Geography")) {
             return geographyQuestions.get(randIndex);
-        } else if (currentCategory.equals("Science")) {
+        } else if (category.equals("Science")) {
             return scienceQuestions.get(randIndex);
         }
-        return "VAD FAN HÄNDER MED FRÅGORNA";
+        return null;
     }
 
-    public List<String> getAnswers() {
+    public List<String> getAnswers(String category) {
         List<String> answers = new LinkedList<>();
         for (int i = randIndex * 4; i < (randIndex * 4 + 4); i++) {
-            if (currentCategory.equals("Technology")) {
+            if (category.equals("Technology")) {
                 answers.add(technologyAnswers.get(i));
-            } else if (currentCategory.equals("Pop culture")) {
+            } else if (category.equals("Pop culture")) {
                 answers.add(popcultureAnswers.get(i));
-            } else if (currentCategory.equals("Geography")) {
+            } else if (category.equals("Geography")) {
                 answers.add(geographyAnswers.get(i));
-            } else if (currentCategory.equals("Science")) {
+            } else if (category.equals("Science")) {
                 answers.add(scienceAnswers.get(i));
             }
         }
@@ -161,22 +150,20 @@ public class Database {
     }
 
     public void setQuestionCategory(String a) {
-        duplicates.clear();
-        //currentCategory = a; //commented out since we are testing with only one category
-        System.out.println("Kategori satt: " + currentCategory);
+        currentCategory = a;
     }
 
-    public String getCorrectAnswer() {
-        if (currentCategory.equalsIgnoreCase("Technology")) { // testa att det fungerar korrekt med currentCategory being static
+    public String getCorrectAnswer(String category) {
+        if (category.equals("Technology")) { // testa att det fungerar korrekt med currentCategory being static
             return technologyAnswers.get(4 * randIndex);
-        } else if (currentCategory.equalsIgnoreCase("Pop culture")) {
+        } else if (category.equals("Pop culture")) {
             return popcultureAnswers.get(4 * randIndex);
-        } else if (currentCategory.equalsIgnoreCase("Geography")) {
+        } else if (category.equals("Geography")) {
             return geographyAnswers.get(4 * randIndex);
-        } else if (currentCategory.equalsIgnoreCase("Science")) {
+        } else if (category.equals("Science")) {
             return scienceAnswers.get(4 * randIndex);
         }
-        return "VAD FAN HÄNDER MED SVAREN";
+        return null;
     }
 
 

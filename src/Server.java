@@ -10,11 +10,12 @@ public class Server {
         try (ServerSocket ss = new ServerSocket(port)) {
             System.out.println("Quiz game server is running");
             while (true) {
-                Database database = new Database();
-                ServerSideGame game = new ServerSideGame();
 
-                ServerSidePlayer player1 = new ServerSidePlayer(ss.accept(), "Player1", game, multiWriter, database);
-                ServerSidePlayer player2 = new ServerSidePlayer(ss.accept(), "Player2", game, multiWriter, database);
+                ServerSideGame game = new ServerSideGame();
+                Database database = new Database(); // NYTT
+
+                ServerSidePlayer player1 = new ServerSidePlayer(ss.accept(), "Player1", game, multiWriter, database); // NYTT
+                ServerSidePlayer player2 = new ServerSidePlayer(ss.accept(), "Player2", game, multiWriter, database); // NYTT
 
                 player1.setOpponent(player2);
                 player2.setOpponent(player1);

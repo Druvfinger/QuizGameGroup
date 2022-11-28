@@ -54,6 +54,8 @@ public class GameScreen extends JFrame {
     JLabel pointsLabelA;
     JLabel pointsLabelB;
     JTextField infoField;
+    String rightAnswer;
+    boolean wantToGoForward = false;
     public void setUpGameScreenGUI(){
 
 
@@ -98,6 +100,7 @@ public class GameScreen extends JFrame {
         pointsLabelB = new JLabel("Points:", SwingConstants.CENTER);
 
         infoField = new JTextField("Fråga " + currentQuestion, 43);
+
 
         categoryTextLabel = new JLabel(currentCategory, SwingConstants.CENTER);
         categoryTextLabel.setPreferredSize(new Dimension(135, 50));
@@ -216,42 +219,55 @@ public class GameScreen extends JFrame {
         public void actionPerformed(ActionEvent e) {
 
             // Nedanstående action events (och metoder i dem) behöver anpassas till nuvarande spelmotor
-            if (onlyOneAnswerPressed == 1) {
-                if (e.getSource() == answerButtonA || e.getSource() == answerButtonB || e.getSource() == answerButtonC ||
-                        e.getSource() == answerButtonD) {
-                    if (currentQuestion <= numberOfQuestions) {
-                        changeScore(isRightAnswer((JButton) e.getSource()), playerNumber); // ändrar antal poäng på spelarens poäng label
-                        paintRightOrFalseAnswer((JButton) e.getSource()); // målar knappar i olika färger beroende på om svaret är korrekt
-                        currentQuestion++;
-                        onlyOneAnswerPressed = 2;
-                    }
-                }
+
+            if (e.getSource() == answerButtonA || e.getSource() == answerButtonB || e.getSource() == answerButtonC ||
+                    e.getSource() == answerButtonD) {
+
+                changeScore(isRightAnswer((JButton) e.getSource()), playerNumber); // ändrar antal poäng på spelarens poäng panel
+                paintRightOrFalseAnswer((JButton) e.getSource()); // målar knappar i olika färger beroende på om svaret är korrekt
+                currentQuestion++;
             }
 
             if (e.getSource() == goOnButton) {
 
-                //goOnButtonNumberClicked++;
-                onlyOneAnswerPressed = 1;
-//                if (goOnButtonNumberClicked <= 3) {
                 if (currentQuestion <= numberOfQuestions) {
-                    changeInfoField(); // ändrar information på info panelen längst ner
-                    game.drawUpQuestion(questionLabel, buttonList);
-                    for (JButton button : buttonList) {
-                        button.setBackground(new JButton().getBackground());
-                    }
-                    revalidate();
-                } else { // (currentQuestion > numberOfQuestions)
-                    currentQuestion = 1;
-                    changeInfoField();
+                    Client.outWriter.println("NEXT_QUESTION? " + playerNumber);
+                }
+                else if (!wantToGoForward){ // (currentQuestion > numberOfQuestions)
+                    changeInfoField(); // ???
                     questionLabel.setText("");
                     for (JButton button : buttonList) {
-                        button.setBackground(new JButton().getBackground());
-                        button.setText("");
-                        button.setEnabled(false);
+                        button.setVisible(false); // VIKTIGT!! Glöm inte att sätta tillbaka till synligt!
                     }
-                    JOptionPane.showMessageDialog(null, "Du har nu svarat på alla 3 frågorna. " +
-                            "Click på Fortsätt för att gå vidare.");
                     revalidate();
+                    Client.outWriter.println("BACK_TO_RESULTS " + playerNumber);
+                    wantToGoForward = true;
+                }
+                else {
+                    Client.outWriter.println("SHOW_ME_RESULTS " + playerNumber);
+                }
+
+                /*
+
+
+                    if (currentQuestion <= numberOfQuestions) {
+                        changeInfoField(); // ändrar information på info panelen längst ner
+                        game.drawUpQuestion(questionLabel, buttonList);
+                        for (JButton button : buttonList) {
+                            button.setBackground(new JButton().getBackground());
+                        }
+                        revalidate();
+                    } else { // (currentQuestion > numberOfQuestions)
+                        changeInfoField();
+                        questionLabel.setText("");
+                        for (JButton button : buttonList) {
+                            button.setBackground(new JButton().getBackground());
+                            button.setText("");
+                        }
+                        JOptionPane.showMessageDialog(null, "Du har nu svarat på alla 3 frågorna. " +
+                                "Click på Fortsätt för att gå vidare.");
+                        revalidate();
+                    }
                 }
             }
         }
@@ -274,7 +290,7 @@ public class GameScreen extends JFrame {
     //-- Kolla att denna stämmer har en känsla att den spökar
     public boolean isRightAnswer(JButton clickedButton) {
         String givenAnswer = clickedButton.getText();
-        return givenAnswer.equalsIgnoreCase(serverDatabase.getCorrectAnswer());
+        return givenAnswer.equalsIgnoreCase(rightAnswer);
     }
 
     // målar knappar i grönt eller rött/grönt beroende på om svaret är korrekt
@@ -290,7 +306,6 @@ public class GameScreen extends JFrame {
     // ger knapp med det korrekta svaret
     public JButton findButtonWithRightAnswer() {
         JButton correctButton = new JButton();
-        String rightAnswer = serverDatabase.getCorrectAnswer();
         for (JButton button : buttonList) {
             if (button.getText().equals(rightAnswer)) {
                 correctButton = button;
@@ -327,7 +342,7 @@ public class GameScreen extends JFrame {
             infoField.setText("Fråga " + currentQuestion);
             infoField.revalidate();
         } else {
-            infoField.setText("Du har nu svarat på alla 3 frågorna. Click på Fortsätt för att gå vidare.");
+            infoField.setText("Du har nu svarat på alla 3 frågorna. Click på Fortsätt för att gå vidare."); // Ändra???
             infoField.revalidate();
         }
     }
