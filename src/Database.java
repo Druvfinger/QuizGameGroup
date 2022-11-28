@@ -124,30 +124,30 @@ public class Database {
         return technologyQuestions;
     }
 
-    public String getQuestion() {
+    public String getQuestion(String category) {
         randIndex = (int) (Math.random() * technologyQuestions.size());
-        if (GameScreen.currentCategory.equals("Technology")) {
+        if (category.equals("Technology")) {
             return technologyQuestions.get(randIndex);
-        } else if (GameScreen.currentCategory.equals("Pop culture")) {
+        } else if (category.equals("Pop culture")) {
             return popcoultureQuestions.get(randIndex);
-        } else if (GameScreen.currentCategory.equals("Geography")) {
+        } else if (category.equals("Geography")) {
             return geographyQuestions.get(randIndex);
-        } else if (GameScreen.currentCategory.equals("Science")) {
+        } else if (category.equals("Science")) {
             return scienceQuestions.get(randIndex);
         }
         return null;
     }
 
-    public List<String> getAnswers() {
+    public List<String> getAnswers(String category) {
         List<String> answers = new LinkedList<>();
         for (int i = randIndex * 4; i < (randIndex * 4 + 4); i++) {
-            if (GameScreen.currentCategory.equals("Technology")) {
+            if (category.equals("Technology")) {
                 answers.add(technologyAnswers.get(i));
-            } else if (GameScreen.currentCategory.equals("Pop culture")) {
+            } else if (category.equals("Pop culture")) {
                 answers.add(popcultureAnswers.get(i));
-            } else if (GameScreen.currentCategory.equals("Geography")) {
+            } else if (category.equals("Geography")) {
                 answers.add(geographyAnswers.get(i));
-            } else if (GameScreen.currentCategory.equals("Science")) {
+            } else if (category.equals("Science")) {
                 answers.add(scienceAnswers.get(i));
             }
         }
@@ -159,14 +159,14 @@ public class Database {
         currentCategory = a;
     }
 
-    public String getCorrectAnswer() {
-        if (GameScreen.currentCategory.equals("Technology")) {
+    public String getCorrectAnswer(String category) {
+        if (category.equals("Technology")) { // testa att det fungerar korrekt med currentCategory being static
             return technologyAnswers.get(4 * randIndex);
-        } else if (GameScreen.currentCategory.equals("Pop culture")) {
+        } else if (category.equals("Pop culture")) {
             return popcultureAnswers.get(4 * randIndex);
-        } else if (GameScreen.currentCategory.equals("Geography")) {
+        } else if (category.equals("Geography")) {
             return geographyAnswers.get(4 * randIndex);
-        } else if (GameScreen.currentCategory.equals("Science")) {
+        } else if (category.equals("Science")) {
             return scienceAnswers.get(4 * randIndex);
         }
         return null;

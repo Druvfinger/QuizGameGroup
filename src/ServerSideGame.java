@@ -45,9 +45,18 @@ public class ServerSideGame {
         return false;
     }
 
+    public String getQuestionText(String category) {
+        return database.getQuestion(category);
+    }
+
+    public List<String> getAnswersText(String category) {
+        return database.getAnswers(category);
+    }
+
+    // Delat upp metoden i två separata delar
     public void drawUpQuestion(JLabel questionLabel, List<JButton> buttonList) {
-        questionLabel.setText(database.getQuestion());
-        List<String> answers = database.getAnswers();
+        questionLabel.setText(database.getQuestion(null));                  // OBS!!!! Null parameter!!!
+        List<String> answers = database.getAnswers(null);                   // OBS!!!! Null parameter!!!
         for (int i = 0; i < answers.size(); i++) {
             buttonList.get(i).setText(String.valueOf(answers.get(i)));
             /*gameScreen.repaint();
@@ -82,18 +91,17 @@ public class ServerSideGame {
         gameScreen.questionLabel.setText("What Category do you want to choose");
         for (int i = 0; i < 4; i++) {
             gameScreen.buttonList.get(i).setText(String.valueOf(database.getCategories()));
-            gameScreen = new GameScreen(currentPlayer.player);// ändrat i metoden
+            gameScreen = new GameScreen(currentPlayer.player, null, null,null);// ändrat i metoden
             gameScreen.repaint();
             gameScreen.revalidate();
         }
     }
 
 
-
     public void newQuestion() {
         while (gameScreen.isAnswered) {
             //drawUpQuestion();
-            if (gameScreen.isAnswerCorrect){
+            if (gameScreen.isAnswerCorrect) {
                 currentPlayer.score++; // funkar detta ?
                 currentPlayer.currentScore++;
             }
@@ -119,14 +127,16 @@ public class ServerSideGame {
         }
     }
 
-    public void showResults(){
+    public void showResults() {
 
     }
-    public void showFinalResults(){}
 
-    public void gameTest(){
+    public void showFinalResults() {
+    }
+
+    public void gameTest() {
         WelcomeScreen welcomeScreen = new WelcomeScreen(null); // ändrade i metoden
-        if (!isLastRound()){
+        if (!isLastRound()) {
             chooseCategory();
             newRound();
             showResults();

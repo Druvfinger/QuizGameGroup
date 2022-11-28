@@ -8,7 +8,6 @@ import java.util.List;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Properties;
 
 public class GameScreen extends JFrame {
     String answerA = "Svar A";
@@ -50,7 +49,7 @@ public class GameScreen extends JFrame {
 
     String userNameA = "PLayer A";
     JLabel userNameLabelA = new JLabel(userNameA, SwingConstants.CENTER);
-    String userNameB = "Player B"; // test name
+    String userNameB = "Player B";
     JLabel userNameLabelB = new JLabel(userNameB, SwingConstants.CENTER);
 
     JLabel pointsLabelA = new JLabel("Points:", SwingConstants.CENTER);
@@ -73,9 +72,11 @@ public class GameScreen extends JFrame {
     static String userName; // livsviktigt för att det ska fungera
 
     static String quizTitle;
-    static String currentCategory = "Geography"; // Testkategori
+    String currentCategory;
     static int finalScore;
     int goOnButtonNumberClicked = 0;
+    String currentPlayerName;
+    String opponentName;
 
     public int getCurrentRound() {
         return currentRound;
@@ -88,14 +89,18 @@ public class GameScreen extends JFrame {
     public static final Color GOLD = new Color(255, 204, 51);
     public static final Color VERY_LIGHT_RED = new Color(255, 102, 102);
 
-    public GameScreen(String player) {
+    public GameScreen(String player, String currentPlayerName, String opponentName, String currentCategory) {
         playerNumber = player;
-        System.out.println(playerNumber);
+        this.currentPlayerName = currentPlayerName;
+        this.opponentName = opponentName;
+        this.currentCategory = currentCategory;
 
         numberOfQuestions = settings.getNumberOfQuestions(); // nuvarande 3
 
         categoryTextLabel = new JLabel(currentCategory, SwingConstants.CENTER);
         categoryTextLabel.setPreferredSize(new Dimension(135, 50));
+        categoryTextLabel.setForeground(Color.WHITE);
+        categoryTextLabel.setFont(new Font("Sans Serif", Font.BOLD, 20));
 
         setTitle(quizTitle);
         add(basePanel);
@@ -123,8 +128,6 @@ public class GameScreen extends JFrame {
         goOnButton.setPreferredSize(new Dimension(250, 40));
         goOnButton.setBorder(new LineBorder(Color.WHITE, 3));
         goOnButton.setBackground(LIGHT_GREEN);
-
-        game.drawUpQuestion(questionLabel, buttonList); // metod som ritar upp fråga och svar
 
         lowerNorthPanel.add(answerButtonA);
         lowerNorthPanel.add(answerButtonB);
@@ -184,13 +187,9 @@ public class GameScreen extends JFrame {
         userNamePointsPanelB.add(userNameLabelB);
         userNamePointsPanelB.add(pointsLabelB);
 
-        // Här tilldelas det rätt av sida av skärmen till spelare 1 och spelare 2 beroende på vilken tråd de är
-        if (playerNumber.equals("Player1")) {
-            userNameLabelA.setText(userName);
-        }
-        if (playerNumber.equals("Player2")) {
-            userNameLabelB.setText(userName);
-        }
+        //Placerar namn/spelare på panelen
+        userNameLabelA.setText(currentPlayerName);
+        userNameLabelB.setText(opponentName);
 
         setSize(410, 670);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -198,22 +197,25 @@ public class GameScreen extends JFrame {
         setVisible(true);
     }
 
-    ActionListener listener = new ActionListener() { // anonym klass
+    ActionListener listener = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
 
+            // Nedanstående action events (och metoder i dem) behöver anpassas till nuvarande spelmotor
 
             if (e.getSource() == answerButtonA || e.getSource() == answerButtonB || e.getSource() == answerButtonC ||
                     e.getSource() == answerButtonD) {
+                /*
                 if (currentQuestion <= numberOfQuestions) {
                     changeScore(isRightAnswer((JButton) e.getSource()), playerNumber); // ändrar antal poäng på spelarens poäng panel
                     paintRightOrFalseAnswer((JButton) e.getSource()); // målar knappar i olika färger beroende på om svaret är korrekt
                     currentQuestion++;
-                }
+                }*/
 
                 //isAnswered = true;
             }
 
             if (e.getSource() == goOnButton) {
+                /*
                 goOnButtonNumberClicked++;
                 if (goOnButtonNumberClicked <= 3) {
                     if (currentQuestion <= numberOfQuestions) {
@@ -239,8 +241,8 @@ public class GameScreen extends JFrame {
                 else {
                     ResultsScreen.finalScore = finalScore;
                     setVisible(false);
-                    resultsScreen = new ResultsScreen(playerNumber);
-                }
+                    //resultsScreen = new ResultsScreen(playerNumber);
+                }*/
             }
         }
     };
@@ -261,7 +263,7 @@ public class GameScreen extends JFrame {
     // kontrollerar om svaret på den valda knappen är korrekt
     public boolean isRightAnswer(JButton clickedButton) {
         String givenAnswer = clickedButton.getText();
-        return givenAnswer.equalsIgnoreCase(database.getCorrectAnswer());
+        return givenAnswer.equalsIgnoreCase(database.getCorrectAnswer(currentCategory));
     }
 
     // målar knappar i grönt eller rött/grönt beroende på om svaret är korrekt
@@ -277,7 +279,7 @@ public class GameScreen extends JFrame {
     // ger knapp med det korrekta svaret
     public JButton findButtonWithRightAnswer() {
         JButton correctButton = new JButton();
-        String rightAnswer = database.getCorrectAnswer();
+        String rightAnswer = database.getCorrectAnswer(currentCategory);
         for (JButton button : buttonList) {
             if (button.getText().equals(rightAnswer)) {
                 correctButton = button;
@@ -320,6 +322,6 @@ public class GameScreen extends JFrame {
     }
 
     public static void main(String[] args) {
-        GameScreen game = new GameScreen("Player2");
+        GameScreen game = new GameScreen("Player2", "David", "Anakin", "Geography"); // OBS! Testvariabler
     }
 }

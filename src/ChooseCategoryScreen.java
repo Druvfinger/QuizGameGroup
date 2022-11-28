@@ -17,14 +17,16 @@ public class ChooseCategoryScreen extends JFrame {
     static String quizTitle = "Quiz Game"; // Test title
     List<String> shuffledCategoryList;
     static String playerNumber;
+    String currentPlayerName;
     public static final Color LIGHT_BLUE = new Color(51, 153, 255);
     public static final Color VERY_LIGHT_BLUE = new Color(51, 204, 255);
     public static final Color VERY_LIGHT_GREEN = new Color(102, 255, 102);
     public static final Color LIGHT_GREEN = new Color(0, 255, 51);
     public static final Color GOLD = new Color(255, 204, 51);
 
-    public ChooseCategoryScreen(String player){
+    public ChooseCategoryScreen(String player, String currentPlayerName){
         playerNumber=player;
+        this.currentPlayerName = currentPlayerName;
 
         setTitle(quizTitle);
         add(basePanel);
@@ -64,14 +66,13 @@ public class ChooseCategoryScreen extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() instanceof JButton){
-                GameScreen.currentCategory = ((JButton) e.getSource()).getText();
-                setVisible(false);
-                gameScreen = new GameScreen(playerNumber);
+                String chosenCategory = ((JButton) e.getSource()).getText();
+                Client.outWriter.println("I_CHOSE " + chosenCategory);
             }
         }
     };
 
     public static void main(String[] args) {
-        ChooseCategoryScreen categoryScreen = new ChooseCategoryScreen(playerNumber);
+        ChooseCategoryScreen categoryScreen = new ChooseCategoryScreen("Player2", "David"); // OBS! Testparametrar
     }
 }

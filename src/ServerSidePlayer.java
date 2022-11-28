@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.List;
 
 public class ServerSidePlayer extends Thread {
 
@@ -11,16 +12,18 @@ public class ServerSidePlayer extends Thread {
     Socket socket;
     BufferedReader input;
     PrintWriter output;
-
     String player;
+    String currentPlayerName;
 
-    ServerSideGame game; // protokoll
+    ServerSideGame game;
     private MultiWriter multiWriter;
     int score;
-
     int currentScore = 0;
-    boolean playerReady = false;
-    int numberPLayersEnteredName;
+    boolean playerEnteredName = false;
+    boolean playerReadyToPlay = false;
+    static String category; // går det bra att göra denna variabel statisk? Hur ska den påverka om man spelar flera par???
+    static String question; // går det bra att göra denna variabel statisk? Hur ska den påverka om man spelar flera par???
+    static StringBuilder builderWithAnswers; // går det bra att göra denna variabel statisk? Hur ska den påverka om man spelar flera par???
 
     public int getCurrentScore() {
         return currentScore;
@@ -31,7 +34,7 @@ public class ServerSidePlayer extends Thread {
         this.socket = socket;
         this.player = player;
         this.game = game;
-        this.multiWriter = multiWriter;// testing this out
+        this.multiWriter = multiWriter;
         try {
             input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             output = new PrintWriter(socket.getOutputStream(), true);
@@ -42,7 +45,14 @@ public class ServerSidePlayer extends Thread {
         } catch (IOException e) {
             System.out.println("Player died: " + e);
         }
+    }
 
+    public ServerSideGame getGame() {
+        return game;
+    }
+
+    public void setGame(ServerSideGame game) {
+        this.game = game;
     }
 
     public void setOpponent(ServerSidePlayer opponent) {
@@ -68,21 +78,75 @@ public class ServerSidePlayer extends Thread {
 
             String fromClient, toClient;
             while ((fromClient = input.readLine()) != null) { // kommunicerar med klienten
-                if (fromClient.startsWith("READY_TO_PLAY ")) {
-                    player = fromClient.substring(14);
-                    System.out.println(fromClient);
-                    System.out.println(player);
-                    System.out.println(player + " is ready to play");
-                    this.playerReady = true;
-                    System.out.println(playerReady);
-                    if (playerReady && this.getOpponent().playerReady) {
-                        System.out.println("PLAYERS_READY");
-                        toClient = "PLAYERS_READY";
+
+                if (fromClient.startsWith("ENTERED_NAME ")) {
+                    player = fromClient.substring(13);
+                    System.out.println(player + " has entered their name.");// för att kontrollera att det fungerar korrekt
+                    this.playerEnteredName = true;
+                    System.out.println(playerEnteredName);// för att kontrollera att det fungerar korrekt
+                    if (playerEnteredName && this.getOpponent().playerEnteredName) {
+                        System.out.println("ENTERED_NAME_BOTH");// för att kontrollera att det fungerar korrekt
+                        toClient = "ENTERED_NAME_BOTH";
                         for (PrintWriter writer : multiWriter.getWriters()) {
                             writer.println(toClient);
                         }
                     }
                 }
+
+                else if (fromClient.startsWith("MY_NAME ")) {
+                    currentPlayerName = fromClient.substring(8);
+                    for (PrintWriter writer : multiWriter.getWriters()) {
+                        writer.println("MY_NAME " + player + " " + currentPlayerName);
+                    }
+                    System.out.println(currentPlayerName);
+                }
+
+                else if (fromClient.startsWith("READY_TO_PLAY ")) {
+                    player = fromClient.substring(14);
+                    System.out.println(player + " is ready to play.");// för att kontrollera att det fungerar korrekt
+                    this.playerReadyToPlay = true;
+                    output.println("READY_TO_PLAY");
+                    if (playerReadyToPlay && this.getOpponent().playerReadyToPlay) {
+                        System.out.println("READY_TO_PLAY_BOTH");// för att kontrollera att det fungerar korrekt
+                        toClient = "READY_TO_PLAY_BOTH";
+                        for (PrintWriter writer : multiWriter.getWriters()) {
+                            writer.println(toClient);
+                        }
+                    }
+                }
+
+                else if (fromClient.startsWith("CHOOSING_CATEGORY ")) {
+                    for (PrintWriter writer : multiWriter.getWriters()) {
+                        writer.println(fromClient);
+                    }
+                }
+
+                else if (fromClient.startsWith("I_CHOSE ")) {
+                    category = fromClient.substring(8);
+                    for (PrintWriter writer : multiWriter.getWriters()) {
+                        writer.println(fromClient);
+                    }
+                    question = game.getQuestionText(category);
+                    System.out.println(question);// för att kontrollera att det fungerar korrekt
+                    List<String> answers = game.getAnswersText(category);
+                    builderWithAnswers = new StringBuilder();
+                    for (String answer : answers) {
+                        builderWithAnswers.append(answer).append(",");
+                    }
+                    System.out.println(builderWithAnswers);// för att kontrollera att det fungerar korrekt
+                }
+
+                else if (fromClient.startsWith("READY_TO_ANSWER ")) {
+                    System.out.println(fromClient);
+                    output.println(fromClient);
+                }
+
+                else if (fromClient.startsWith("QUESTION? ")) {
+                    System.out.println(category);
+                    output.println("QUESTION: " + question);
+                    output.println("ANSWERS: " + builderWithAnswers);
+                }
+
             }
         } catch (RuntimeException ex) {
             System.out.println("Klienten har avbrutit programmet.");

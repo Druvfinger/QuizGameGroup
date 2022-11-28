@@ -23,8 +23,6 @@ public class WelcomeScreen extends JFrame {
     static String userName;
     static String quizTitle;
     static String playerNumber;
-    ChooseCategoryScreen categoryScreen;
-    GameScreen gameScreen;
     ServerSideGame game = new ServerSideGame();
     public static final Color LIGHT_BLUE = new Color(51, 153, 255);
     public static final Color VERY_LIGHT_BLUE = new Color(51, 204, 255);
@@ -81,7 +79,7 @@ public class WelcomeScreen extends JFrame {
     ActionListener listener = new ActionListener() { // anonym klass
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == newGameButton) {
-
+                Client.outWriter.println("READY_TO_PLAY " + playerNumber);
             }
             if (e.getSource() == userNameSubmitButton) {
                 userName = userNameTextField.getText();
@@ -103,7 +101,9 @@ public class WelcomeScreen extends JFrame {
 
                 System.out.println(userName + " is connected.");
 
-                Client.outWriter.println("READY_TO_PLAY " + playerNumber);
+                Client.outWriter.println("MY_NAME " + userName);
+
+                Client.outWriter.println("ENTERED_NAME " + playerNumber);
             }
         }
     };
