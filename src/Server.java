@@ -12,9 +12,10 @@ public class Server {
             while (true) {
 
                 ServerSideGame game = new ServerSideGame();
+                Database database = new Database(); // NYTT
 
-                ServerSidePlayer player1 = new ServerSidePlayer(ss.accept(), "Player1", game, multiWriter);
-                ServerSidePlayer player2 = new ServerSidePlayer(ss.accept(), "Player2", game, multiWriter);
+                ServerSidePlayer player1 = new ServerSidePlayer(ss.accept(), "Player1", game, multiWriter, database); // NYTT
+                ServerSidePlayer player2 = new ServerSidePlayer(ss.accept(), "Player2", game, multiWriter, database); // NYTT
 
                 player1.setOpponent(player2);
                 player2.setOpponent(player1);

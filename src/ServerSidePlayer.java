@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ServerSidePlayer extends Thread {
@@ -15,26 +16,31 @@ public class ServerSidePlayer extends Thread {
     String player;
     String currentPlayerName;
 
+
     ServerSideGame game;
     private MultiWriter multiWriter;
+    Database database;
     int score;
     int currentScore = 0;
     boolean playerEnteredName = false;
+    boolean playerAnsweredQuestions = false;
     boolean playerReadyToPlay = false;
     static String category; // går det bra att göra denna variabel statisk? Hur ska den påverka om man spelar flera par???
     static String question; // går det bra att göra denna variabel statisk? Hur ska den påverka om man spelar flera par???
     static StringBuilder builderWithAnswers; // går det bra att göra denna variabel statisk? Hur ska den påverka om man spelar flera par???
+    static boolean drawnNextQuestion = false;
 
     public int getCurrentScore() {
         return currentScore;
     }
 
 
-    public ServerSidePlayer(Socket socket, String player, ServerSideGame game, MultiWriter multiWriter) throws IOException {
+    public ServerSidePlayer(Socket socket, String player, ServerSideGame game, MultiWriter multiWriter, Database database) throws IOException {
         this.socket = socket;
         this.player = player;
         this.game = game;
         this.multiWriter = multiWriter;
+        this.database = database;
         try {
             input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             output = new PrintWriter(socket.getOutputStream(), true);
@@ -83,7 +89,6 @@ public class ServerSidePlayer extends Thread {
                     player = fromClient.substring(13);
                     System.out.println(player + " has entered their name.");// för att kontrollera att det fungerar korrekt
                     this.playerEnteredName = true;
-                    System.out.println(playerEnteredName);// för att kontrollera att det fungerar korrekt
                     if (playerEnteredName && this.getOpponent().playerEnteredName) {
                         System.out.println("ENTERED_NAME_BOTH");// för att kontrollera att det fungerar korrekt
                         toClient = "ENTERED_NAME_BOTH";
@@ -106,13 +111,13 @@ public class ServerSidePlayer extends Thread {
                     System.out.println(player + " is ready to play.");// för att kontrollera att det fungerar korrekt
                     this.playerReadyToPlay = true;
                     output.println("READY_TO_PLAY");
-                    if (playerReadyToPlay && this.getOpponent().playerReadyToPlay) {
-                        System.out.println("READY_TO_PLAY_BOTH");// för att kontrollera att det fungerar korrekt
-                        toClient = "READY_TO_PLAY_BOTH";
-                        for (PrintWriter writer : multiWriter.getWriters()) {
-                            writer.println(toClient);
-                        }
-                    }
+                //    if (playerReadyToPlay && this.getOpponent().playerReadyToPlay) {
+                //        System.out.println("READY_TO_PLAY_BOTH");// för att kontrollera att det fungerar korrekt
+                //       toClient = "READY_TO_PLAY_BOTH";
+                //        for (PrintWriter writer : multiWriter.getWriters()) {
+                //            writer.println(toClient);
+                //       }
+                //    }
                 }
 
                 else if (fromClient.startsWith("CHOOSING_CATEGORY ")) {
@@ -128,11 +133,13 @@ public class ServerSidePlayer extends Thread {
                     }
                     question = game.getQuestionText(category);
                     System.out.println(question);// för att kontrollera att det fungerar korrekt
-                    List<String> answers = game.getAnswersText(category);
+                    List<String> answers = game.getAnswersText(category); // använda direkt metod       !!!!!!!!!!!!!!!!
+                    String rightAnswer = database.getCorrectAnswer(category); // NYTT (Det korrekta svaret)
                     builderWithAnswers = new StringBuilder();
                     for (String answer : answers) {
                         builderWithAnswers.append(answer).append(",");
                     }
+                    builderWithAnswers.append(rightAnswer);           //NYTT
                     System.out.println(builderWithAnswers);// för att kontrollera att det fungerar korrekt
                 }
 
@@ -147,6 +154,47 @@ public class ServerSidePlayer extends Thread {
                     output.println("ANSWERS: " + builderWithAnswers);
                 }
 
+                else if (fromClient.startsWith("NEXT_QUESTION? ")) {
+                    System.out.println(drawnNextQuestion);
+                    if (!drawnNextQuestion){
+                        question = game.getQuestionText(category);
+                        System.out.println(question);// för att kontrollera att det fungerar korrekt
+                        List<String> answers = game.getAnswersText(category);
+                        String rightAnswer = database.getCorrectAnswer(category); // NYTT (Det korrekta svaret)
+                        builderWithAnswers.delete(0,builderWithAnswers.length()); // VIKTIGT! Tömmar StringBuilder (ta bort gamla svar)
+                        for (String answer : answers) {
+                            builderWithAnswers.append(answer).append(",");
+                        }
+                        builderWithAnswers.append(rightAnswer);           //NYTT
+                        System.out.println(builderWithAnswers);// för att kontrollera att det fungerar korrekt
+                    }
+                    output.println("NEXT_QUESTION: " + question);
+                    output.println("NEXT_ANSWERS: " + builderWithAnswers);
+
+                    if (!drawnNextQuestion) { // VIKTIGT för att det ska ändras i drawnNextQuestion på rätt sätt
+                        drawnNextQuestion = true;
+                    }
+                    else
+                        drawnNextQuestion = false;
+                }
+
+                else if (fromClient.startsWith("BACK_TO_RESULTS ")) {
+                    player = fromClient.substring(16);
+                    System.out.println(player + " has entered their name.");// för att kontrollera att det fungerar korrekt
+                    this.playerAnsweredQuestions = true;
+                    output.println("WAIT");
+                    if (playerAnsweredQuestions && this.getOpponent().playerAnsweredQuestions) {
+                        System.out.println("ANSWERED_QUESTIONS_BOTH");// för att kontrollera att det fungerar korrekt
+                        toClient = "ANSWERED_QUESTIONS_BOTH";
+                        for (PrintWriter writer : multiWriter.getWriters()) {
+                            writer.println(toClient);
+                        }
+                    }
+                }
+
+                else if (fromClient.startsWith("SHOW_ME_RESULTS ")) {
+                    output.println("SHOW_RESULTS");
+                }
             }
         } catch (RuntimeException ex) {
             System.out.println("Klienten har avbrutit programmet.");
@@ -161,41 +209,3 @@ public class ServerSidePlayer extends Thread {
         }
     }
 }
-
-
-// Repeatedly get commands from the client and process them.
-           /* while (true) {
-                String command = input.readLine();
-                if (command.startsWith("MOVE")) {
-
-
-
-                    int location = Integer.parseInt(command.substring(5));
-                    if (game.legalMove(location, this)) {
-                        output.println("VALID_MOVE");
-                        output.println(game.hasWinner() ? "VICTORY"
-                                : game.boardFilledUp() ? "TIE"
-                                : "");
-                    } else {
-                        output.println("MESSAGE ?");
-                    }
-                } else if (command.startsWith("QUIT")) {
-                    return;
-                }
-            /*while (true) {
-                String command = input.readLine();
-                if (command.equals("start")) {
-                    game.newRound();
-                    output.println("SCORE" + game.currentPlayer.score);
-                    String username;
-                    if (command.contains("player")) {
-                        username = command.replace("player ", "");
-                        this.player = username;
-                    } else if (command.equals("MOVE")) {
-                        System.out.println(player + " connected");
-                    } else {
-                        System.out.println("not yey"); // skriver ut ifall nåt skulle gå fel
-                    }
-                }
-            }
-        */

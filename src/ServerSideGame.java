@@ -1,4 +1,3 @@
-
 import javax.swing.*;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,7 +11,6 @@ public class ServerSideGame {
     static ServerSidePlayer opponentPlayer;
     GameScreen gameScreen;
     Database database = new Database();
-    GameSettings gameSettings = new GameSettings();
 
     public ServerSidePlayer getCurrentPlayer() {
         return currentPlayer;
@@ -38,7 +36,7 @@ public class ServerSideGame {
     }
 
     public boolean isLastRound() {
-        int numRounds = gameSettings.getNumberOfRounds();
+        int numRounds = getNumberOfRounds();
         return gameScreen.currentRound == numRounds;
     }
 
@@ -66,7 +64,7 @@ public class ServerSideGame {
     }
 
     public Boolean isLastQuestion() {
-        int numQuestions = gameSettings.getNumberOfQuestions();
+        int numQuestions = getNumberOfQuestions();
         return gameScreen.currentQuestion == numQuestions; // true if currentQuestion == numQuestions
     }
 
@@ -92,7 +90,7 @@ public class ServerSideGame {
         gameScreen.questionLabel.setText("What Category do you want to choose");
         for (int i = 0; i < 4; i++) {
             gameScreen.buttonList.get(i).setText(String.valueOf(database.getCategories()));
-            gameScreen = new GameScreen(currentPlayer.player, null, null,null);// ändrat i metoden
+            gameScreen = new GameScreen(currentPlayer.player, null, null, null);// ändrat i metoden
             gameScreen.repaint();
             gameScreen.revalidate();
         }
@@ -110,6 +108,23 @@ public class ServerSideGame {
         }
     }
 
+    public int getNumberOfRounds() {
+        try (InputStream input = new FileInputStream("src/Settings.properties")) {
+            Properties prop = new Properties();
+            return Integer.parseInt(prop.getProperty("numberOfRounds", "3"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public int getNumberOfQuestions() {
+        try (InputStream input = new FileInputStream("src/Settings.properties")) {
+            Properties prop = new Properties();
+            return Integer.parseInt(prop.getProperty("numberOfQuestions", "3"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public void showResults() {
 
