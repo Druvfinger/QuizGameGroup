@@ -58,11 +58,12 @@ public class GameScreen extends JFrame {
     JTextField infoField = new JTextField("Fråga " + currentQuestion, 43);
 
     ServerSideGame game = new ServerSideGame();
-    Database database = new Database();
+    Database serverDatabase;
     GameSettings settings = new GameSettings();
     ResultsScreen resultsScreen;
 
     int numberOfQuestions;
+    int onlyOneAnswerPressed = 1;
 
     static String playerNumber;
     Boolean isAnswerCorrect = false; // testa
@@ -89,11 +90,12 @@ public class GameScreen extends JFrame {
     public static final Color GOLD = new Color(255, 204, 51);
     public static final Color VERY_LIGHT_RED = new Color(255, 102, 102);
 
-    public GameScreen(String player, String currentPlayerName, String opponentName, String currentCategory) {
+    public GameScreen(String player, String currentPlayerName, String opponentName, String currentCategory, Database database) {
         playerNumber = player;
         this.currentPlayerName = currentPlayerName;
         this.opponentName = opponentName;
         this.currentCategory = currentCategory;
+        this.serverDatabase = database;
 
         numberOfQuestions = settings.getNumberOfQuestions(); // nuvarande 3
 
@@ -191,7 +193,7 @@ public class GameScreen extends JFrame {
         userNameLabelA.setText(currentPlayerName);
         userNameLabelB.setText(opponentName);
 
-        setSize(410, 670);
+        setSize(500, 670);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
@@ -201,43 +203,46 @@ public class GameScreen extends JFrame {
         public void actionPerformed(ActionEvent e) {
 
             // Nedanstående action events (och metoder i dem) behöver anpassas till nuvarande spelmotor
-
-            if (e.getSource() == answerButtonA || e.getSource() == answerButtonB || e.getSource() == answerButtonC ||
-                    e.getSource() == answerButtonD) {
-                /*
-                if (currentQuestion <= numberOfQuestions) {
-                    changeScore(isRightAnswer((JButton) e.getSource()), playerNumber); // ändrar antal poäng på spelarens poäng panel
-                    paintRightOrFalseAnswer((JButton) e.getSource()); // målar knappar i olika färger beroende på om svaret är korrekt
-                    currentQuestion++;
-                }*/
-
-                //isAnswered = true;
+            if (onlyOneAnswerPressed == 1) {
+                if (e.getSource() == answerButtonA || e.getSource() == answerButtonB || e.getSource() == answerButtonC ||
+                        e.getSource() == answerButtonD) {
+                    if (currentQuestion <= numberOfQuestions) {
+                        changeScore(isRightAnswer((JButton) e.getSource()), playerNumber); // ändrar antal poäng på spelarens poäng label
+                        paintRightOrFalseAnswer((JButton) e.getSource()); // målar knappar i olika färger beroende på om svaret är korrekt
+                        currentQuestion++;
+                        onlyOneAnswerPressed = 2;
+                    }
+                }
             }
 
             if (e.getSource() == goOnButton) {
-                /*
-                goOnButtonNumberClicked++;
-                if (goOnButtonNumberClicked <= 3) {
-                    if (currentQuestion <= numberOfQuestions) {
-                        changeInfoField(); // ändrar information på info panelen längst ner
-                        game.drawUpQuestion(questionLabel, buttonList);
-                        for (JButton button : buttonList) {
-                            button.setBackground(new JButton().getBackground());
-                        }
-                        revalidate();
-                    } else { // (currentQuestion > numberOfQuestions)
-                        changeInfoField();
-                        questionLabel.setText("");
-                        for (JButton button : buttonList) {
-                            button.setBackground(new JButton().getBackground());
-                            button.setText("");
-                        }
-                        JOptionPane.showMessageDialog(null, "Du har nu svarat på alla 3 frågorna. " +
-                                "Click på Fortsätt för att gå vidare.");
-                        revalidate();
 
+                //goOnButtonNumberClicked++;
+                onlyOneAnswerPressed = 1;
+//                if (goOnButtonNumberClicked <= 3) {
+                if (currentQuestion <= numberOfQuestions) {
+                    changeInfoField(); // ändrar information på info panelen längst ner
+                    game.drawUpQuestion(questionLabel, buttonList);
+                    for (JButton button : buttonList) {
+                        button.setBackground(new JButton().getBackground());
                     }
-                }
+                    revalidate();
+                } else { // (currentQuestion > numberOfQuestions)
+                    currentQuestion = 1;
+                    changeInfoField();
+                    questionLabel.setText("");
+                    for (JButton button : buttonList) {
+                        button.setBackground(new JButton().getBackground());
+                        button.setText("");
+                        button.setEnabled(false);
+                    }
+                    Client.outWriter.println( playerNumber + finalScore);  //??
+                    JOptionPane.showMessageDialog(null, "Du har nu svarat på alla 3 frågorna. " +
+                            "Click på Fortsätt för att gå vidare.");
+                    revalidate();
+
+                }/*
+//                }
                 else {
                     ResultsScreen.finalScore = finalScore;
                     setVisible(false);
@@ -322,6 +327,7 @@ public class GameScreen extends JFrame {
     }
 
     public static void main(String[] args) {
-        GameScreen game = new GameScreen("Player2", "David", "Anakin", "Geography"); // OBS! Testvariabler
+        Database testDatabase = new Database();
+        GameScreen game = new GameScreen("Player2", "David", "Anakin", "Geography", testDatabase); // OBS! Testvariabler
     }
 }

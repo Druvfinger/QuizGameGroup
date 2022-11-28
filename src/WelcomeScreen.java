@@ -65,6 +65,18 @@ public class WelcomeScreen extends JFrame {
         newGameButtonAndInfoFieldPanel.add(newGameButton, BorderLayout.NORTH);
         newGameButtonAndInfoFieldPanel.add(userInfoTextField, BorderLayout.SOUTH);
 
+        userNameSubmitButton.setEnabled(false);
+        userNameTextField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (userNameTextField.getText().equals("")) {
+                    userNameSubmitButton.setEnabled(false);
+                } else {
+                    userNameSubmitButton.setEnabled(true);
+                }
+            }
+        });
+
         userNameSubmitButton.addActionListener(listener);
         newGameButton.addActionListener(listener);
 

@@ -45,7 +45,7 @@ public class ResultsScreen extends JFrame {
 
     static int finalScore;
     GameSettings gameSettings = new GameSettings();
-    int numberOfCategories = gameSettings.numberOfRounds;
+    int numberOfCategories = gameSettings.getNumberOfRounds();
     List<JLabel> listOfLabelsPlayerA = new LinkedList<>();
     List<JLabel> listOfLabelsPlayerB = new LinkedList<>();
     List<JLabel> listOfCategoryLabels = new LinkedList<>();

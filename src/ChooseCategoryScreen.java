@@ -68,6 +68,8 @@ public class ChooseCategoryScreen extends JFrame {
             if (e.getSource() instanceof JButton){
                 String chosenCategory = ((JButton) e.getSource()).getText();
                 Client.outWriter.println("I_CHOSE " + chosenCategory);
+                System.out.println("KLIENTVALD KATEGORI: " + chosenCategory);
+                database.setQuestionCategory(chosenCategory);
             }
         }
     };

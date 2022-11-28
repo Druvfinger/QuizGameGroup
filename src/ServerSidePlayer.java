@@ -16,6 +16,7 @@ public class ServerSidePlayer extends Thread {
     String currentPlayerName;
 
     ServerSideGame game;
+    Database serverDatabase;
     private MultiWriter multiWriter;
     int score;
     int currentScore = 0;
@@ -30,11 +31,12 @@ public class ServerSidePlayer extends Thread {
     }
 
 
-    public ServerSidePlayer(Socket socket, String player, ServerSideGame game, MultiWriter multiWriter) throws IOException {
+    public ServerSidePlayer(Socket socket, String player, ServerSideGame game, MultiWriter multiWriter, Database database) throws IOException {
         this.socket = socket;
         this.player = player;
         this.game = game;
         this.multiWriter = multiWriter;
+        this.serverDatabase = database;
         try {
             input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             output = new PrintWriter(socket.getOutputStream(), true);
@@ -106,13 +108,13 @@ public class ServerSidePlayer extends Thread {
                     System.out.println(player + " is ready to play.");// för att kontrollera att det fungerar korrekt
                     this.playerReadyToPlay = true;
                     output.println("READY_TO_PLAY");
-                    if (playerReadyToPlay && this.getOpponent().playerReadyToPlay) {
-                        System.out.println("READY_TO_PLAY_BOTH");// för att kontrollera att det fungerar korrekt
-                        toClient = "READY_TO_PLAY_BOTH";
-                        for (PrintWriter writer : multiWriter.getWriters()) {
-                            writer.println(toClient);
-                        }
-                    }
+//                    if (playerReadyToPlay && this.getOpponent().playerReadyToPlay) {
+//                        System.out.println("READY_TO_PLAY_BOTH");// för att kontrollera att det fungerar korrekt
+//                        toClient = "READY_TO_PLAY_BOTH";
+//                        for (PrintWriter writer : multiWriter.getWriters()) {
+//                            writer.println(toClient);
+//                        }
+//                    }
                 }
 
                 else if (fromClient.startsWith("CHOOSING_CATEGORY ")) {
@@ -126,7 +128,7 @@ public class ServerSidePlayer extends Thread {
                     for (PrintWriter writer : multiWriter.getWriters()) {
                         writer.println(fromClient);
                     }
-                    question = game.getQuestionText(category);
+                    question = game.getQuestionText();
                     System.out.println(question);// för att kontrollera att det fungerar korrekt
                     List<String> answers = game.getAnswersText(category);
                     builderWithAnswers = new StringBuilder();
