@@ -8,6 +8,7 @@ import java.util.List;
 
 public class ResultsScreen extends JFrame {
 
+
     JButton goOnButton;
     static String quizTitle;
     static String playerNumber;
@@ -21,6 +22,11 @@ public class ResultsScreen extends JFrame {
     String opponentName;
 
     JLabel theirTurnLabel;
+    List<JLabel> listOfLabelsPlayerA = new LinkedList<>();
+    List<JLabel> listOfLabelsPlayerB = new LinkedList<>();
+    List<JLabel> listOfCategoryLabels = new LinkedList<>();
+    JTextField infoField;
+    JPanel categoryPanel;
     //boolean myTurnToChoose = false; // not Used?
     //int currentRoundNumber = 1; //not Used?
 
@@ -33,7 +39,7 @@ public class ResultsScreen extends JFrame {
         goOnButton = new JButton("Fortsätt");
         JPanel leftPlayerPanel = new JPanel(new BorderLayout());
         JLabel totalsLabel = new JLabel("0 - 0", SwingConstants.CENTER);
-        JPanel categoryPanel = new JPanel();
+        categoryPanel = new JPanel();
         JPanel rightPlayerPanel = new JPanel(new BorderLayout());
         JPanel leftUserInfoPanel = new JPanel(new BorderLayout());
         JPanel rightUserInfoPanel = new JPanel(new BorderLayout());
@@ -46,17 +52,12 @@ public class ResultsScreen extends JFrame {
         String userNameB = "Player B"; //
         JLabel userNameLabelB = new JLabel(userNameB, SwingConstants.CENTER);
 
-        JTextField infoField = new JTextField("Här kommer det skrivas ut info till användare", 43);
+        infoField = new JTextField("Här kommer det skrivas ut info till användare", 43);
 
 
         setTitle(quizTitle);
         add(basePanel);
 
-
-
-        List<JLabel> listOfLabelsPlayerA = new LinkedList<>();
-        List<JLabel> listOfLabelsPlayerB = new LinkedList<>();
-        List<JLabel> listOfCategoryLabels = new LinkedList<>();
 
         theirTurnLabel.setPreferredSize(new Dimension(300, 75));
         theirTurnLabel.setForeground(Constants.GOLD);
