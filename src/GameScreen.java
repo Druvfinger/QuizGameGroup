@@ -111,14 +111,14 @@ public class GameScreen extends JFrame {
 
         lowerNorthPanel.setBackground(Constants.LIGHT_BLUE);
         lowerCenterPanel.setBackground(Constants.LIGHT_BLUE);
-        lowerSouthPanel.setBackground(LIGHT_BLUE);
+        lowerSouthPanel.setBackground(Constants.LIGHT_BLUE);
 
-        emptyPanel.setBackground(LIGHT_BLUE);
+        emptyPanel.setBackground(Constants.LIGHT_BLUE);
         emptyPanel.setPreferredSize(new Dimension(400, 25));
 
         goOnButton.setPreferredSize(new Dimension(250, 40));
         goOnButton.setBorder(new LineBorder(Color.WHITE, 3));
-        goOnButton.setBackground(LIGHT_GREEN);
+        goOnButton.setBackground(Constants.LIGHT_GREEN);
 
         lowerNorthPanel.add(answerButtonA);
         lowerNorthPanel.add(answerButtonB);
@@ -129,7 +129,7 @@ public class GameScreen extends JFrame {
         lowerSouthPanel.add(goOnButton);
         lowerSouthPanel.add(infoField);
 
-        categoryInfoPanel.setBackground(LIGHT_BLUE);
+        categoryInfoPanel.setBackground(Constants.LIGHT_BLUE);
         rightUserInfoPanel.setBackground(Color.WHITE);
         questionLabel.setOpaque(true);
         questionLabel.setBackground(Color.WHITE);
@@ -148,7 +148,7 @@ public class GameScreen extends JFrame {
         rightUserInfoPanel.add(playerEmojiLabelB);
         rightUserInfoPanel.add(userNamePointsPanelB);
 
-        questionLabel.setBorder(new CompoundBorder(new LineBorder(LIGHT_BLUE, 10), new EtchedBorder(EtchedBorder.RAISED)));
+        questionLabel.setBorder(new CompoundBorder(new LineBorder(Constants.LIGHT_BLUE, 10), new EtchedBorder(EtchedBorder.RAISED)));
 
         for (JButton button : buttonList) {
             button.addActionListener(listener);
@@ -157,19 +157,19 @@ public class GameScreen extends JFrame {
         goOnButton.addActionListener(listener);
 
         playerEmojiLabelA.setOpaque(true);
-        playerEmojiLabelA.setBackground(LIGHT_BLUE);
+        playerEmojiLabelA.setBackground(Constants.LIGHT_BLUE);
         playerEmojiLabelB.setOpaque(true);
-        playerEmojiLabelB.setBackground(LIGHT_BLUE);
+        playerEmojiLabelB.setBackground(Constants.LIGHT_BLUE);
 
         userNamePointsPanelA.setOpaque(true);
-        userNamePointsPanelA.setBackground(LIGHT_BLUE);
+        userNamePointsPanelA.setBackground(Constants.LIGHT_BLUE);
         userNamePointsPanelB.setOpaque(true);
-        userNamePointsPanelB.setBackground(LIGHT_BLUE);
+        userNamePointsPanelB.setBackground(Constants.LIGHT_BLUE);
 
         userNameLabelA.setFont(new Font("Sans Serif", Font.BOLD, 20));
-        userNameLabelA.setForeground(GOLD);
+        userNameLabelA.setForeground(Constants.GOLD);
         userNameLabelB.setFont(new Font("Sans Serif", Font.BOLD, 20));
-        userNameLabelB.setForeground(GOLD);
+        userNameLabelB.setForeground(Constants.GOLD);
 
         userNamePointsPanelA.add(userNameLabelA);
         userNamePointsPanelA.add(pointsLabelA);
@@ -238,10 +238,10 @@ public class GameScreen extends JFrame {
     // målar knappar i grönt eller rött/grönt beroende på om svaret är korrekt
     public void paintRightOrFalseAnswer(JButton clickedButton) {
         if (isRightAnswer(clickedButton)) {
-            clickedButton.setBackground(VERY_LIGHT_GREEN);
+            clickedButton.setBackground(Constants.VERY_LIGHT_GREEN);
         } else {
-            clickedButton.setBackground(VERY_LIGHT_RED);
-            findButtonWithRightAnswer().setBackground(VERY_LIGHT_GREEN);
+            clickedButton.setBackground(Constants.VERY_LIGHT_RED);
+            findButtonWithRightAnswer().setBackground(Constants.VERY_LIGHT_GREEN);
         }
     }
 
