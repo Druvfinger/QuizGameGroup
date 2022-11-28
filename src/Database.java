@@ -1,16 +1,15 @@
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Database {
-
-    // klass för att hantera frågor och svar
     private static int randIndex;
-    private int indexAnswer;
+     //private int indexAnswer; // används aldrig vad vill vi ha den till
 
-    private List<Integer> duplicates = List.of();
+    private List<Integer> duplicates = new ArrayList<>();
 
-    private String currentCategory;
+    final private String currentCategory = "Technology"; // for testing
 
     List<String> categories = List.of("Technology", "Pop culture", "Geography", "Science");
 
@@ -121,62 +120,64 @@ public class Database {
         return categories;
     }
 
-    public List<String> getTechnologyQuestions() {
-        return technologyQuestions;
-    }
-
-    public String getQuestion(String category){
+    public String getQuestion(){
         while (true) {
             randIndex = (int) (Math.random() * technologyQuestions.size());
             if (!duplicates.contains(randIndex)) {
                 break;
             }
         }
+        System.out.println("Getting questions");
+        System.out.println("NUVARANDE KATEGORI: " + currentCategory);
         duplicates.add(randIndex);
-        if (category.equals("Technology")) {
+        if (currentCategory.equals("Technology")) {
             return technologyQuestions.get(randIndex);
-        } else if (category.equals("Pop culture")) {
+        } else if (currentCategory.equals("Pop culture")) {
             return popcoultureQuestions.get(randIndex);
-        } else if (category.equals("Geography")) {
+        } else if (currentCategory.equals("Geography")) {
             return geographyQuestions.get(randIndex);
-        } else if (category.equals("Science")) {
+        } else if (currentCategory.equals("Science")) {
             return scienceQuestions.get(randIndex);
         }
-        return null;
+        return "VAD FAN HÄNDER MED FRÅGORNA";
     }
 
-    public List<String> getAnswers(String category) {
+    public List<String> getAnswers() {
         List<String> answers = new LinkedList<>();
         for (int i = randIndex * 4; i < (randIndex * 4 + 4); i++) {
-            if (category.equals("Technology")) {
+            if (currentCategory.equals("Technology")) {
                 answers.add(technologyAnswers.get(i));
-            } else if (category.equals("Pop culture")) {
+            } else if (currentCategory.equals("Pop culture")) {
                 answers.add(popcultureAnswers.get(i));
-            } else if (category.equals("Geography")) {
+            } else if (currentCategory.equals("Geography")) {
                 answers.add(geographyAnswers.get(i));
-            } else if (category.equals("Science")) {
+            } else if (currentCategory.equals("Science")) {
                 answers.add(scienceAnswers.get(i));
             }
         }
         Collections.shuffle(answers);
+        System.out.println("getting answers");
         return answers;
     }
 
     public void setQuestionCategory(String a) {
         duplicates.clear();
-        currentCategory = a;
+        //currentCategory = a; //commented out since we are testing with only one category
+        System.out.println("Kategori satt: " + currentCategory);
     }
 
-    public String getCorrectAnswer(String category) {
-        if (category.equals("Technology")) { // testa att det fungerar korrekt med currentCategory being static
+    public String getCorrectAnswer() {
+        if (currentCategory.equalsIgnoreCase("Technology")) { // testa att det fungerar korrekt med currentCategory being static
             return technologyAnswers.get(4 * randIndex);
-        } else if (category.equals("Pop culture")) {
+        } else if (currentCategory.equalsIgnoreCase("Pop culture")) {
             return popcultureAnswers.get(4 * randIndex);
-        } else if (category.equals("Geography")) {
+        } else if (currentCategory.equalsIgnoreCase("Geography")) {
             return geographyAnswers.get(4 * randIndex);
-        } else if (category.equals("Science")) {
+        } else if (currentCategory.equalsIgnoreCase("Science")) {
             return scienceAnswers.get(4 * randIndex);
         }
-        return null;
+        return "VAD FAN HÄNDER MED SVAREN";
     }
+
+
 }

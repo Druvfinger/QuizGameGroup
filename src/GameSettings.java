@@ -10,7 +10,7 @@ public class GameSettings {
     int numberOfQuestions;
 
 
-    public GameSettings() {
+    protected GameSettings() {
 
         try {
             prop.load(new FileInputStream("src/Settings.properties"));

@@ -1,10 +1,6 @@
 
 import javax.swing.*;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
-import java.util.Properties;
 
 public class ServerSideGame {
 
@@ -46,35 +42,42 @@ public class ServerSideGame {
         return false;
     }
 
-    public String getQuestionText(String category) {
-        return database.getQuestion(category);
+    public String getQuestionText() {
+        return database.getQuestion();
     }
 
-    public List<String> getAnswersText(String category) {
-        return database.getAnswers(category);
+    public List<String> getAnswersText() {
+        return database.getAnswers();
+    }
+    public String getCorrectAnswer(){
+        return database.getCorrectAnswer();
     }
 
-    // Delat upp metoden i två separata delar
+    // Delat upp metoden i två separata delar flytta till gamescreen
     public void drawUpQuestion(JLabel questionLabel, List<JButton> buttonList) {
-        questionLabel.setText(database.getQuestion(null));                  // OBS!!!! Null parameter!!!
-        List<String> answers = database.getAnswers(null);                   // OBS!!!! Null parameter!!!
+        questionLabel.setText(getQuestionText());
+        List<String> answers = getAnswersText();
         for (int i = 0; i < answers.size(); i++) {
             buttonList.get(i).setText(String.valueOf(answers.get(i)));
             /*gameScreen.repaint();
             gameScreen.revalidate();*/
         }
     }
+    public void getQuestionTest(){
+        String question = getQuestionText();
+        String correctAnswer = getCorrectAnswer();
+        List<String>answersText = getAnswersText();
+        StringBuilder builderWithAnswers = new StringBuilder();
+        for(String answer : answersText){
+            builderWithAnswers.append(answer).append(",");
+        }
+        System.out.println(builderWithAnswers);
+    }
 
     public Boolean isLastQuestion() {
         int numQuestions = gameSettings.getNumberOfQuestions();
         return gameScreen.currentQuestion == numQuestions; // true if currentQuestion == numQuestions
     }
-
-    /* actionperformed
-     * if !(isLastQuestion){
-     * new Question();
-     * }
-     */
 
     public void newRound() {
         gameScreen.currentRound++;
@@ -88,11 +91,12 @@ public class ServerSideGame {
         }
     }
 
+
     public void chooseCategory() {
         gameScreen.questionLabel.setText("What Category do you want to choose");
         for (int i = 0; i < 4; i++) {
             gameScreen.buttonList.get(i).setText(String.valueOf(database.getCategories()));
-            gameScreen = new GameScreen(currentPlayer.player, null, null,null);// ändrat i metoden
+            gameScreen = new GameScreen(currentPlayer.player, null, null,null,null);// ändrat i metoden
             gameScreen.repaint();
             gameScreen.revalidate();
         }
@@ -111,23 +115,5 @@ public class ServerSideGame {
     }
 
 
-    public void showResults() {
 
-    }
-
-    public void showFinalResults() {
-    }
-
-    public void gameTest() {
-        WelcomeScreen welcomeScreen = new WelcomeScreen(null); // ändrade i metoden
-        if (!isLastRound()) {
-            chooseCategory();
-            newRound();
-            showResults();
-        } else if (isLastRound()) {
-            chooseCategory();
-            newRound();
-            showFinalResults();
-        }
-    }
 }

@@ -18,15 +18,8 @@ public class ChooseCategoryScreen extends JFrame {
     List<String> shuffledCategoryList;
     static String playerNumber;
     String currentPlayerName;
-    public static final Color LIGHT_BLUE = new Color(51, 153, 255);
-    public static final Color VERY_LIGHT_BLUE = new Color(51, 204, 255);
-    public static final Color VERY_LIGHT_GREEN = new Color(102, 255, 102);
-    public static final Color LIGHT_GREEN = new Color(0, 255, 51);
-    public static final Color GOLD = new Color(255, 204, 51);
 
-    public ChooseCategoryScreen(String player, String currentPlayerName){
-        playerNumber=player;
-        this.currentPlayerName = currentPlayerName;
+    public void setUpCategoryScreenGUI(){
 
         setTitle(quizTitle);
         add(basePanel);
@@ -49,9 +42,9 @@ public class ChooseCategoryScreen extends JFrame {
             categoryPanel.add(button);
         }
 
-        basePanel.setBackground(LIGHT_BLUE);
-        categoryPanel.setBackground(LIGHT_BLUE);
-        emptyPanel.setBackground(LIGHT_BLUE);
+        basePanel.setBackground(Constants.LIGHT_BLUE);
+        categoryPanel.setBackground(Constants.LIGHT_BLUE);
+        emptyPanel.setBackground(Constants.LIGHT_BLUE);
 
         questionLabel.setForeground(Color.WHITE);
         questionLabel.setFont(new Font("Sans Serif", Font.PLAIN,20));
@@ -62,17 +55,22 @@ public class ChooseCategoryScreen extends JFrame {
         setVisible(true);
     }
 
+
+    public ChooseCategoryScreen(String player, String currentPlayerName){
+        playerNumber=player;
+        this.currentPlayerName = currentPlayerName;
+        setUpCategoryScreenGUI();
+    }
+
     ActionListener listener = new ActionListener() { // anonym klass
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() instanceof JButton){
                 String chosenCategory = ((JButton) e.getSource()).getText();
                 Client.outWriter.println("I_CHOSE " + chosenCategory);
+                System.out.println("KLIENTVALD KATEGORI: " + chosenCategory);
+                database.setQuestionCategory(chosenCategory);
             }
         }
     };
-
-    public static void main(String[] args) {
-        ChooseCategoryScreen categoryScreen = new ChooseCategoryScreen("Player2", "David"); // OBS! Testparametrar
-    }
 }
