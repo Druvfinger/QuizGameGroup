@@ -172,6 +172,7 @@ public class ResultsScreen extends JFrame {
         return panelToFill;
     }
 
+    // At some point we need to remove Main from all classes except Client and Server
     public static void main(String[] args) {
         ResultsScreen results = new ResultsScreen("Player2", "David", "Anakin"); // OBS! Testparametrar
     }

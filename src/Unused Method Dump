@@ -4,7 +4,7 @@
         return new ImageIcon(filePath);
     }
 
-
+----------------------------------------------------------------------------------------------------------
         public JPanel createDesiredNumberOfPanels(JPanel panelToFill, int numberOfPanels) {
             panelToFill.setLayout(new GridLayout(numberOfPanels, 1));
             for (int i = 0; i < numberOfPanels; i++) {
@@ -16,7 +16,7 @@
             }
             return panelToFill;
         }
-
+----------------------------------------------------------------------------------------------------------
          public ImageIcon setSizeToFitLabel(JLabel label, String imagePath) {
                 BufferedImage image = null;
                 try {
@@ -28,3 +28,36 @@
                         Image.SCALE_SMOOTH);
                 return new ImageIcon(resizedImage);
             }
+----------------------------------------------------------------------------------------------------------
+            public String getCurrentCategory() {
+                    return currentCategory;
+                }
+
+----------------------------------------------------------------------------------------------------------
+
+                    public void showResults() {
+
+                    }
+----------------------------------------------------------------------------------------------------------
+
+                    public void showFinalResults() {
+                    }
+----------------------------------------------------------------------------------------------------------
+                    public void gameTest() {
+                        WelcomeScreen welcomeScreen = new WelcomeScreen(null); // ändrade i metoden
+                        if (!isLastRound()) {
+                            chooseCategory();
+                            newRound();
+                            showResults();
+                        } else if (isLastRound()) {
+                            chooseCategory();
+                            newRound();
+                            showFinalResults();
+                        }
+                    }
+----------------------------------------------------------------------------------------------------------
+    public void makeLabelForScoreEachRound() {
+        String name = "Round " + gameScreen.getCurrentRound() + ": " + game.getCurrentPlayer().getCurrentScore();
+        //Try to make label for score keeping
+    }
+----------------------------------------------------------------------------------------------------------

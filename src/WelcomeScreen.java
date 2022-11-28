@@ -11,9 +11,31 @@ public class WelcomeScreen extends JFrame {
     static String userName;
     static String quizTitle;
     static String playerNumber;
+    JButton newGameButton;
+    JButton userNameSubmitButton;
+    JTextField userNameTextField;
+    JTextField userInfoTextField;
+    JPanel userNamePanel;
+    JLabel userNameLabel;
 
-    ServerSideGame game = new ServerSideGame();
+
     public void setUpWelcomeScreenGUI(){
+
+        JPanel newGameButtonAndInfoFieldPanel = new JPanel(new BorderLayout());
+        JLabel welcomeText = new JLabel("Welcome to our Quiz Game!", SwingConstants.CENTER);
+        JLabel emojiLabel = new JLabel(new ImageIcon("Pictures/YellowSmart.png"));
+        userNamePanel = new JPanel(new GridLayout(1, 3));
+        userNameLabel = new JLabel("Write your username:", SwingConstants.CENTER);
+        userNameTextField = new JTextField(20);
+        userInfoTextField = new JTextField("");
+        userNameSubmitButton = new JButton("Submit");
+        newGameButton = new JButton("New Game");
+
+        JPanel backPanel = new JPanel(new BorderLayout());
+        JPanel userPanel = new JPanel(new BorderLayout());
+        JPanel emptyPanel = new JPanel();
+
+
         setTitle("QuizGame");
         add(backPanel);
         backPanel.add(userPanel, BorderLayout.NORTH);
@@ -50,11 +72,7 @@ public class WelcomeScreen extends JFrame {
         userNameTextField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                if (userNameTextField.getText().equals("")) {
-                    userNameSubmitButton.setEnabled(false);
-                } else {
-                    userNameSubmitButton.setEnabled(true);
-                }
+                userNameSubmitButton.setEnabled(!userNameTextField.getText().equals(""));
             }
         });
 
@@ -68,26 +86,10 @@ public class WelcomeScreen extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
     }
-    //klass för en välkomstskärm
-    JPanel backPanel = new JPanel(new BorderLayout());
-    JPanel userPanel = new JPanel(new BorderLayout());
-    JPanel emptyPanel = new JPanel();
-    JPanel newGameButtonAndInfoFieldPanel = new JPanel(new BorderLayout());
-    JLabel welcomeText = new JLabel("Welcome to our Quiz Game!", SwingConstants.CENTER);
-    JLabel emojiLabel = new JLabel(new ImageIcon("Pictures/YellowSmart.png"));
-    JPanel userNamePanel = new JPanel(new GridLayout(1, 3));
-    JLabel userNameLabel = new JLabel("Write your username:", SwingConstants.CENTER);
-    JTextField userNameTextField = new JTextField(20);
-    JTextField userInfoTextField = new JTextField("");
-    JButton userNameSubmitButton = new JButton("Submit");
-    JButton newGameButton = new JButton("New Game");
-
 
     public WelcomeScreen(String player) { // Kan man ta in en client ?
         playerNumber = player;
         setUpWelcomeScreenGUI();
-
-
     }
 
     ActionListener listener = new ActionListener() { // anonym klass
@@ -100,20 +102,7 @@ public class WelcomeScreen extends JFrame {
                 GameScreen.userName = userName; //
                 ResultsScreen.userName = userName;
 
-                quizTitle = "Quiz Game " + userName;
-                ChooseCategoryScreen.quizTitle = quizTitle;
-                GameScreen.quizTitle = quizTitle;
-                ResultsScreen.quizTitle = quizTitle;
-
-                //Client.numberPLayersEnteredName++;
-                userNamePanel.removeAll();
-                userNameLabel.setText("Welcome " + userName + " and Good Luck!");
-                userNameLabel.setFont(new Font("Sans Serif", Font.PLAIN, 20));
-                userNameLabel.setBorder(new EmptyBorder(2, 20, 5, 20));
-                userNamePanel.add(userNameLabel);
-                userNamePanel.revalidate();
-
-                System.out.println(userName + " is connected.");
+                rePaintWelcomeScreenIfNameSubmitted();
 
                 Client.outWriter.println("MY_NAME " + userName);
 
@@ -121,8 +110,23 @@ public class WelcomeScreen extends JFrame {
             }
         }
     };
+    public void rePaintWelcomeScreenIfNameSubmitted(){
+        quizTitle = "Quiz Game " + userName;
+        ChooseCategoryScreen.quizTitle = quizTitle;
+        GameScreen.quizTitle = quizTitle;
+        ResultsScreen.quizTitle = quizTitle;
 
+        userNamePanel.removeAll();
+        userNameLabel.setText("Welcome " + userName + " and Good Luck!");
+        userNameLabel.setFont(new Font("Sans Serif", Font.PLAIN, 20));
+        userNameLabel.setBorder(new EmptyBorder(2, 20, 5, 20));
+        userNamePanel.add(userNameLabel);
+        userNamePanel.revalidate();
 
+        System.out.println(userName + " is connected.");
+    }
+
+// At some point we need to remove Main from all classes except Client and Server
     public static void main(String[] args) {
         WelcomeScreen welcomeScreen = new WelcomeScreen(playerNumber);
     }

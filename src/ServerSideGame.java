@@ -115,23 +115,5 @@ public class ServerSideGame {
     }
 
 
-    public void showResults() {
 
-    }
-
-    public void showFinalResults() {
-    }
-
-    public void gameTest() {
-        WelcomeScreen welcomeScreen = new WelcomeScreen(null); // ändrade i metoden
-        if (!isLastRound()) {
-            chooseCategory();
-            newRound();
-            showResults();
-        } else if (isLastRound()) {
-            chooseCategory();
-            newRound();
-            showFinalResults();
-        }
-    }
 }

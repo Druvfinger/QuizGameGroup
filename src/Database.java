@@ -4,10 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Database {
-
-    // klass för att hantera frågor och svar
     private static int randIndex;
-    private int indexAnswer;
+     //private int indexAnswer; // används aldrig vad vill vi ha den till
 
     private List<Integer> duplicates = new ArrayList<>();
 
@@ -122,10 +120,6 @@ public class Database {
         return categories;
     }
 
-    public List<String> getTechnologyQuestions() {
-        return technologyQuestions;
-    }
-
     public String getQuestion(){
         while (true) {
             randIndex = (int) (Math.random() * technologyQuestions.size());
@@ -168,7 +162,7 @@ public class Database {
 
     public void setQuestionCategory(String a) {
         duplicates.clear();
-        //currentCategory = a;
+        //currentCategory = a; //commented out since we are testing with only one category
         System.out.println("Kategori satt: " + currentCategory);
     }
 
@@ -185,7 +179,5 @@ public class Database {
         return "VAD FAN HÄNDER MED SVAREN";
     }
 
-    public String getCurrentCategory() {
-        return currentCategory;
-    }
+
 }

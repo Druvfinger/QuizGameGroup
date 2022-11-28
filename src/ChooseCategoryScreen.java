@@ -74,6 +74,7 @@ public class ChooseCategoryScreen extends JFrame {
         }
     };
 
+    // At some point we need to remove Main from all classes except Client and Server
     public static void main(String[] args) {
         ChooseCategoryScreen categoryScreen = new ChooseCategoryScreen("Player2", "David"); // OBS! Testparametrar
     }

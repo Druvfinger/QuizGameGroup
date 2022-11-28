@@ -10,8 +10,8 @@ import java.net.Socket;
 public class Client {
     protected final String host = "127.0.0.1";
     protected final int port = 54321;
+    Socket socket;
 
-    private Socket socket;
     static BufferedReader inReader;
     static PrintWriter outWriter;
     static String player;
@@ -20,8 +20,6 @@ public class Client {
     ResultsScreen resultsScreen;
     GameScreen gameScreen;
     ChooseCategoryScreen categoryScreen;
-
-    ServerSideGame game;
     String currentPlayerName;
     String opponentName;
     String chosenCategory;
@@ -32,11 +30,10 @@ public class Client {
         socket = new Socket(host, port);
         outWriter = new PrintWriter(socket.getOutputStream(), true);
         inReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        game = new ServerSideGame();
     }
 
-    public void play() throws IOException {
-        String response = "";
+    public void play() {
+        String response;
         try {
             while (true) {
                 response = inReader.readLine();
@@ -117,7 +114,7 @@ public class Client {
                 } else if (response.startsWith("QUESTION: ")) {
                     String question = response.substring(10);
                     System.out.println(question);// för att kontrollera att det fungerar korrekt
-                    gameScreen = new GameScreen(player, currentPlayerName, opponentName, chosenCategory, game.database);
+                    gameScreen = new GameScreen(player, currentPlayerName, opponentName, chosenCategory, null); // game.database pretty sure Wrong
                     gameScreen.currentCategory = chosenCategory;
                     gameScreen.questionLabel.setText(question);
                     gameScreen.revalidate();
@@ -142,10 +139,7 @@ public class Client {
         }
     }
 
-    public void makeLabelForScoreEachRound() {
-        String name = "Round " + gameScreen.getCurrentRound() + ": " + game.getCurrentPlayer().getCurrentScore();
-        //Try to make label for score keeping
-    }
+
 
     public static void main(String[] args) throws IOException {
         Client client = new Client();
