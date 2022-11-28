@@ -46,12 +46,12 @@ public class ServerSideGame {
         return false;
     }
 
-    public String getQuestionText(String category) {
-        return database.getQuestion(category);
+    public String getQuestionText() {
+        return database.getQuestion();
     }
 
-    public List<String> getAnswersText(String category) {
-        return database.getAnswers(category);
+    public List<String> getAnswersText() {
+        return database.getAnswers();
     }
 
     // Delat upp metoden i två separata delar flytta till gamescreen

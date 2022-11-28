@@ -130,7 +130,7 @@ public class ServerSidePlayer extends Thread {
                     }
                     question = game.getQuestionText();
                     System.out.println(question);// för att kontrollera att det fungerar korrekt
-                    List<String> answers = game.getAnswersText(category);
+                    List<String> answers = game.getAnswersText();
                     builderWithAnswers = new StringBuilder();
                     for (String answer : answers) {
                         builderWithAnswers.append(answer).append(",");

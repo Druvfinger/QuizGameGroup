@@ -268,7 +268,7 @@ public class GameScreen extends JFrame {
     // kontrollerar om svaret på den valda knappen är korrekt
     public boolean isRightAnswer(JButton clickedButton) {
         String givenAnswer = clickedButton.getText();
-        return givenAnswer.equalsIgnoreCase(database.getCorrectAnswer(currentCategory));
+        return givenAnswer.equalsIgnoreCase(serverDatabase.getCorrectAnswer());
     }
 
     // målar knappar i grönt eller rött/grönt beroende på om svaret är korrekt
@@ -284,7 +284,7 @@ public class GameScreen extends JFrame {
     // ger knapp med det korrekta svaret
     public JButton findButtonWithRightAnswer() {
         JButton correctButton = new JButton();
-        String rightAnswer = database.getCorrectAnswer(currentCategory);
+        String rightAnswer = serverDatabase.getCorrectAnswer();
         for (JButton button : buttonList) {
             if (button.getText().equals(rightAnswer)) {
                 correctButton = button;

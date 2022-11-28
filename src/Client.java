@@ -134,7 +134,8 @@ public class Client {
                 }
 
                 //else System.out.println("Something fishy is going on.");
-                else System.out.println("We are missing out on something.");
+                else System.out.println("We are missing out on something. " + response);
+
             }
         } catch (Exception e) {
             e.printStackTrace();
