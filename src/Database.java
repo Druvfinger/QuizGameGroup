@@ -1,4 +1,3 @@
-import javax.swing.*;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,6 +7,8 @@ public class Database {
     // klass för att hantera frågor och svar
     private static int randIndex;
     private int indexAnswer;
+
+    private List<Integer> duplicates = List.of();
 
     private String currentCategory;
 
@@ -124,8 +125,14 @@ public class Database {
         return technologyQuestions;
     }
 
-    public String getQuestion(String category) {
-        randIndex = (int) (Math.random() * technologyQuestions.size());
+    public String getQuestion(String category){
+        while (true) {
+            randIndex = (int) (Math.random() * technologyQuestions.size());
+            if (!duplicates.contains(randIndex)) {
+                break;
+            }
+        }
+        duplicates.add(randIndex);
         if (category.equals("Technology")) {
             return technologyQuestions.get(randIndex);
         } else if (category.equals("Pop culture")) {
@@ -156,6 +163,7 @@ public class Database {
     }
 
     public void setQuestionCategory(String a) {
+        duplicates.clear();
         currentCategory = a;
     }
 
