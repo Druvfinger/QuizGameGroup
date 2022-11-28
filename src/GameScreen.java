@@ -16,13 +16,6 @@ public class GameScreen extends JFrame {
     int currentPoint = 0;
     int currentRound = 0; // testa
     static String userName; // livsviktigt för att det ska fungera
-    final Color LIGHT_BLUE = new Color(51, 153, 255);
-    final Color VERY_LIGHT_BLUE = new Color(51, 204, 255);
-    final Color VERY_LIGHT_GREEN = new Color(102, 255, 102);
-    final Color LIGHT_GREEN = new Color(0, 255, 51);
-    final Color GOLD = new Color(255, 204, 51);
-    final Color VERY_LIGHT_RED = new Color(255, 102, 102);
-
     static String quizTitle; // when do you use static ??
     String currentCategory;
     static int finalScore;
@@ -106,7 +99,7 @@ public class GameScreen extends JFrame {
         basePanel.add(upperPanel);
         basePanel.add(lowerPanel);
 
-        lowerPanel.setBackground(LIGHT_BLUE);
+        lowerPanel.setBackground(Constants.LIGHT_BLUE);
         lowerPanel.setLayout(new BoxLayout(lowerPanel, BoxLayout.Y_AXIS));
 
         lowerPanel.add(Box.createRigidArea(new Dimension(1, 5)));
@@ -116,8 +109,8 @@ public class GameScreen extends JFrame {
         lowerPanel.add(Box.createRigidArea(new Dimension(1, 5)));
         lowerPanel.add(lowerSouthPanel);
 
-        lowerNorthPanel.setBackground(LIGHT_BLUE);
-        lowerCenterPanel.setBackground(LIGHT_BLUE);
+        lowerNorthPanel.setBackground(Constants.LIGHT_BLUE);
+        lowerCenterPanel.setBackground(Constants.LIGHT_BLUE);
         lowerSouthPanel.setBackground(LIGHT_BLUE);
 
         emptyPanel.setBackground(LIGHT_BLUE);
@@ -287,7 +280,7 @@ public class GameScreen extends JFrame {
 
     // ändrar information på info panelen längst ner
     public void changeInfoField() {
-        if (currentQuestion <= numberOfQuestions) {
+        if (currentQuestion <= numberOfQuestions){
             infoField.setText("Fråga " + currentQuestion);
             infoField.revalidate();
         } else {
