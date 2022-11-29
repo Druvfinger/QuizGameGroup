@@ -15,6 +15,7 @@ public class ResultsScreen extends JFrame {
     static int finalScore; // kommer att användas senare på ResultsScreen
     GameSettings gameSettings = new GameSettings();
     int numberOfCategories = gameSettings.getNumberOfRounds();
+    int numberOfQuestions = gameSettings.getNumberOfQuestions();
     String currentPlayerName;
     String opponentName;
 
