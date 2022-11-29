@@ -203,7 +203,6 @@ public class GameScreen extends JFrame {
                 currentQuestion++;
                 isAnswered = true;
             }
-
             if (e.getSource() == goOnButton && isAnswered) {
                 isAnswered = false;
                 if (currentQuestion <= numberOfQuestions) {
