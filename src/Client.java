@@ -15,7 +15,6 @@ public class Client {
     static BufferedReader inReader;
     static PrintWriter outWriter;
     static String player;
-
     WelcomeScreen welcomeScreen;
     ResultsScreen resultsScreen;
     GameScreen gameScreen;
@@ -34,7 +33,7 @@ public class Client {
         game = new ServerSideGame(); //
     }
 
-    public void play() throws IOException {
+    public void play() {
         String response;
         try {
             while (true) {
@@ -187,10 +186,7 @@ public class Client {
                         resultsScreen.infoField.setText("Please wait while your opponent is choosing a category.");
                     }
                 }
-
-                //else System.out.println("Something fishy is going on.");
                 else System.out.println("We are missing out on something. " + response);
-
             }
         } catch (Exception e) {
             e.printStackTrace();

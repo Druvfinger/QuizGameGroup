@@ -205,11 +205,11 @@ public class GameScreen extends JFrame {
             }
 
             if (e.getSource() == goOnButton && isAnswered) {
-
+                isAnswered = false;
                 if (currentQuestion <= numberOfQuestions) {
                     Client.outWriter.println("NEXT_QUESTION? " + playerNumber);
 
-                } else if (!wantToGoForward) { 
+                } else if (!wantToGoForward) {
                     changeInfoField();
                     questionLabel.setText("");
                     for (JButton button : buttonList) {
@@ -218,8 +218,10 @@ public class GameScreen extends JFrame {
                     revalidate();
                     Client.outWriter.println("BACK_TO_RESULTS " + playerNumber);
                     wantToGoForward = true;
+                    isAnswered = true; // ??
                 } else {
                     Client.outWriter.println("SHOW_ME_RESULTS " + playerNumber);
+                    isAnswered = false;
                 }
             }
         }
