@@ -125,3 +125,6 @@
         }
     }
 ----------------------------------------------------------------------------------------------------------
+} else if (ServerSideGame.currentRound == roundsToBePlayed){ // Richard test for last
+                    Client.outWriter.println("GAME_FINISHED" + playerNumber); // behöver förmodligen inte skicka playerNumber
+                    ServerSideGame.isLastRound = true;

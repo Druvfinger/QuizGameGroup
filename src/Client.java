@@ -11,7 +11,6 @@ public class Client {
     protected final String host = "127.0.0.1";
     protected final int port = 54321;
     Socket socket;
-
     static BufferedReader inReader;
     static PrintWriter outWriter;
     static String player;
@@ -24,6 +23,7 @@ public class Client {
     String opponentName;
     String chosenCategory;
     boolean myTurnToChoose = false;
+    static boolean gameOver = false;
     int currentRoundNumber = 0;
     int currentPlayerPoints = 0;
     int opponentPlayerPoints = 0;
@@ -233,7 +233,8 @@ public class Client {
                         resultsScreen.infoField.setText("Please wait while your opponent is choosing a category.");
                         resultsScreen.revalidate();
                     }
-                }else if(response.equals("SHOW_FINAL_RESULT")){
+                } else if (response.equals("SHOW_FINAL_RESULT")) {
+                    getWinner();
 
                 } else System.out.println("We are missing out on something. " + response);
             }
@@ -250,6 +251,18 @@ public class Client {
     public int sumPointsForRounds(int currenPoints, String pointsToAdd) {
         int pointsToSum = getPointsIntFromPointsString(pointsToAdd);
         return currenPoints + pointsToSum;
+    }
+
+    public void getWinner() {
+        gameScreen.setVisible(false);
+        resultsScreen.infoField.setText("Game is over press continue to exit game");
+        if (this.currentPlayerPoints < opponentPlayerPoints) {
+            resultsScreen.theirTurnLabel.setText("YOU WON!");
+        } else if (this.currentPlayerPoints == opponentPlayerPoints) {
+            resultsScreen.theirTurnLabel.setText("YOU TIED!");
+        } else {
+            resultsScreen.theirTurnLabel.setText("YOU LOST");
+        }
     }
 
     public static void main(String[] args) throws IOException {

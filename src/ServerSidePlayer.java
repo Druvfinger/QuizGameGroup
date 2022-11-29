@@ -8,6 +8,7 @@ import java.util.List;
 
 public class ServerSidePlayer extends Thread {
 
+    GameSettings gameSettings = new GameSettings();
     ServerSidePlayer opponent;
     ServerSidePlayer currentPlayer;
     Socket socket;
@@ -195,9 +196,11 @@ public class ServerSidePlayer extends Thread {
                             writer.println(toClient);
                         }
                     }
+
                 } else if (fromClient.startsWith("SHOW_ME_RESULTS ")) {
                     output.println("SHOW_RESULTS");
-                } else if (fromClient.startsWith("GAME_FINISHED")){
+                } else if (fromClient.startsWith("GAME_FINISHED")) {
+                    System.out.println("I EXPECT GAME_FINISHED I GOT: " + fromClient); // test
                     output.println("SHOW_FINAL_RESULT");
                 }
             }
@@ -211,7 +214,5 @@ public class ServerSidePlayer extends Thread {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-
         }
-    }
-}
+    }}

@@ -3,6 +3,7 @@ import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.PrintWriter;
 import java.util.List;
 
 public class GameScreen extends JFrame {
@@ -14,7 +15,6 @@ public class GameScreen extends JFrame {
     int questionsPerRound = gameSettings.getNumberOfQuestions();
     boolean isAnswered = false; // testa
     int currentPoint = 0;
-    int currentRound = 0; // testa
     static String userName; // livsviktigt för att det ska fungera
     static String quizTitle; // when do you use static ??
     String currentCategory;
@@ -26,7 +26,7 @@ public class GameScreen extends JFrame {
     String answerB = "Answer B";
     String answerC = "Answer C";
     String answerD = "Answer D";
-    int currentQuestion = 1;
+    static int currentQuestion = 1;
     List<JButton> buttonList;
     GameSettings settings = new GameSettings();
     JButton answerButtonA;
@@ -210,11 +210,12 @@ public class GameScreen extends JFrame {
             }
             if (e.getSource() == goOnButton && isAnswered) {
                 isAnswered = false;
-                if (currentRound > roundsToBePlayed){
-                    Client.outWriter.println("GAME_FINISHED");
+                for (JButton element : buttonList) {
+                    element.setEnabled(true);
                 }
-                else if (currentQuestion <= numberOfQuestions) {
+                if (currentQuestion <= numberOfQuestions) {
                     Client.outWriter.println("NEXT_QUESTION? " + playerNumber);
+
 
                 } else if (!wantToGoForward) {
                     changeInfoField();
@@ -228,11 +229,12 @@ public class GameScreen extends JFrame {
                     Client.outWriter.println("BACK_TO_RESULTS " + playerNumber + " " + totalPointsThisRound);
                     wantToGoForward = true;
                     isAnswered = true;
+
                 } else {
-                    Client.outWriter.println("SHOW_ME_RESULTS " + playerNumber);
-                    isAnswered = false;
-                    currentRound++;
-                    System.out.println("CURRENT ROUND" + currentRound);
+                        Client.outWriter.println("SHOW_ME_RESULTS " + playerNumber);
+                        isAnswered = false;
+                        ServerSideGame.currentRound++;
+                        System.out.println("CURRENT ROUND" + ServerSideGame.currentRound);
                 }
             }
         }
