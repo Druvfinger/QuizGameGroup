@@ -6,12 +6,13 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 public class GameScreen extends JFrame {
-
+    GameSettings gameSettings = new GameSettings();
     int numberOfQuestions;
     int onlyOneAnswerPressed = 1;
     static String playerNumber;
-    Boolean isAnswerCorrect = false; // testa
-    Boolean isAnswered = false; // testa
+    int roundsToBePlayed = gameSettings.getNumberOfRounds();
+    //
+    boolean isAnswered = false; // testa
     int currentPoint = 0;
     int currentRound = 0; // testa
     static String userName; // livsviktigt för att det ska fungera
@@ -202,6 +203,8 @@ public class GameScreen extends JFrame {
                 paintRightOrFalseAnswer((JButton) e.getSource()); // målar knappar i olika färger beroende på om svaret är korrekt
                 currentQuestion++;
                 isAnswered = true;
+                Client.outWriter.println("I ANSWERED " + playerNumber); // NYTT
+
             }
             if (e.getSource() == goOnButton && isAnswered) {
                 isAnswered = false;
@@ -217,10 +220,11 @@ public class GameScreen extends JFrame {
                     revalidate();
                     Client.outWriter.println("BACK_TO_RESULTS " + playerNumber);
                     wantToGoForward = true;
-                    isAnswered = true; // ??
+                    isAnswered = true;
                 } else {
                     Client.outWriter.println("SHOW_ME_RESULTS " + playerNumber);
                     isAnswered = false;
+                    currentRound++;
                 }
             }
         }

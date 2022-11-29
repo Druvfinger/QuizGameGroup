@@ -153,6 +153,10 @@ public class ServerSidePlayer extends Thread {
                     output.println("QUESTION: " + question);
                     output.println("ANSWERS: " + builderWithAnswers);
                 }
+                else if(fromClient.startsWith("I ANSWERED ")){ // NYTT
+                    //String PlayerName = fromClient.substring(11);
+                    output.println(fromClient);
+                }
 
                 else if (fromClient.startsWith("NEXT_QUESTION? ")) {
                     System.out.println(drawnNextQuestion);
