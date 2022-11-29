@@ -51,7 +51,6 @@ public class Client {
                     System.out.println("Waiting for opponent to connect.");
                 } else if (response.equals("PLAYERS_CONNECTED")) {
                     System.out.println("All players connected. We are set to go.");
-
                     // tilldelar namn till denna spelare och till spelarens opponent
                 } else if (response.startsWith("MY_NAME ")) {
                     String playerNumber = response.substring(8, 15);

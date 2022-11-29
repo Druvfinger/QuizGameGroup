@@ -11,7 +11,7 @@ public class GameScreen extends JFrame {
     ServerSideGame game = new ServerSideGame();
     static String playerNumber;
     int roundsToBePlayed = gameSettings.getNumberOfRounds();
-    //
+    int questionsPerRound = gameSettings.getNumberOfQuestions();
     boolean isAnswered = false; // testa
     int currentPoint = 0;
     int currentRound = 0; // testa
@@ -266,19 +266,19 @@ public class GameScreen extends JFrame {
     // ändrar poäng på spelarens poäng-label
     public void changeScore(boolean isCorrectAnswer, String playerNumber) {
         if (isCorrectAnswer && playerNumber.equals("Player1")) {
-            pointsLabelA.setText("Points: " + ++currentPoint + "/3");
+            pointsLabelA.setText("Points: " + ++currentPoint + "/" + questionsPerRound);
             pointsLabelA.revalidate();
             finalScore = currentPoint;
         } else if (!isCorrectAnswer && playerNumber.equals("Player1")) {
-            pointsLabelA.setText("Points: " + currentPoint + "/3");
+            pointsLabelA.setText("Points: " + currentPoint + "/" + + questionsPerRound);
             pointsLabelA.revalidate();
             finalScore = currentPoint;
         } else if (isCorrectAnswer && playerNumber.equals("Player2")) {
-            pointsLabelB.setText("Points: " + ++currentPoint + "/3");
+            pointsLabelB.setText("Points: " + ++currentPoint + "/" + questionsPerRound);
             pointsLabelB.revalidate();
             finalScore = currentPoint;
         } else {   // if (!isCorrectAnswer && playerNumber.equals("Player2"))
-            pointsLabelB.setText("Points: " + currentPoint + "/3");
+            pointsLabelB.setText("Points: " + currentPoint + "/" + + questionsPerRound);
             pointsLabelB.revalidate();
             finalScore = currentPoint;
         }
@@ -290,7 +290,7 @@ public class GameScreen extends JFrame {
             infoField.setText("Question " + currentQuestion);
             infoField.revalidate();
         } else {
-            infoField.setText("Du har nu svarat på alla 3 frågorna. Click på Fortsätt för att gå vidare."); // Ändra???
+            infoField.setText("You have answer all " +questionsPerRound + "questions. Click on Continue to proceed."); // Ändra???
             infoField.revalidate();
         }
     }

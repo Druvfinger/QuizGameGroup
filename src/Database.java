@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -5,6 +6,8 @@ import java.util.List;
 public class Database {
     private static int randIndex;
     private String currentCategory;
+    private List<Integer> duplicates = new ArrayList<>();
+    GameSettings gs = new GameSettings();
 
     List<String> categories = List.of("Technology", "Pop culture", "Geography", "Science");
 
@@ -116,7 +119,17 @@ public class Database {
     }
 
     public String getQuestion(String category) {
-        randIndex = (int) (Math.random() * technologyQuestions.size());
+        if (duplicates.size() == gs.numberOfQuestions) {
+            duplicates.clear();
+        }
+        while (true) {
+            randIndex = (int) (Math.random() * 10);
+            if (!duplicates.contains(randIndex)) {
+                break;
+            }
+        }
+        duplicates.add(randIndex);
+
         if (category.equals("Technology")) {
             return technologyQuestions.get(randIndex);
         } else if (category.equals("Pop culture")) {
