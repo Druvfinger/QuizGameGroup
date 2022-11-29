@@ -12,17 +12,9 @@ public class GameScreen extends JFrame {
     static String playerNumber;
     Boolean isAnswerCorrect = false; // testa
     Boolean isAnswered = false; // testa
-
     int currentPoint = 0;
     int currentRound = 0; // testa
     static String userName; // livsviktigt för att det ska fungera
-    final Color LIGHT_BLUE = new Color(51, 153, 255);
-    final Color VERY_LIGHT_BLUE = new Color(51, 204, 255);
-    final Color VERY_LIGHT_GREEN = new Color(102, 255, 102);
-    final Color LIGHT_GREEN = new Color(0, 255, 51);
-    final Color GOLD = new Color(255, 204, 51);
-    final Color VERY_LIGHT_RED = new Color(255, 102, 102);
-
     static String quizTitle; // when do you use static ??
     String currentCategory;
     static int finalScore;
@@ -34,9 +26,6 @@ public class GameScreen extends JFrame {
     String answerD = "Svar D";
     int currentQuestion = 1;
     List<JButton> buttonList;
-    ServerSideGame game = new ServerSideGame();
-    Database database = new Database();
-    ResultsScreen resultsScreen;
     GameSettings settings = new GameSettings();
     JButton answerButtonA;
     JButton answerButtonB;
@@ -106,7 +95,7 @@ public class GameScreen extends JFrame {
         basePanel.add(upperPanel);
         basePanel.add(lowerPanel);
 
-        lowerPanel.setBackground(LIGHT_BLUE);
+        lowerPanel.setBackground(Constants.LIGHT_BLUE);
         lowerPanel.setLayout(new BoxLayout(lowerPanel, BoxLayout.Y_AXIS));
 
         lowerPanel.add(Box.createRigidArea(new Dimension(1, 5)));
@@ -116,16 +105,16 @@ public class GameScreen extends JFrame {
         lowerPanel.add(Box.createRigidArea(new Dimension(1, 5)));
         lowerPanel.add(lowerSouthPanel);
 
-        lowerNorthPanel.setBackground(LIGHT_BLUE);
-        lowerCenterPanel.setBackground(LIGHT_BLUE);
-        lowerSouthPanel.setBackground(LIGHT_BLUE);
+        lowerNorthPanel.setBackground(Constants.LIGHT_BLUE);
+        lowerCenterPanel.setBackground(Constants.LIGHT_BLUE);
+        lowerSouthPanel.setBackground(Constants.LIGHT_BLUE);
 
-        emptyPanel.setBackground(LIGHT_BLUE);
+        emptyPanel.setBackground(Constants.LIGHT_BLUE);
         emptyPanel.setPreferredSize(new Dimension(400, 25));
 
         goOnButton.setPreferredSize(new Dimension(250, 40));
         goOnButton.setBorder(new LineBorder(Color.WHITE, 3));
-        goOnButton.setBackground(LIGHT_GREEN);
+        goOnButton.setBackground(Constants.LIGHT_GREEN);
 
         lowerNorthPanel.add(answerButtonA);
         lowerNorthPanel.add(answerButtonB);
@@ -136,7 +125,7 @@ public class GameScreen extends JFrame {
         lowerSouthPanel.add(goOnButton);
         lowerSouthPanel.add(infoField);
 
-        categoryInfoPanel.setBackground(LIGHT_BLUE);
+        categoryInfoPanel.setBackground(Constants.LIGHT_BLUE);
         rightUserInfoPanel.setBackground(Color.WHITE);
         questionLabel.setOpaque(true);
         questionLabel.setBackground(Color.WHITE);
@@ -155,7 +144,7 @@ public class GameScreen extends JFrame {
         rightUserInfoPanel.add(playerEmojiLabelB);
         rightUserInfoPanel.add(userNamePointsPanelB);
 
-        questionLabel.setBorder(new CompoundBorder(new LineBorder(LIGHT_BLUE, 10), new EtchedBorder(EtchedBorder.RAISED)));
+        questionLabel.setBorder(new CompoundBorder(new LineBorder(Constants.LIGHT_BLUE, 10), new EtchedBorder(EtchedBorder.RAISED)));
 
         for (JButton button : buttonList) {
             button.addActionListener(listener);
@@ -164,19 +153,19 @@ public class GameScreen extends JFrame {
         goOnButton.addActionListener(listener);
 
         playerEmojiLabelA.setOpaque(true);
-        playerEmojiLabelA.setBackground(LIGHT_BLUE);
+        playerEmojiLabelA.setBackground(Constants.LIGHT_BLUE);
         playerEmojiLabelB.setOpaque(true);
-        playerEmojiLabelB.setBackground(LIGHT_BLUE);
+        playerEmojiLabelB.setBackground(Constants.LIGHT_BLUE);
 
         userNamePointsPanelA.setOpaque(true);
-        userNamePointsPanelA.setBackground(LIGHT_BLUE);
+        userNamePointsPanelA.setBackground(Constants.LIGHT_BLUE);
         userNamePointsPanelB.setOpaque(true);
-        userNamePointsPanelB.setBackground(LIGHT_BLUE);
+        userNamePointsPanelB.setBackground(Constants.LIGHT_BLUE);
 
         userNameLabelA.setFont(new Font("Sans Serif", Font.BOLD, 20));
-        userNameLabelA.setForeground(GOLD);
+        userNameLabelA.setForeground(Constants.GOLD);
         userNameLabelB.setFont(new Font("Sans Serif", Font.BOLD, 20));
-        userNameLabelB.setForeground(GOLD);
+        userNameLabelB.setForeground(Constants.GOLD);
 
         userNamePointsPanelA.add(userNameLabelA);
         userNamePointsPanelA.add(pointsLabelA);
@@ -212,13 +201,15 @@ public class GameScreen extends JFrame {
                 changeScore(isRightAnswer((JButton) e.getSource()), playerNumber); // ändrar antal poäng på spelarens poäng panel
                 paintRightOrFalseAnswer((JButton) e.getSource()); // målar knappar i olika färger beroende på om svaret är korrekt
                 currentQuestion++;
+                isAnswered = true;
             }
 
-            if (e.getSource() == goOnButton) {
+            if (e.getSource() == goOnButton && isAnswered) {
 
                 if (currentQuestion <= numberOfQuestions) {
                     Client.outWriter.println("NEXT_QUESTION? " + playerNumber);
-                } else if (!wantToGoForward) { // (currentQuestion > numberOfQuestions)
+
+                } else if (!wantToGoForward) { 
                     changeInfoField();
                     questionLabel.setText("");
                     for (JButton button : buttonList) {
@@ -236,7 +227,6 @@ public class GameScreen extends JFrame {
 
 
     // kontrollerar om svaret på den valda knappen är korrekt
-    //-- Kolla att denna stämmer har en känsla att den spökar - Den spöKar inte! ;-P
     public boolean isRightAnswer(JButton clickedButton) {
         String givenAnswer = clickedButton.getText();
         return givenAnswer.equalsIgnoreCase(rightAnswer);
@@ -245,10 +235,10 @@ public class GameScreen extends JFrame {
     // målar knappar i grönt eller rött/grönt beroende på om svaret är korrekt
     public void paintRightOrFalseAnswer(JButton clickedButton) {
         if (isRightAnswer(clickedButton)) {
-            clickedButton.setBackground(VERY_LIGHT_GREEN);
+            clickedButton.setBackground(Constants.VERY_LIGHT_GREEN);
         } else {
-            clickedButton.setBackground(VERY_LIGHT_RED);
-            findButtonWithRightAnswer().setBackground(VERY_LIGHT_GREEN);
+            clickedButton.setBackground(Constants.VERY_LIGHT_RED);
+            findButtonWithRightAnswer().setBackground(Constants.VERY_LIGHT_GREEN);
         }
     }
 
