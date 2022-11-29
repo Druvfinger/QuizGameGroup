@@ -203,7 +203,12 @@ public class GameScreen extends JFrame {
 
                 changeScore(isRightAnswer((JButton) e.getSource()), playerNumber); // ändrar antal poäng på spelarens poäng panel
                 paintRightOrFalseAnswer((JButton) e.getSource()); // målar knappar i olika färger beroende på om svaret är korrekt
+                for (JButton element : buttonList) {
+                    element.setEnabled(false);
+                }
+                System.out.println(currentQuestion + " CURRENTQUEST BEFORE");
                 currentQuestion++;
+                System.out.println(currentQuestion + " CURRENTQUEST AFTER");
                 isAnswered = true;
                 Client.outWriter.println("I_ANSWERED" + playerNumber); // NYTT
 

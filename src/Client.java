@@ -17,6 +17,7 @@ public class Client {
     WelcomeScreen welcomeScreen;
     ResultsScreen resultsScreen;
     GameScreen gameScreen;
+    GameSettings gameSettings = new GameSettings();
     ChooseCategoryScreen categoryScreen;
     ServerSideGame game; //
     String currentPlayerName;
@@ -224,7 +225,13 @@ public class Client {
                 } else if (response.equals("SHOW_RESULTS")) {
                     gameScreen.setVisible(false);
                     resultsScreen.setVisible(true);
-                    if (myTurnToChoose) {
+                    System.out.println(ServerSideGame.currentRound + "-" + gameSettings.getNumberOfRounds() + "-" + (GameScreen.currentQuestion - 1) + "-" + gameSettings.getNumberOfQuestions());
+                    if ((ServerSideGame.currentRound == gameSettings.getNumberOfRounds()) && ((GameScreen.currentQuestion - 1) == gameSettings.getNumberOfQuestions())) {
+                        gameOver = true;
+                        getWinner();
+                        System.out.println("WINNER");
+
+                    } else if (myTurnToChoose) {
                         resultsScreen.theirTurnLabel.setText("Your Turn");
                         resultsScreen.infoField.setText("Your turn to choose a category. Click \"Continue\" to continue.");
                     } else {

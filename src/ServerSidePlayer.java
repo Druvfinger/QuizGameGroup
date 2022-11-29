@@ -145,18 +145,16 @@ public class ServerSidePlayer extends Thread {
                     System.out.println(player + " Has answered the question"); // test
                     this.questionAnswered = true;
                     output.println("HOLD");
-                    if (questionAnswered && getOpponent().questionAnswered){
+                    if (questionAnswered && getOpponent().questionAnswered) {
                         System.out.println("Both answered Question");
                         toClient = "BOTH_ANSWERED_QUESTION";
-                        for (PrintWriter writer : multiWriter.getWriters()){
+                        for (PrintWriter writer : multiWriter.getWriters()) {
                             writer.println(toClient);
                         }
                         this.questionAnswered = false;
                         getOpponent().questionAnswered = false;
                     }
-                }
-
-                else if (fromClient.startsWith("NEXT_QUESTION? ")) {
+                } else if (fromClient.startsWith("NEXT_QUESTION? ")) {
                     System.out.println(drawnNextQuestion);
                     if (!drawnNextQuestion) {
                         question = game.getQuestionText(category);
@@ -177,9 +175,8 @@ public class ServerSidePlayer extends Thread {
                         drawnNextQuestion = true;
                     } else
                         drawnNextQuestion = false;
-                }
-                else if (fromClient.startsWith("BACK_TO_RESULTS ")) {
-                    String playerInfoNumber = fromClient.substring(16,23);
+                } else if (fromClient.startsWith("BACK_TO_RESULTS ")) {
+                    String playerInfoNumber = fromClient.substring(16, 23);
                     myPoints = fromClient.substring(24);
                     System.out.println(playerInfoNumber + " " + myPoints);// för att kontrollera att det fungerar korrekt
                     this.playerAnsweredQuestions = true;
