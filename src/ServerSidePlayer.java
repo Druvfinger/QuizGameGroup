@@ -191,6 +191,8 @@ public class ServerSidePlayer extends Thread {
                     }
                 } else if (fromClient.startsWith("SHOW_ME_RESULTS ")) {
                     output.println("SHOW_RESULTS");
+                } else if (fromClient.startsWith("GAME_FINISHED")){
+                    output.println("SHOW_FINAL_RESULT");
                 }
             }
         } catch (RuntimeException ex) {

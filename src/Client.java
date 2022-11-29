@@ -197,6 +197,8 @@ public class Client {
                         resultsScreen.goOnButton.setVisible(false);
                         resultsScreen.infoField.setText("Please wait while your opponent is choosing a category.");
                     }
+                }else if(response.equals("SHOW_FINAL_RESULT")){
+
                 } else System.out.println("We are missing out on something. " + response);
             }
         } catch (Exception e) {

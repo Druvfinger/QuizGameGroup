@@ -8,7 +8,6 @@ import java.util.List;
 public class GameScreen extends JFrame {
     GameSettings gameSettings = new GameSettings();
     int numberOfQuestions;
-    int onlyOneAnswerPressed = 1;
     ServerSideGame game = new ServerSideGame();
     static String playerNumber;
     int roundsToBePlayed = gameSettings.getNumberOfRounds();
@@ -209,7 +208,10 @@ public class GameScreen extends JFrame {
             }
             if (e.getSource() == goOnButton && isAnswered) {
                 isAnswered = false;
-                if (currentQuestion <= numberOfQuestions) {
+                if (currentRound > roundsToBePlayed){
+                    Client.outWriter.println("GAME_FINISHED");
+                }
+                else if (currentQuestion <= numberOfQuestions) {
                     Client.outWriter.println("NEXT_QUESTION? " + playerNumber);
 
                 } else if (!wantToGoForward) {
@@ -226,6 +228,7 @@ public class GameScreen extends JFrame {
                     Client.outWriter.println("SHOW_ME_RESULTS " + playerNumber);
                     isAnswered = false;
                     currentRound++;
+                    System.out.println("CURRENT ROUND" + currentRound);
                 }
             }
         }
