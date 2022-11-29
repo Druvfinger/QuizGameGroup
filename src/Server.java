@@ -3,7 +3,7 @@ import java.net.ServerSocket;
 
 public class Server {
 
-    int port = 54322;
+    int port = 54321;
     private MultiWriter multiWriter = new MultiWriter();
 
     public Server() throws IOException {

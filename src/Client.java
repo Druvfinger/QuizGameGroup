@@ -35,7 +35,7 @@ public class Client {
         game = new ServerSideGame(); //
     }
 
-    public void play() {
+    public void play() throws IOException {
         String response;
         try {
             while (true) {
@@ -231,11 +231,10 @@ public class Client {
                         resultsScreen.theirTurnLabel.setText("Their Turn");
                         resultsScreen.goOnButton.setVisible(false);
                         resultsScreen.infoField.setText("Please wait while your opponent is choosing a category.");
+                        resultsScreen.revalidate();
                     }
                 }else if(response.equals("SHOW_FINAL_RESULT")){
 
-                } else System.out.println("We are missing out on something. " + response);
-                    resultsScreen.revalidate();
                 } else System.out.println("We are missing out on something. " + response);
             }
         } catch (Exception e) {
