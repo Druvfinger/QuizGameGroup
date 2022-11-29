@@ -5,7 +5,6 @@ public class ServerSideGame {
 
     static ServerSidePlayer currentPlayer;
     static ServerSidePlayer opponentPlayer;
-    GameScreen gameScreen;
     Database database = new Database();
 
     public ServerSidePlayer getCurrentPlayer() {
@@ -19,7 +18,6 @@ public class ServerSideGame {
     public ServerSidePlayer getOpponentPlayer() {
         return opponentPlayer;
     }
-
     public void setOpponentPlayer(ServerSidePlayer opponentPlayer) {
         this.opponentPlayer = opponentPlayer;
     }
@@ -27,7 +25,6 @@ public class ServerSideGame {
     public String getQuestionText(String category) {
         return database.getQuestion(category);
     }
-
     public List<String> getAnswersText(String category) {
         return database.getAnswers(category);
     }

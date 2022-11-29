@@ -24,7 +24,7 @@ public class Database {
             "2007", "2008", "2006", "2005",
             "Ctrl + c", "Ctrl + v", "Ctrl + a", "Ctrl + s",
             "kilobyte", "gigabyte", "megabyte", "terabyte",
-            "no", "yes", "What are you stupid?", "im genuis",
+            "no", "yes", "What are you stupid?", "I'm a genius",
             "Charles Babbage", "Steve Jobs", "Dr.Phil", "Bill Gates",
             "Hyper Text Transfer Protocol", "Hyper Text Transfer Plan", "Hyper Textable Transfer Plan", "Hyper Tin Transfer Protocol",
             "Pierre Omidyar", "Pierre White", "Ramsey Bolton", "Jonas Gudrunson",
@@ -117,50 +117,40 @@ public class Database {
 
     public String getQuestion(String category) {
         randIndex = (int) (Math.random() * technologyQuestions.size());
-        if (category.equals("Technology")) {
-            return technologyQuestions.get(randIndex);
-        } else if (category.equals("Pop culture")) {
-            return popcoultureQuestions.get(randIndex);
-        } else if (category.equals("Geography")) {
-            return geographyQuestions.get(randIndex);
-        } else if (category.equals("Science")) {
-            return scienceQuestions.get(randIndex);
-        }
-        return null;
+        return switch (category) {
+            case "Technology" -> technologyQuestions.get(randIndex);
+            case "Pop culture" -> popcoultureQuestions.get(randIndex);
+            case "Geography" -> geographyQuestions.get(randIndex);
+            case "Science" -> scienceQuestions.get(randIndex);
+            default -> null;
+        };
     }
 
     public List<String> getAnswers(String category) {
         List<String> answers = new LinkedList<>();
         for (int i = randIndex * 4; i < (randIndex * 4 + 4); i++) {
-            if (category.equals("Technology")) {
-                answers.add(technologyAnswers.get(i));
-            } else if (category.equals("Pop culture")) {
-                answers.add(popcultureAnswers.get(i));
-            } else if (category.equals("Geography")) {
-                answers.add(geographyAnswers.get(i));
-            } else if (category.equals("Science")) {
-                answers.add(scienceAnswers.get(i));
+            switch (category) {
+                case "Technology" -> answers.add(technologyAnswers.get(i));
+                case "Pop culture" -> answers.add(popcultureAnswers.get(i));
+                case "Geography" -> answers.add(geographyAnswers.get(i));
+                case "Science" -> answers.add(scienceAnswers.get(i));
             }
         }
         Collections.shuffle(answers);
         return answers;
     }
 
+    public String getCorrectAnswer(String category) {
+        return switch (category) {
+            case "Technology" -> technologyAnswers.get(4 * randIndex);
+            case "Pop culture" -> popcultureAnswers.get(4 * randIndex);
+            case "Geography" -> geographyAnswers.get(4 * randIndex);
+            case "Science" -> scienceAnswers.get(4 * randIndex);
+            default -> null;
+        };
+    }
     public void setQuestionCategory(String a) {
         currentCategory = a;
-    }
-
-    public String getCorrectAnswer(String category) {
-        if (category.equals("Technology")) {
-            return technologyAnswers.get(4 * randIndex);
-        } else if (category.equals("Pop culture")) {
-            return popcultureAnswers.get(4 * randIndex);
-        } else if (category.equals("Geography")) {
-            return geographyAnswers.get(4 * randIndex);
-        } else if (category.equals("Science")) {
-            return scienceAnswers.get(4 * randIndex);
-        }
-        return null;
     }
 
 

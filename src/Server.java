@@ -3,10 +3,8 @@ import java.net.ServerSocket;
 
 public class Server {
 
-    int port = 54321;
-    private MultiWriter multiWriter = new MultiWriter();
-
     public Server() throws IOException {
+        int port = 54321;
         try (ServerSocket ss = new ServerSocket(port)) {
             System.out.println("Quiz game server is running");
             while (true) {
@@ -14,6 +12,7 @@ public class Server {
                 ServerSideGame game = new ServerSideGame();
                 Database database = new Database();
 
+                MultiWriter multiWriter = new MultiWriter();
                 ServerSidePlayer player1 = new ServerSidePlayer(ss.accept(), "Player1", game, multiWriter, database);
                 ServerSidePlayer player2 = new ServerSidePlayer(ss.accept(), "Player2", game, multiWriter, database);
 

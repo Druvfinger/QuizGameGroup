@@ -20,8 +20,6 @@ public class ServerSidePlayer extends Thread {
     ServerSideGame game;
     private MultiWriter multiWriter;
     Database database;
-    int score;
-    int currentScore = 0;
     boolean playerEnteredName = false;
     boolean playerAnsweredQuestions = false;
     boolean playerReadyToPlay = false;
@@ -29,10 +27,6 @@ public class ServerSidePlayer extends Thread {
     static String question; // går det bra att göra denna variabel statisk? Hur ska den påverka om man spelar flera par???
     static StringBuilder builderWithAnswers; // går det bra att göra denna variabel statisk? Hur ska den påverka om man spelar flera par???
     static boolean drawnNextQuestion = false;
-
-    public int getCurrentScore() {
-        return currentScore;
-    }
 
     public ServerSidePlayer(Socket socket, String player, ServerSideGame game, MultiWriter multiWriter, Database database) throws IOException {
         this.socket = socket;
@@ -52,13 +46,13 @@ public class ServerSidePlayer extends Thread {
         }
     }
 
-    public ServerSideGame getGame() {
+    /*public ServerSideGame getGame() {
         return game;
     }
 
     public void setGame(ServerSideGame game) {
         this.game = game;
-    }
+    }*/
 
     public void setOpponent(ServerSidePlayer opponent) {
         this.opponent = opponent;
@@ -204,7 +198,7 @@ public class ServerSidePlayer extends Thread {
             try {
                 socket.close();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         }
     }

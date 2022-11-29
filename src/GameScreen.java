@@ -6,31 +6,25 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 public class GameScreen extends JFrame {
-
-    int numberOfQuestions;
-    int onlyOneAnswerPressed = 1;
-    static String playerNumber;
-    Boolean isAnswerCorrect = false; // testa
-    Boolean isAnswered = false; // testa
-
+    GameSettings settings = new GameSettings();
+    List<JButton> buttonList;
+    int currentRound = 1;
+    int currentQuestion = 1;
     int currentPoint = 0;
-    int currentRound = 0; // testa
+    int numberOfQuestions;
+    static int finalScore;
+    boolean isAnswered = false;
+    boolean wantToGoForward = false;
+    static String playerNumber;
     static String userName; // livsviktigt för att det ska fungera
     static String quizTitle; // when do you use static ??
     String currentCategory;
-    static int finalScore;
     String currentPlayerName;
     String opponentName;
     String answerA = "Svar A";
     String answerB = "Svar B";
     String answerC = "Svar C";
     String answerD = "Svar D";
-    int currentQuestion = 1;
-    List<JButton> buttonList;
-    ServerSideGame game = new ServerSideGame();
-    Database database = new Database();
-    ResultsScreen resultsScreen;
-    GameSettings settings = new GameSettings();
     JButton answerButtonA;
     JButton answerButtonB;
     JButton answerButtonC;
@@ -42,7 +36,7 @@ public class GameScreen extends JFrame {
     JTextField infoField;
     JLabel categoryTextLabel;
     String rightAnswer;
-    boolean wantToGoForward = false;
+
 
     public void setUpGameScreenGUI() {
 
@@ -195,23 +189,22 @@ public class GameScreen extends JFrame {
         numberOfQuestions = settings.getNumberOfQuestions(); // nuvarande 3
         setUpGameScreenGUI();
     }
-
+// add functionality so that for each round it sets stuff different?
     ActionListener listener = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
 
             if (e.getSource() == answerButtonA || e.getSource() == answerButtonB || e.getSource() == answerButtonC ||
                     e.getSource() == answerButtonD) {
-
                 changeScore(isRightAnswer((JButton) e.getSource()), playerNumber); // ändrar antal poäng på spelarens poäng panel
                 paintRightOrFalseAnswer((JButton) e.getSource()); // målar knappar i olika färger beroende på om svaret är korrekt
                 currentQuestion++;
+                isAnswered = true;
             }
-
-            if (e.getSource() == goOnButton) {
-
+            if (e.getSource() == goOnButton && isAnswered) {
                 if (currentQuestion <= numberOfQuestions) {
                     Client.outWriter.println("NEXT_QUESTION? " + playerNumber);
-                } else if (!wantToGoForward) { // (currentQuestion > numberOfQuestions)
+                    isAnswered = false;
+                } else if (!wantToGoForward) {
                     changeInfoField();
                     questionLabel.setText("");
                     for (JButton button : buttonList) {
@@ -220,12 +213,14 @@ public class GameScreen extends JFrame {
                     revalidate();
                     Client.outWriter.println("BACK_TO_RESULTS " + playerNumber);
                     wantToGoForward = true;
+                    currentRound++; // might be in the wrong place
                 } else {
                     Client.outWriter.println("SHOW_ME_RESULTS " + playerNumber);
                 }
             }
         }
     };
+
 
 
     // kontrollerar om svaret på den valda knappen är korrekt

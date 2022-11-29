@@ -34,7 +34,7 @@ public class Client {
         game = new ServerSideGame(); //
     }
 
-    public void play() throws IOException {
+    public void play() {
         String response;
         try {
             while (true) {
@@ -76,12 +76,12 @@ public class Client {
                     if (myTurnToChoose) {
                         welcomeScreen.setVisible(false);
                         resultsScreen = new ResultsScreen(player, currentPlayerName, opponentName);
-                        resultsScreen.theirTurnLabel.setText("Din tur");
-                        resultsScreen.infoField.setText("Your turn to choose a category. Click \"Fortsätt\" to continue.");
+                        resultsScreen.theirTurnLabel.setText("Your Turn");
+                        resultsScreen.infoField.setText("Your turn to choose a category. Click \"Continue\" to continue.");
                     } else {
                         welcomeScreen.setVisible(false);
                         resultsScreen = new ResultsScreen(player, currentPlayerName, opponentName);
-                        resultsScreen.theirTurnLabel.setText("Deras tur");
+                        resultsScreen.theirTurnLabel.setText("Their turn");
                         resultsScreen.goOnButton.setVisible(false);
                         resultsScreen.infoField.setText("Please wait while your opponent is choosing a category.");
                     }
@@ -187,8 +187,6 @@ public class Client {
                         resultsScreen.infoField.setText("Please wait while your opponent is choosing a category.");
                     }
                 }
-
-                //else System.out.println("Something fishy is going on.");
                 else System.out.println("We are missing out on something. " + response);
 
             }

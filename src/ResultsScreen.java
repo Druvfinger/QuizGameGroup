@@ -1,12 +1,8 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,10 +30,10 @@ public class ResultsScreen extends JFrame {
     public void setUpResultScreenGUI(){
 
         JPanel basePanel = new JPanel(new BorderLayout());
-        theirTurnLabel = new JLabel("Spelarens tur", SwingConstants.CENTER); //
+        theirTurnLabel = new JLabel("Players Turn", SwingConstants.CENTER); //
         JPanel middlePanel = new JPanel(new BorderLayout());
         JPanel goOnPanel = new JPanel(new BorderLayout());
-        goOnButton = new JButton("Fortsätt");
+        goOnButton = new JButton("Continue");
         JPanel leftPlayerPanel = new JPanel(new BorderLayout());
         JLabel totalsLabel = new JLabel("0 - 0", SwingConstants.CENTER);
         categoryPanel = new JPanel();
@@ -53,7 +49,7 @@ public class ResultsScreen extends JFrame {
         String userNameB = "Player B";
         JLabel userNameLabelB = new JLabel(userNameB, SwingConstants.CENTER);
 
-        infoField = new JTextField("Här kommer det skrivas ut info till användare", 43);
+        infoField = new JTextField("Info for user shows up here", 43);
 
         setTitle(quizTitle);
         add(basePanel);
@@ -147,7 +143,7 @@ public class ResultsScreen extends JFrame {
     ActionListener listener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (e.getSource() == goOnButton && theirTurnLabel.getText().equals("Din tur")) {
+            if (e.getSource() == goOnButton && theirTurnLabel.getText().equals("Your turn!")) {
                 Client.outWriter.println("CHOOSING_CATEGORY " + playerNumber);
             } else if (e.getSource() == goOnButton && theirTurnLabel.getText().equals("Time to play!")) {
                 Client.outWriter.println("READY_TO_ANSWER " + playerNumber);
