@@ -29,6 +29,7 @@ public class ServerSidePlayer extends Thread {
     static String question; // går det bra att göra denna variabel statisk? Hur ska den påverka om man spelar flera par???
     static StringBuilder builderWithAnswers; // går det bra att göra denna variabel statisk? Hur ska den påverka om man spelar flera par???
     static boolean drawnNextQuestion = false;
+    String myPoints;
 
     public int getCurrentScore() {
         return currentScore;
@@ -179,12 +180,18 @@ public class ServerSidePlayer extends Thread {
                 }
 
                 else if (fromClient.startsWith("BACK_TO_RESULTS ")) {
-                    player = fromClient.substring(16);
-                    System.out.println(player + " has entered their name.");// för att kontrollera att det fungerar korrekt
+                    String playerInfoNumber = fromClient.substring(16,23);
+                    myPoints = fromClient.substring(24);
+                    System.out.println(playerInfoNumber + " " + myPoints);// för att kontrollera att det fungerar korrekt
                     this.playerAnsweredQuestions = true;
                     output.println("WAIT");
+
+                    for (PrintWriter writer : multiWriter.getWriters()) {
+                        writer.println("POINTS: " + playerInfoNumber + " " + myPoints);
+                    }
+
                     if (playerAnsweredQuestions && this.getOpponent().playerAnsweredQuestions) {
-                        System.out.println("ANSWERED_QUESTIONS_BOTH");// för att kontrollera att det fungerar korrekt
+                        System.out.println("Both players have answered questions.");// för att kontrollera att det fungerar korrekt
                         toClient = "ANSWERED_QUESTIONS_BOTH";
                         for (PrintWriter writer : multiWriter.getWriters()) {
                             writer.println(toClient);

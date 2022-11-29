@@ -164,6 +164,32 @@ public class Client {
                     gameScreen.goOnButton.setVisible(false); // VIKTIGT!! Glöm inte att sätta tillbaka till synligt!
                     gameScreen.infoField.setVisible(false);
                     gameScreen.revalidate();
+                    System.out.println(player + " is waiting.");
+                    //outWriter.println("POINTS?");
+                }
+
+                else if (response.startsWith("POINTS: ")){
+                    String playerInfoNumber = response.substring(8, 15);
+                    System.out.println(playerInfoNumber); // kontroll
+                    String points = response.substring(16);
+                    System.out.println(points); // kontroll
+
+                    //Placerar poäng på GameScreen innan man går vidare till ResultsScreen
+                    if (player.equals("Player1")) {
+                        if (playerInfoNumber.equals("Player1")) {
+                            gameScreen.pointsLabelA.setText(points);
+                        } else { // (playerInfoNumber.equals("Player2"))
+                            gameScreen.pointsLabelB.setText(points);
+                        }
+                    }
+                    else if (player.equals("Player2")) {
+                        if (playerInfoNumber.equals("Player1")) {
+                            gameScreen.pointsLabelB.setText(points);
+                        } else { // (playerInfoNumber.equals("Player1"))
+                            gameScreen.pointsLabelA.setText(points);
+                        }
+                    }
+                    gameScreen.revalidate();
                 }
 
                 else if (response.equals("ANSWERED_QUESTIONS_BOTH")) {

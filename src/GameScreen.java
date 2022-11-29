@@ -26,6 +26,7 @@ public class GameScreen extends JFrame {
     static String quizTitle; // when do you use static ??
     String currentCategory;
     static int finalScore;
+    String totalPointsThisRound;
     String currentPlayerName;
     String opponentName;
     String answerA = "Svar A";
@@ -218,14 +219,16 @@ public class GameScreen extends JFrame {
 
                 if (currentQuestion <= numberOfQuestions) {
                     Client.outWriter.println("NEXT_QUESTION? " + playerNumber);
-                } else if (!wantToGoForward) { // (currentQuestion > numberOfQuestions)
+                } else if (!wantToGoForward) { // ( && currentQuestion > numberOfQuestions)
                     changeInfoField();
                     questionLabel.setText("");
                     for (JButton button : buttonList) {
-                        button.setVisible(false); // VIKTIGT!! Glöm inte att sätta tillbaka till synligt!
+                        button.setVisible(false); // VIKTIGT!! Glöm inte att sätta tillbaka till synlig!
                     }
                     revalidate();
-                    Client.outWriter.println("BACK_TO_RESULTS " + playerNumber);
+                    totalPointsThisRound = pointsLabelA.getText();  // hämtar poäng för denna runda i form av: "Points: .../..."
+                    System.out.println(totalPointsThisRound); // kontroll
+                    Client.outWriter.println("BACK_TO_RESULTS " + playerNumber + " " + totalPointsThisRound);
                     wantToGoForward = true;
                 } else {
                     Client.outWriter.println("SHOW_ME_RESULTS " + playerNumber);
@@ -266,21 +269,13 @@ public class GameScreen extends JFrame {
 
     // ändrar poäng på spelarens poäng-label
     public void changeScore(boolean isCorrectAnswer, String playerNumber) {
-        if (isCorrectAnswer && playerNumber.equals("Player1")) {
+        if (isCorrectAnswer) {
             pointsLabelA.setText("Points: " + ++currentPoint + "/3");
             pointsLabelA.revalidate();
             finalScore = currentPoint;
-        } else if (!isCorrectAnswer && playerNumber.equals("Player1")) {
+        } else {
             pointsLabelA.setText("Points: " + currentPoint + "/3");
             pointsLabelA.revalidate();
-            finalScore = currentPoint;
-        } else if (isCorrectAnswer && playerNumber.equals("Player2")) {
-            pointsLabelB.setText("Points: " + ++currentPoint + "/3");
-            pointsLabelB.revalidate();
-            finalScore = currentPoint;
-        } else {   // if (!isCorrectAnswer && playerNumber.equals("Player2"))
-            pointsLabelB.setText("Points: " + currentPoint + "/3");
-            pointsLabelB.revalidate();
             finalScore = currentPoint;
         }
     }
