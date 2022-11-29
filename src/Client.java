@@ -25,7 +25,6 @@ public class Client {
     String chosenCategory;
     boolean myTurnToChoose = false;
     int currentRoundNumber = 1;
-
     public Client() throws IOException {
         socket = new Socket(host, port);
         outWriter = new PrintWriter(socket.getOutputStream(), true);
@@ -134,31 +133,26 @@ public class Client {
                     gameScreen.rightAnswer = answersArray[answersArray.length - 1]; // NYTT (Det korrekta svaret)
                     System.out.println(gameScreen.rightAnswer);
                     gameScreen.revalidate();
-                    
-                } else if (response.startsWith("I ANSWERED")) { // NYTT -->
-                    int positionOfLastBlankspace = response.lastIndexOf(" "); // NYTT test
-                    String playerName = response.substring(positionOfLastBlankspace); // NYTT test
-                    System.out.println(playerName); // NYTT test
-                    boolean p1Played = false;
-                    boolean p2Played = false;
-                    if (playerName.equals("Player1")) {
-                        p1Played = true;
-                        gameScreen.infoField.setText("Waiting for other player to answer.");
-                    }
-                    if (playerName.equals("Player2")) {
-                        p2Played = true;
-                        gameScreen.infoField.setText("Waiting for other player to answer.");
-                    }
-                    if (p1Played && p2Played) {
-                        gameScreen.goOnButton.setEnabled(true);
-                    }
-// END of NYTT
+                } else if (response.startsWith("HOLD")) {
+                    gameScreen.categoryTextLabel.setText("");
+                    gameScreen.questionLabel.setText("Please wait while your opponent is answering.");
+                    gameScreen.goOnButton.setEnabled(false); // VIKTIGT!! Glöm inte att sätta tillbaka till synligt!
+                    gameScreen.infoField.setVisible(false);
+                    gameScreen.revalidate();
+                } else if (response.startsWith("BOTH_ANSWERED_QUESTION")) { // NYTT -->
+                    gameScreen.goOnButton.setEnabled(true);
+                    gameScreen.infoField.setVisible(true);
+                    gameScreen.infoField.setText("You can go to next Question");
+                    gameScreen.revalidate();
+
                 } else if (response.startsWith("NEXT_QUESTION: ")) {
                     String question = response.substring(15);
                     System.out.println(question);// för att kontrollera att det fungerar korrekt
                     gameScreen.questionLabel.setText(question);
                     gameScreen.changeInfoField();
+                    gameScreen.goOnButton.setEnabled(false); // NYTT
                     gameScreen.revalidate();
+
 
                 } else if (response.startsWith("NEXT_ANSWERS: ")) {
                     String answers = response.substring(14);

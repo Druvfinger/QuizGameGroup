@@ -64,7 +64,8 @@ public class GameScreen extends JFrame {
         answerButtonB = new JButton(answerB);
         answerButtonC = new JButton(answerC);
         answerButtonD = new JButton(answerD);
-        goOnButton = new JButton("Fortsätt");
+        goOnButton = new JButton("Continue");
+        goOnButton.setEnabled(false);
 
         buttonList = List.of(answerButtonA, answerButtonB, answerButtonC, answerButtonD);
 
@@ -203,7 +204,7 @@ public class GameScreen extends JFrame {
                 paintRightOrFalseAnswer((JButton) e.getSource()); // målar knappar i olika färger beroende på om svaret är korrekt
                 currentQuestion++;
                 isAnswered = true;
-                Client.outWriter.println("I ANSWERED " + playerNumber); // NYTT
+                Client.outWriter.println("I_ANSWERED" + playerNumber); // NYTT
 
             }
             if (e.getSource() == goOnButton && isAnswered) {
