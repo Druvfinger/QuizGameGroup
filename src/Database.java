@@ -33,7 +33,7 @@ public class Database {
             "twttr", "twittr", "twitt", "tweet"
     );
 
-    List<String> popcoultureQuestions = List.of(
+    List<String> popcultureQuestions = List.of(
             "What is Hawkeye's real name?",
             "Which Avenger is the only one who could calm the Hulk down?",
             "Night Crawler, member of the X-Men, has what kind of powers?",
@@ -120,7 +120,7 @@ public class Database {
         if (category.equals("Technology")) {
             return technologyQuestions.get(randIndex);
         } else if (category.equals("Pop culture")) {
-            return popcoultureQuestions.get(randIndex);
+            return popcultureQuestions.get(randIndex);
         } else if (category.equals("Geography")) {
             return geographyQuestions.get(randIndex);
         } else if (category.equals("Science")) {
@@ -145,6 +145,28 @@ public class Database {
         Collections.shuffle(answers);
         return answers;
     }
+
+    /*public String getQuestion(){
+        while (true) {
+            randIndex = (int) (Math.random() * technologyQuestions.size());
+            if (!duplicates.contains(randIndex)) {
+                break;
+            }
+        }
+        System.out.println("Getting questions");
+        System.out.println("NUVARANDE KATEGORI: " + currentCategory);
+        duplicates.add(randIndex);
+        if (category.equals("Technology")) {
+            return technologyQuestions.get(randIndex);
+        } else if (category.equals("Pop culture")) {
+            return popcultureQuestions.get(randIndex);
+        } else if (category.equals("Geography")) {
+            return geographyQuestions.get(randIndex);
+        } else if (category.equals("Science")) {
+            return scienceQuestions.get(randIndex);
+        }
+        return "VAD FAN HÄNDER MED FRÅGORNA";
+    }*/
 
     public void setQuestionCategory(String a) {
         currentCategory = a;
