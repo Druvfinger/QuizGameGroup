@@ -75,12 +75,12 @@ public class Client {
                     if (myTurnToChoose) {
                         welcomeScreen.setVisible(false);
                         resultsScreen = new ResultsScreen(player, currentPlayerName, opponentName);
-                        resultsScreen.theirTurnLabel.setText("Din tur");
+                        resultsScreen.theirTurnLabel.setText("Your Turn");
                         resultsScreen.infoField.setText("Your turn to choose a category. Click \"Fortsätt\" to continue.");
                     } else {
                         welcomeScreen.setVisible(false);
                         resultsScreen = new ResultsScreen(player, currentPlayerName, opponentName);
-                        resultsScreen.theirTurnLabel.setText("Deras tur");
+                        resultsScreen.theirTurnLabel.setText("Their Turn");
                         resultsScreen.goOnButton.setVisible(false);
                         resultsScreen.infoField.setText("Please wait while your opponent is choosing a category.");
                     }
@@ -190,10 +190,10 @@ public class Client {
                     gameScreen.setVisible(false);
                     resultsScreen.setVisible(true);
                     if (myTurnToChoose) {
-                        resultsScreen.theirTurnLabel.setText("Din tur");
-                        resultsScreen.infoField.setText("Your turn to choose a category. Click \"Fortsätt\" to continue.");
+                        resultsScreen.theirTurnLabel.setText("Your Turn");
+                        resultsScreen.infoField.setText("Your turn to choose a category. Click \"Continue\" to continue.");
                     } else {
-                        resultsScreen.theirTurnLabel.setText("Deras tur");
+                        resultsScreen.theirTurnLabel.setText("Their Turn");
                         resultsScreen.goOnButton.setVisible(false);
                         resultsScreen.infoField.setText("Please wait while your opponent is choosing a category.");
                     }

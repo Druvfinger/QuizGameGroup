@@ -22,10 +22,10 @@ public class GameScreen extends JFrame {
     static int finalScore;
     String currentPlayerName;
     String opponentName;
-    String answerA = "Svar A";
-    String answerB = "Svar B";
-    String answerC = "Svar C";
-    String answerD = "Svar D";
+    String answerA = "Answer A";
+    String answerB = "Answer B";
+    String answerC = "Answer C";
+    String answerD = "Answer D";
     int currentQuestion = 1;
     List<JButton> buttonList;
     GameSettings settings = new GameSettings();
@@ -284,7 +284,7 @@ public class GameScreen extends JFrame {
     // ändrar information på info panelen längst ner
     public void changeInfoField() {
         if (currentQuestion <= numberOfQuestions) {
-            infoField.setText("Fråga " + currentQuestion);
+            infoField.setText("Question " + currentQuestion);
             infoField.revalidate();
         } else {
             infoField.setText("Du har nu svarat på alla 3 frågorna. Click på Fortsätt för att gå vidare."); // Ändra???

@@ -77,12 +77,6 @@ public class ServerSidePlayer extends Thread {
     public void setCurrentPlayer(ServerSidePlayer currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
-    /*public boolean bothAnswered(){
-        if (game.p1Played && game.p2Played){
-            return true;
-        }
-        return false;
-    }*/
 
     public synchronized void run() {
         try {
@@ -160,20 +154,6 @@ public class ServerSidePlayer extends Thread {
                         this.questionAnswered = false;
                         getOpponent().questionAnswered = false;
                     }
-                    /*if (player.equals("Player1")) {
-                        System.out.println("PLAYER 1 ANSWERED " + game.p2Played);
-                        game.p1Played = true;
-                    }
-                    if (player.equals("Player2")) {
-                        System.out.println("PLAYER 2 ANSWERED " + game.p1Played);
-                        game.p2Played = true;
-                    }
-                    if (bothAnswered()) {
-                        System.out.println(" BOTH PLAYER ANSWERED");
-                        output.println("BOTH_ANSWERED_QUESTION");
-                        game.p1Played = false;
-                        game.p2Played = false;
-                    }*/
                 }
 
                 else if (fromClient.startsWith("NEXT_QUESTION? ")) {
