@@ -1,12 +1,9 @@
-import javax.imageio.ImageIO;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,8 +24,8 @@ public class ResultsScreen extends JFrame {
     List<JLabel> listOfCategoryLabels = new LinkedList<>();
     JTextField infoField;
     JPanel categoryPanel;
-    //boolean myTurnToChoose = false; // not Used?
-    int currentRoundNumber = 1; //not Used?
+    JLabel pointsALabel;
+    JLabel pointsBLabel;
 
     public void setUpResultScreenGUI(){
 
@@ -38,7 +35,10 @@ public class ResultsScreen extends JFrame {
         JPanel goOnPanel = new JPanel(new BorderLayout());
         goOnButton = new JButton("Fortsätt");
         JPanel leftPlayerPanel = new JPanel(new BorderLayout());
-        JLabel totalsLabel = new JLabel("0 - 0", SwingConstants.CENTER);
+        JPanel totalsPanel = new JPanel(new GridLayout(1,3)); // NYTT
+        pointsALabel = new JLabel("0", SwingConstants.RIGHT);
+        JLabel dashLabel = new JLabel("-", SwingConstants.CENTER);
+        pointsBLabel = new JLabel("0", SwingConstants.LEFT);
         categoryPanel = new JPanel();
         JPanel rightPlayerPanel = new JPanel(new BorderLayout());
         JPanel leftUserInfoPanel = new JPanel(new BorderLayout());
@@ -75,6 +75,7 @@ public class ResultsScreen extends JFrame {
         categoryPanel.setBackground(Constants.VERY_LIGHT_BLUE); //hjälpverktyg
         rightPlayerPanel.setBackground(Color.WHITE); //hjälpverktyg
         goOnPanel.setBackground(Constants.LIGHT_BLUE); //hjälpverktyg
+        totalsPanel.setBackground(Constants.LIGHT_BLUE);
 
         basePanel.add(theirTurnLabel, BorderLayout.NORTH);
         basePanel.add(leftPlayerPanel, BorderLayout.WEST);
@@ -82,12 +83,23 @@ public class ResultsScreen extends JFrame {
         basePanel.add(rightPlayerPanel, BorderLayout.EAST);
         basePanel.add(goOnPanel, BorderLayout.SOUTH);
 
-        totalsLabel.setPreferredSize(new Dimension(190, 100));
-        totalsLabel.setForeground(Color.WHITE);
-        totalsLabel.setFont(new Font("Sans Serif", Font.BOLD, 30));
+        totalsPanel.setPreferredSize(new Dimension(190, 100));
+        // skriva en metod för följande rader (koden upprepas):
+        pointsALabel.setForeground(Color.WHITE);
+        pointsALabel.setFont(new Font("Sans Serif", Font.BOLD, 30));
+        dashLabel.setForeground(Color.WHITE);
+        dashLabel.setFont(new Font("Sans Serif", Font.BOLD, 30));
+        pointsBLabel.setForeground(Color.WHITE);
+        pointsBLabel.setFont(new Font("Sans Serif", Font.BOLD, 30));
 
-        middlePanel.add(totalsLabel, BorderLayout.NORTH);
+        middlePanel.add(totalsPanel, BorderLayout.NORTH);
         middlePanel.add(categoryPanel, BorderLayout.CENTER);
+
+        dashLabel.setPreferredSize(new Dimension(30,100));
+
+        totalsPanel.add(pointsALabel);
+        totalsPanel.add(dashLabel);
+        totalsPanel.add(pointsBLabel);
 
         goOnButton.setPreferredSize(new Dimension(250, 40));
         goOnButton.setBorder(new LineBorder(Color.WHITE, 3));

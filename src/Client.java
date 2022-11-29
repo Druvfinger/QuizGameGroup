@@ -9,7 +9,7 @@ import java.net.Socket;
 
 public class Client {
     protected final String host = "127.0.0.1";
-    protected final int port = 54321;
+    protected final int port = 54322;
     Socket socket;
 
     static BufferedReader inReader;
@@ -24,7 +24,9 @@ public class Client {
     String opponentName;
     String chosenCategory;
     boolean myTurnToChoose = false;
-    int currentRoundNumber = 1;
+    int currentRoundNumber = 0;
+    int currentPlayerPoints = 0;
+    int opponentPlayerPoints = 0;
 
     public Client() throws IOException {
         socket = new Socket(host, port);
@@ -94,9 +96,9 @@ public class Client {
                 } else if (response.startsWith("I_CHOSE ")) {
                     chosenCategory = response.substring(8);
                     System.out.println(chosenCategory); // för att kontrollera att det fungerar korrekt
-                    resultsScreen.listOfCategoryLabels.get(currentRoundNumber - 1).setText(chosenCategory);
-                    resultsScreen.listOfCategoryLabels.get(currentRoundNumber - 1).setForeground(Color.WHITE);
-                    resultsScreen.listOfCategoryLabels.get(currentRoundNumber - 1).setFont(new Font("Sans Serif", Font.BOLD, 25));
+                    resultsScreen.listOfCategoryLabels.get(currentRoundNumber).setText(chosenCategory);
+                    resultsScreen.listOfCategoryLabels.get(currentRoundNumber).setForeground(Color.WHITE);
+                    resultsScreen.listOfCategoryLabels.get(currentRoundNumber).setFont(new Font("Sans Serif", Font.BOLD, 25));
                     resultsScreen.categoryPanel.removeAll();
                     for (JLabel label : resultsScreen.listOfCategoryLabels) resultsScreen.categoryPanel.add(label);
                     resultsScreen.goOnButton.setVisible(true);
@@ -107,8 +109,7 @@ public class Client {
                     if (myTurnToChoose) {
                         categoryScreen.setVisible(false);
                         myTurnToChoose = false;         // NYTT Reglerar spelarnas tur att välja
-                    }
-                    else myTurnToChoose = true;         // NYTT Reglerar spelarnas tur att välja
+                    } else myTurnToChoose = true;         // NYTT Reglerar spelarnas tur att välja
 
                     resultsScreen.setVisible(true); // viktigt för den spelaren som har just valt kategorin
 
@@ -129,11 +130,11 @@ public class Client {
                     String answers = response.substring(9);
                     System.out.println(answers);// för att kontrollera att det fungerar korrekt
                     String[] answersArray = answers.split(",");
-                    for (int i = 0; i < answersArray.length-1; i++){
+                    for (int i = 0; i < answersArray.length - 1; i++) {
                         System.out.println(answersArray[i]);// för att kontrollera att det fungerar korrekt
                         gameScreen.buttonList.get(i).setText(answersArray[i]);
                     }
-                    gameScreen.rightAnswer = answersArray[answersArray.length-1]; // NYTT (Det korrekta svaret)
+                    gameScreen.rightAnswer = answersArray[answersArray.length - 1]; // NYTT (Det korrekta svaret)
                     System.out.println(gameScreen.rightAnswer);
                     gameScreen.revalidate();
 
@@ -148,12 +149,12 @@ public class Client {
                     String answers = response.substring(14);
                     System.out.println(answers);// för att kontrollera att det fungerar korrekt
                     String[] answersArray = answers.split(",");
-                    for (int i = 0; i < answersArray.length-1; i++){
+                    for (int i = 0; i < answersArray.length - 1; i++) {
                         System.out.println(answersArray[i]);// för att kontrollera att det fungerar korrekt
                         gameScreen.buttonList.get(i).setText(answersArray[i]);
                         gameScreen.buttonList.get(i).setBackground(new JButton().getBackground()); // NYTT målar knappar i default färg
                     }
-                    gameScreen.rightAnswer = answersArray[answersArray.length-1]; // NYTT (Det korrekta svaret)
+                    gameScreen.rightAnswer = answersArray[answersArray.length - 1]; // NYTT (Det korrekta svaret)
                     System.out.println(gameScreen.rightAnswer);
                     gameScreen.revalidate();
 
@@ -164,59 +165,78 @@ public class Client {
                     gameScreen.infoField.setVisible(false);
                     gameScreen.revalidate();
                     System.out.println(player + " is waiting.");
-                    //outWriter.println("POINTS?");
-                }
-
-                else if (response.startsWith("POINTS: ")){
+                } else if (response.startsWith("POINTS: ")) {
                     String playerInfoNumber = response.substring(8, 15);
                     System.out.println(playerInfoNumber); // kontroll
                     String points = response.substring(16);
                     System.out.println(points); // kontroll
+                    String pointsFirstPart = points.substring(9, 10);
 
-                    //Placerar poäng på GameScreen innan man går vidare till ResultsScreen
+                    //Placerar poäng på GameScreen under respektive spelare innan man går vidare till ResultsScreen
                     if (player.equals("Player1")) {
                         if (playerInfoNumber.equals("Player1")) {
-                            gameScreen.pointsLabelA.setText(points);
+                            gameScreen.pointsLabelA.setText(points); // uppdaterar poäng på GameScreen poäng label
+                            resultsScreen.listOfLabelsPlayerA.get(currentRoundNumber).setText(points); // uppdaterar poäng på ResultsScreen poäng label
+                            currentPlayerPoints = sumPointsForRounds(currentPlayerPoints, points); // metod som adderar befintliga poäng till poäng från Server
+                            resultsScreen.pointsALabel.setText(Integer.toString(currentPlayerPoints));
+                            System.out.println(playerInfoNumber + " " + currentPlayerPoints); // kontroll
+
                         } else { // (playerInfoNumber.equals("Player2"))
                             gameScreen.pointsLabelB.setText(points);
+                            resultsScreen.listOfLabelsPlayerB.get(currentRoundNumber).setText(points);
+                            opponentPlayerPoints = sumPointsForRounds(opponentPlayerPoints, points);
+                            resultsScreen.pointsBLabel.setText(Integer.toString(opponentPlayerPoints));
+                            System.out.println(playerInfoNumber + " " + opponentPlayerPoints); // kontroll
                         }
-                    }
-                    else if (player.equals("Player2")) {
+                    } else if (player.equals("Player2")) {
                         if (playerInfoNumber.equals("Player1")) {
                             gameScreen.pointsLabelB.setText(points);
-                        } else { // (playerInfoNumber.equals("Player1"))
+                            resultsScreen.listOfLabelsPlayerB.get(currentRoundNumber).setText(points);
+                            opponentPlayerPoints = sumPointsForRounds(opponentPlayerPoints, points);
+                            resultsScreen.pointsBLabel.setText(Integer.toString(opponentPlayerPoints));
+                            System.out.println(playerInfoNumber + " " + opponentPlayerPoints); // kontroll
+                        } else { // (playerInfoNumber.equals("Player2"))
                             gameScreen.pointsLabelA.setText(points);
+                            resultsScreen.listOfLabelsPlayerA.get(currentRoundNumber).setText(points);
+                            currentPlayerPoints = sumPointsForRounds(currentPlayerPoints, points);
+                            resultsScreen.pointsALabel.setText(Integer.toString(currentPlayerPoints));
+                            System.out.println(playerInfoNumber + " " + currentPlayerPoints); // kontroll
                         }
                     }
                     gameScreen.revalidate();
-                }
-
-                else if (response.equals("ANSWERED_QUESTIONS_BOTH")) {
+                } else if (response.equals("ANSWERED_QUESTIONS_BOTH")) {
                     gameScreen.questionLabel.setText("Please continue to see the results.");
                     gameScreen.goOnButton.setVisible(true);
                     gameScreen.infoField.setVisible(true);
                     gameScreen.infoField.setText("Please continue to see the results.");
                     gameScreen.revalidate();
-                }
-
-                else if (response.equals("SHOW_RESULTS")){
+                } else if (response.equals("SHOW_RESULTS")) {
                     gameScreen.setVisible(false);
                     resultsScreen.setVisible(true);
                     if (myTurnToChoose) {
                         resultsScreen.theirTurnLabel.setText("Din tur");
                         resultsScreen.infoField.setText("Your turn to choose a category. Click \"Fortsätt\" to continue.");
-                    }
-                    else{
+                    } else {
                         resultsScreen.theirTurnLabel.setText("Deras tur");
                         resultsScreen.goOnButton.setVisible(false);
                         resultsScreen.infoField.setText("Please wait while your opponent is choosing a category.");
                     }
-                }
-                else System.out.println("We are missing out on something. " + response);
+                    resultsScreen.revalidate();
+                } else System.out.println("We are missing out on something. " + response);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public int getPointsIntFromPointsString(String points) {
+        String part = points.substring(8, 9);
+        return Integer.parseInt(part);
+    }
+
+    public int sumPointsForRounds(int currenPoints, String pointsToAdd) {
+        int pointsToSum = getPointsIntFromPointsString(pointsToAdd);
+        return currenPoints + pointsToSum;
     }
 
     public static void main(String[] args) throws IOException {
