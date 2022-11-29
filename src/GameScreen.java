@@ -9,6 +9,7 @@ public class GameScreen extends JFrame {
     GameSettings gameSettings = new GameSettings();
     int numberOfQuestions;
     int onlyOneAnswerPressed = 1;
+    ServerSideGame game = new ServerSideGame();
     static String playerNumber;
     int roundsToBePlayed = gameSettings.getNumberOfRounds();
     //
