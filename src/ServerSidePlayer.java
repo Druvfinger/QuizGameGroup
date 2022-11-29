@@ -203,7 +203,7 @@ public class ServerSidePlayer extends Thread {
                     System.out.println("I EXPECT GAME_FINISHED I GOT: " + fromClient); // test
                     output.println("SHOW_FINAL_RESULT");
                 }
-            }
+            } // ta bort alla show final result och game finished som går fram och tillbaka
         } catch (RuntimeException ex) {
             System.out.println("Klienten har avbrutit programmet.");
         } catch (IOException e) {
