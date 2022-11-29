@@ -113,7 +113,6 @@ public class Client {
 
                     resultsScreen.setVisible(true); // viktigt för den spelaren som har just valt kategorin
 
-
                 } else if (response.startsWith("READY_TO_ANSWER ")) {
                     resultsScreen.setVisible(false);
                     outWriter.println("QUESTION? " + chosenCategory);
@@ -137,12 +136,14 @@ public class Client {
                     gameScreen.rightAnswer = answersArray[answersArray.length - 1]; // NYTT (Det korrekta svaret)
                     System.out.println(gameScreen.rightAnswer);
                     gameScreen.revalidate();
+
                 } else if (response.startsWith("HOLD")) {
                     gameScreen.categoryTextLabel.setText("");
                     gameScreen.questionLabel.setText("Please wait while your opponent is answering.");
                     gameScreen.goOnButton.setEnabled(false); // VIKTIGT!! Glöm inte att sätta tillbaka till synligt!
                     gameScreen.infoField.setVisible(false);
                     gameScreen.revalidate();
+
                 } else if (response.startsWith("BOTH_ANSWERED_QUESTION")) { // NYTT -->
                     gameScreen.goOnButton.setEnabled(true);
                     gameScreen.infoField.setVisible(true);
@@ -176,6 +177,7 @@ public class Client {
                     gameScreen.infoField.setVisible(false);
                     gameScreen.revalidate();
                     System.out.println(player + " is waiting.");
+
                 } else if (response.startsWith("POINTS: ")) {
                     String playerInfoNumber = response.substring(8, 15);
                     System.out.println(playerInfoNumber); // kontroll
@@ -215,13 +217,16 @@ public class Client {
                         }
                     }
                     gameScreen.revalidate();
+
                 } else if (response.equals("ANSWERED_QUESTIONS_BOTH")) {
                     gameScreen.questionLabel.setText("Please continue to see the results.");
                     gameScreen.goOnButton.setVisible(true);
                     gameScreen.infoField.setVisible(true);
                     gameScreen.infoField.setText("Please continue to see the results.");
                     gameScreen.revalidate();
+
                 } else if (response.equals("SHOW_RESULTS")) {
+                    currentRoundNumber++;
                     gameScreen.setVisible(false);
                     resultsScreen.setVisible(true);
                     if (myTurnToChoose) {
@@ -231,8 +236,11 @@ public class Client {
                         resultsScreen.theirTurnLabel.setText("Their Turn");
                         resultsScreen.goOnButton.setVisible(false);
                         resultsScreen.infoField.setText("Please wait while your opponent is choosing a category.");
-                        resultsScreen.revalidate();
+
                     }
+                    resultsScreen.revalidate();
+
+
                 }else if(response.equals("SHOW_FINAL_RESULT")){
 
                 } else System.out.println("We are missing out on something. " + response);
