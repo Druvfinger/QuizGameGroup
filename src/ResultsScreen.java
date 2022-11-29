@@ -17,7 +17,6 @@ public class ResultsScreen extends JFrame {
     int numberOfCategories = gameSettings.getNumberOfRounds();
     String currentPlayerName;
     String opponentName;
-
     JLabel theirTurnLabel;
     List<JLabel> listOfLabelsPlayerA = new LinkedList<>();
     List<JLabel> listOfLabelsPlayerB = new LinkedList<>();

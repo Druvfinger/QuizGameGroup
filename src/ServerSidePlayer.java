@@ -15,8 +15,6 @@ public class ServerSidePlayer extends Thread {
     PrintWriter output;
     String player;
     String currentPlayerName;
-
-
     ServerSideGame game;
     private MultiWriter multiWriter;
     Database database;

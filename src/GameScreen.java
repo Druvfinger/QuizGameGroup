@@ -84,7 +84,7 @@ public class GameScreen extends JFrame {
         pointsLabelA = new JLabel("Points:", SwingConstants.CENTER);
         pointsLabelB = new JLabel("Points:", SwingConstants.CENTER);
 
-        infoField = new JTextField("Fråga " + currentQuestion, 43);
+        infoField = new JTextField("Question " + currentQuestion, 43);
 
 
         categoryTextLabel = new JLabel(currentCategory, SwingConstants.CENTER);
