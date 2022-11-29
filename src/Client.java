@@ -75,12 +75,12 @@ public class Client {
                     if (myTurnToChoose) {
                         welcomeScreen.setVisible(false);
                         resultsScreen = new ResultsScreen(player, currentPlayerName, opponentName);
-                        resultsScreen.theirTurnLabel.setText("Din tur");
+                        resultsScreen.theirTurnLabel.setText("Your Turn");
                         resultsScreen.infoField.setText("Your turn to choose a category. Click \"Fortsätt\" to continue.");
                     } else {
                         welcomeScreen.setVisible(false);
                         resultsScreen = new ResultsScreen(player, currentPlayerName, opponentName);
-                        resultsScreen.theirTurnLabel.setText("Deras tur");
+                        resultsScreen.theirTurnLabel.setText("Their Turn");
                         resultsScreen.goOnButton.setVisible(false);
                         resultsScreen.infoField.setText("Please wait while your opponent is choosing a category.");
                     }
@@ -107,8 +107,7 @@ public class Client {
                     if (myTurnToChoose) {
                         categoryScreen.setVisible(false);
                         myTurnToChoose = false;         // NYTT Reglerar spelarnas tur att välja
-                    }
-                    else myTurnToChoose = true;         // NYTT Reglerar spelarnas tur att välja
+                    } else myTurnToChoose = true;         // NYTT Reglerar spelarnas tur att välja
 
                     resultsScreen.setVisible(true); // viktigt för den spelaren som har just valt kategorin
 
@@ -129,12 +128,23 @@ public class Client {
                     String answers = response.substring(9);
                     System.out.println(answers);// för att kontrollera att det fungerar korrekt
                     String[] answersArray = answers.split(",");
-                    for (int i = 0; i < answersArray.length-1; i++){
+                    for (int i = 0; i < answersArray.length - 1; i++) {
                         System.out.println(answersArray[i]);// för att kontrollera att det fungerar korrekt
                         gameScreen.buttonList.get(i).setText(answersArray[i]);
                     }
-                    gameScreen.rightAnswer = answersArray[answersArray.length-1]; // NYTT (Det korrekta svaret)
+                    gameScreen.rightAnswer = answersArray[answersArray.length - 1]; // NYTT (Det korrekta svaret)
                     System.out.println(gameScreen.rightAnswer);
+                    gameScreen.revalidate();
+                } else if (response.startsWith("HOLD")) {
+                    gameScreen.categoryTextLabel.setText("");
+                    gameScreen.questionLabel.setText("Please wait while your opponent is answering.");
+                    gameScreen.goOnButton.setEnabled(false); // VIKTIGT!! Glöm inte att sätta tillbaka till synligt!
+                    gameScreen.infoField.setVisible(false);
+                    gameScreen.revalidate();
+                } else if (response.startsWith("BOTH_ANSWERED_QUESTION")) { // NYTT -->
+                    gameScreen.goOnButton.setEnabled(true);
+                    gameScreen.infoField.setVisible(true);
+                    gameScreen.infoField.setText("You can go to next Question");
                     gameScreen.revalidate();
 
                 } else if (response.startsWith("NEXT_QUESTION: ")) {
@@ -142,18 +152,19 @@ public class Client {
                     System.out.println(question);// för att kontrollera att det fungerar korrekt
                     gameScreen.questionLabel.setText(question);
                     gameScreen.changeInfoField();
+                    gameScreen.goOnButton.setEnabled(false); // NYTT
                     gameScreen.revalidate();
 
                 } else if (response.startsWith("NEXT_ANSWERS: ")) {
                     String answers = response.substring(14);
                     System.out.println(answers);// för att kontrollera att det fungerar korrekt
                     String[] answersArray = answers.split(",");
-                    for (int i = 0; i < answersArray.length-1; i++){
+                    for (int i = 0; i < answersArray.length - 1; i++) {
                         System.out.println(answersArray[i]);// för att kontrollera att det fungerar korrekt
                         gameScreen.buttonList.get(i).setText(answersArray[i]);
                         gameScreen.buttonList.get(i).setBackground(new JButton().getBackground()); // NYTT målar knappar i default färg
                     }
-                    gameScreen.rightAnswer = answersArray[answersArray.length-1]; // NYTT (Det korrekta svaret)
+                    gameScreen.rightAnswer = answersArray[answersArray.length - 1]; // NYTT (Det korrekta svaret)
                     System.out.println(gameScreen.rightAnswer);
                     gameScreen.revalidate();
 
@@ -197,22 +208,20 @@ public class Client {
                     gameScreen.infoField.setVisible(true);
                     gameScreen.infoField.setText("Please continue to see the results.");
                     gameScreen.revalidate();
-                }
-
-                else if (response.equals("SHOW_RESULTS")){
+                } else if (response.equals("SHOW_RESULTS")) {
                     gameScreen.setVisible(false);
                     resultsScreen.setVisible(true);
                     if (myTurnToChoose) {
-                        resultsScreen.theirTurnLabel.setText("Din tur");
-                        resultsScreen.infoField.setText("Your turn to choose a category. Click \"Fortsätt\" to continue.");
-                    }
-                    else{
-                        resultsScreen.theirTurnLabel.setText("Deras tur");
+                        resultsScreen.theirTurnLabel.setText("Your Turn");
+                        resultsScreen.infoField.setText("Your turn to choose a category. Click \"Continue\" to continue.");
+                    } else {
+                        resultsScreen.theirTurnLabel.setText("Their Turn");
                         resultsScreen.goOnButton.setVisible(false);
                         resultsScreen.infoField.setText("Please wait while your opponent is choosing a category.");
                     }
-                }
-                else System.out.println("We are missing out on something. " + response);
+                }else if(response.equals("SHOW_FINAL_RESULT")){
+
+                } else System.out.println("We are missing out on something. " + response);
             }
         } catch (Exception e) {
             e.printStackTrace();

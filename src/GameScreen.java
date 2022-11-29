@@ -6,12 +6,13 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 public class GameScreen extends JFrame {
-
+    GameSettings gameSettings = new GameSettings();
     int numberOfQuestions;
-    int onlyOneAnswerPressed = 1;
+    ServerSideGame game = new ServerSideGame();
     static String playerNumber;
-    Boolean isAnswerCorrect = false; // testa
-    Boolean isAnswered = false; // testa
+    int roundsToBePlayed = gameSettings.getNumberOfRounds();
+    int questionsPerRound = gameSettings.getNumberOfQuestions();
+    boolean isAnswered = false; // testa
     int currentPoint = 0;
     int currentRound = 0; // testa
     static String userName; // livsviktigt för att det ska fungera
@@ -21,10 +22,10 @@ public class GameScreen extends JFrame {
     String totalPointsThisRound;
     String currentPlayerName;
     String opponentName;
-    String answerA = "Svar A";
-    String answerB = "Svar B";
-    String answerC = "Svar C";
-    String answerD = "Svar D";
+    String answerA = "Answer A";
+    String answerB = "Answer B";
+    String answerC = "Answer C";
+    String answerD = "Answer D";
     int currentQuestion = 1;
     List<JButton> buttonList;
     GameSettings settings = new GameSettings();
@@ -64,7 +65,8 @@ public class GameScreen extends JFrame {
         answerButtonB = new JButton(answerB);
         answerButtonC = new JButton(answerC);
         answerButtonD = new JButton(answerD);
-        goOnButton = new JButton("Fortsätt");
+        goOnButton = new JButton("Continue");
+        goOnButton.setEnabled(false);
 
         buttonList = List.of(answerButtonA, answerButtonB, answerButtonC, answerButtonD);
 
@@ -203,10 +205,15 @@ public class GameScreen extends JFrame {
                 paintRightOrFalseAnswer((JButton) e.getSource()); // målar knappar i olika färger beroende på om svaret är korrekt
                 currentQuestion++;
                 isAnswered = true;
+                Client.outWriter.println("I_ANSWERED" + playerNumber); // NYTT
+
             }
             if (e.getSource() == goOnButton && isAnswered) {
                 isAnswered = false;
-                if (currentQuestion <= numberOfQuestions) {
+                if (currentRound > roundsToBePlayed){
+                    Client.outWriter.println("GAME_FINISHED");
+                }
+                else if (currentQuestion <= numberOfQuestions) {
                     Client.outWriter.println("NEXT_QUESTION? " + playerNumber);
 
                 } else if (!wantToGoForward) {
@@ -220,10 +227,12 @@ public class GameScreen extends JFrame {
                     System.out.println(totalPointsThisRound); // kontroll
                     Client.outWriter.println("BACK_TO_RESULTS " + playerNumber + " " + totalPointsThisRound);
                     wantToGoForward = true;
-                    isAnswered = true; // ??
+                    isAnswered = true;
                 } else {
                     Client.outWriter.println("SHOW_ME_RESULTS " + playerNumber);
                     isAnswered = false;
+                    currentRound++;
+                    System.out.println("CURRENT ROUND" + currentRound);
                 }
             }
         }
@@ -261,11 +270,11 @@ public class GameScreen extends JFrame {
     // ändrar poäng på spelarens poäng-label
     public void changeScore(boolean isCorrectAnswer, String playerNumber) {
         if (isCorrectAnswer) {
-            pointsLabelA.setText("Points: " + ++currentPoint + "/3");
+            pointsLabelA.setText("Points: " + ++currentPoint + "/" + questionsPerRound);
             pointsLabelA.revalidate();
             finalScore = currentPoint;
         } else {
-            pointsLabelA.setText("Points: " + currentPoint + "/3");
+            pointsLabelA.setText("Points: " + currentPoint + "/" + questionsPerRound);
             pointsLabelA.revalidate();
             finalScore = currentPoint;
         }
@@ -274,10 +283,10 @@ public class GameScreen extends JFrame {
     // ändrar information på info panelen längst ner
     public void changeInfoField() {
         if (currentQuestion <= numberOfQuestions) {
-            infoField.setText("Fråga " + currentQuestion);
+            infoField.setText("Question " + currentQuestion);
             infoField.revalidate();
         } else {
-            infoField.setText("Du har nu svarat på alla 3 frågorna. Click på Fortsätt för att gå vidare."); // Ändra???
+            infoField.setText("You have answer all " +questionsPerRound + "questions. Click on Continue to proceed."); // Ändra???
             infoField.revalidate();
         }
     }

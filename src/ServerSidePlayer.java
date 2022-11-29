@@ -29,6 +29,8 @@ public class ServerSidePlayer extends Thread {
     static String question; // går det bra att göra denna variabel statisk? Hur ska den påverka om man spelar flera par???
     static StringBuilder builderWithAnswers; // går det bra att göra denna variabel statisk? Hur ska den påverka om man spelar flera par???
     static boolean drawnNextQuestion = false;
+    boolean questionAnswered = false;
+
     String myPoints;
 
     public int getCurrentScore() {
@@ -96,38 +98,26 @@ public class ServerSidePlayer extends Thread {
                             writer.println(toClient);
                         }
                     }
-                }
 
-                else if (fromClient.startsWith("MY_NAME ")) {
+                } else if (fromClient.startsWith("MY_NAME ")) {
                     currentPlayerName = fromClient.substring(8);
                     for (PrintWriter writer : multiWriter.getWriters()) {
                         writer.println("MY_NAME " + player + " " + currentPlayerName);
                     }
-                    System.out.println(currentPlayerName);
-                }
 
-                else if (fromClient.startsWith("READY_TO_PLAY ")) {
+                    System.out.println(currentPlayerName);
+                } else if (fromClient.startsWith("READY_TO_PLAY ")) {
                     player = fromClient.substring(14);
                     System.out.println(player + " is ready to play.");// för att kontrollera att det fungerar korrekt
                     this.playerReadyToPlay = true;
                     output.println("READY_TO_PLAY");
-                    //Används inte?:
-                //    if (playerReadyToPlay && this.getOpponent().playerReadyToPlay) {
-                //        System.out.println("READY_TO_PLAY_BOTH");// för att kontrollera att det fungerar korrekt
-                //       toClient = "READY_TO_PLAY_BOTH";
-                //        for (PrintWriter writer : multiWriter.getWriters()) {
-                //            writer.println(toClient);
-                //       }
-                //    }
-                }
 
-                else if (fromClient.startsWith("CHOOSING_CATEGORY ")) {
+                } else if (fromClient.startsWith("CHOOSING_CATEGORY ")) {
                     for (PrintWriter writer : multiWriter.getWriters()) {
                         writer.println(fromClient);
                     }
-                }
 
-                else if (fromClient.startsWith("I_CHOSE ")) {
+                } else if (fromClient.startsWith("I_CHOSE ")) {
                     category = fromClient.substring(8);
                     for (PrintWriter writer : multiWriter.getWriters()) {
                         writer.println(fromClient);
@@ -142,27 +132,39 @@ public class ServerSidePlayer extends Thread {
                     }
                     builderWithAnswers.append(rightAnswer);           //NYTT
                     System.out.println(builderWithAnswers);// för att kontrollera att det fungerar korrekt
-                }
 
-                else if (fromClient.startsWith("READY_TO_ANSWER ")) {
+                } else if (fromClient.startsWith("READY_TO_ANSWER ")) {
                     System.out.println(fromClient);
                     output.println(fromClient);
-                }
-
-                else if (fromClient.startsWith("QUESTION? ")) {
+                } else if (fromClient.startsWith("QUESTION? ")) {
                     System.out.println(category);
                     output.println("QUESTION: " + question);
                     output.println("ANSWERS: " + builderWithAnswers);
+
+                } else if (fromClient.startsWith("I_ANSWERED")) { // NYTT
+                    player = fromClient.substring(10);
+                    System.out.println(player + " Has answered the question"); // test
+                    this.questionAnswered = true;
+                    output.println("HOLD");
+                    if (questionAnswered && getOpponent().questionAnswered){
+                        System.out.println("Both answered Question");
+                        toClient = "BOTH_ANSWERED_QUESTION";
+                        for (PrintWriter writer : multiWriter.getWriters()){
+                            writer.println(toClient);
+                        }
+                        this.questionAnswered = false;
+                        getOpponent().questionAnswered = false;
+                    }
                 }
 
                 else if (fromClient.startsWith("NEXT_QUESTION? ")) {
                     System.out.println(drawnNextQuestion);
-                    if (!drawnNextQuestion){
+                    if (!drawnNextQuestion) {
                         question = game.getQuestionText(category);
                         System.out.println(question);// för att kontrollera att det fungerar korrekt
                         List<String> answers = game.getAnswersText(category);
                         String rightAnswer = database.getCorrectAnswer(category); // NYTT (Det korrekta svaret)
-                        builderWithAnswers.delete(0,builderWithAnswers.length()); // VIKTIGT! Tömmar StringBuilder (ta bort gamla svar)
+                        builderWithAnswers.delete(0, builderWithAnswers.length()); // VIKTIGT! Tömmar StringBuilder (ta bort gamla svar)
                         for (String answer : answers) {
                             builderWithAnswers.append(answer).append(",");
                         }
@@ -174,11 +176,9 @@ public class ServerSidePlayer extends Thread {
 
                     if (!drawnNextQuestion) { // VIKTIGT för att det ska ändras i drawnNextQuestion på rätt sätt
                         drawnNextQuestion = true;
-                    }
-                    else
+                    } else
                         drawnNextQuestion = false;
                 }
-
                 else if (fromClient.startsWith("BACK_TO_RESULTS ")) {
                     String playerInfoNumber = fromClient.substring(16,23);
                     myPoints = fromClient.substring(24);
@@ -197,10 +197,10 @@ public class ServerSidePlayer extends Thread {
                             writer.println(toClient);
                         }
                     }
-                }
-
-                else if (fromClient.startsWith("SHOW_ME_RESULTS ")) {
+                } else if (fromClient.startsWith("SHOW_ME_RESULTS ")) {
                     output.println("SHOW_RESULTS");
+                } else if (fromClient.startsWith("GAME_FINISHED")){
+                    output.println("SHOW_FINAL_RESULT");
                 }
             }
         } catch (RuntimeException ex) {
@@ -213,6 +213,7 @@ public class ServerSidePlayer extends Thread {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+
         }
     }
 }

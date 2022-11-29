@@ -5,6 +5,8 @@ public class ServerSideGame {
 
     static ServerSidePlayer currentPlayer;
     static ServerSidePlayer opponentPlayer;
+    boolean p1Played = false;
+    boolean p2Played = false;
     GameScreen gameScreen;
     Database database = new Database();
 
