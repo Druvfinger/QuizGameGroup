@@ -351,7 +351,6 @@ public class Client {
         } else if (gameSettings.getNumberOfQuestions() == 2) {
             imageScaled = image.getScaledInstance(label.getWidth(), label.getHeight() - 15, Image.SCALE_SMOOTH);
         }
-        ImageIcon scaledIcon = new ImageIcon(imageScaled);
-        return scaledIcon;
+        return new ImageIcon(imageScaled);
     }
 }
