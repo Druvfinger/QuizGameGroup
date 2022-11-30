@@ -18,7 +18,7 @@ public class Client {
     ResultsScreen resultsScreen;
     GameScreen gameScreen;
     ChooseCategoryScreen categoryScreen;
-    ServerSideGame game; //
+    ServerSideGame game;
     String currentPlayerName;
     String opponentName;
     String chosenCategory;
@@ -36,7 +36,7 @@ public class Client {
         game = new ServerSideGame(); //
     }
 
-    public void play() throws IOException {
+    public void play() {
         String response;
         try {
             while (true) {
@@ -61,32 +61,13 @@ public class Client {
                         currentPlayerName = playerName;
                     } else opponentName = playerName;
                 } else if (response.equals("ENTERED_NAME_BOTH")) {
-                    welcomeScreen.newGameButton.setBackground(Constants.VERY_LIGHT_GREEN);
-                    welcomeScreen.newGameButton.setVisible(true);
-                    welcomeScreen.userInfoTextField.setText("We are set to go. Please continue to the game.");
-                    welcomeScreen.repaint();
-                    welcomeScreen.revalidate();
+                    setScreenToStartGame();
 
                 } else if (response.equals("READY_TO_PLAY")) {
-                    System.out.println("My turn to choose: " + myTurnToChoose);
-                    if (myTurnToChoose) {
-                        welcomeScreen.setVisible(false);
-                        resultsScreen = new ResultsScreen(player, currentPlayerName, opponentName);
-                        resultsScreen.theirTurnLabel.setText("Your Turn");
-                        resultsScreen.infoField.setText("Your turn to choose a category. Click \"Continue\" to continue.");
-                    } else {
-                        welcomeScreen.setVisible(false);
-                        resultsScreen = new ResultsScreen(player, currentPlayerName, opponentName);
-                        resultsScreen.theirTurnLabel.setText("Their Turn");
-                        resultsScreen.goOnButton.setVisible(false);
-                        resultsScreen.infoField.setText("Please wait while your opponent is choosing a category.");
-                    }
+                    determineWhoChoosesCategory();
 
                 } else if (response.startsWith("CHOOSING_CATEGORY ")) {
-                    if (myTurnToChoose) {
-                        resultsScreen.setVisible(false);
-                        categoryScreen = new ChooseCategoryScreen(player, currentPlayerName);
-                    }
+                    setScreenChooseCategory();
 
                 } else if (response.startsWith("I_CHOSE ")) {
                     chosenCategory = response.substring(8);
@@ -108,7 +89,7 @@ public class Client {
                     getAndPaintUpAnswers(answers);
 
                 } else if (response.startsWith("HOLD")) {
-                    setScreenToWaitFroOpponentToFinishQuestion();
+                    setScreenToWaitForOpponentToFinishQuestion();
 
                 } else if (response.startsWith("BOTH_ANSWERED_QUESTION")) {
                     setScreenReadyToGoToNextQuestion();
@@ -149,16 +130,54 @@ public class Client {
         return Integer.parseInt(part);
     }
 
+    public void setScreenToStartGame() {
+        welcomeScreen.newGameButton.setBackground(Constants.VERY_LIGHT_GREEN);
+        welcomeScreen.newGameButton.setVisible(true);
+        welcomeScreen.userInfoTextField.setText("We are set to go. Please continue to the game.");
+        welcomeScreen.repaint();
+        welcomeScreen.revalidate();
+    }
+    public void setScreenWaitingToStartGame(String player){
+        if (player.equals("Player1")) {
+            myTurnToChoose = true;
+        }
+        welcomeScreen = new WelcomeScreen(player);
+        welcomeScreen.userInfoTextField.setText("Just one moment " + player + "! We are waiting for your opponent.");
+    }
+    public void setScreenChooseCategory(){
+        if (myTurnToChoose) {
+            resultsScreen.setVisible(false);
+            categoryScreen = new ChooseCategoryScreen(player, currentPlayerName);
+        }
+    }
+
     public void getAndPaintUpQuestion(String question) {
         gameScreen = new GameScreen(player, currentPlayerName, opponentName, chosenCategory);
         gameScreen.currentCategory = chosenCategory;
         gameScreen.questionLabel.setText(question);
         gameScreen.revalidate();
     }
-    public void getAndPaintUpNextQuestion(String question){
+
+    public void getAndPaintUpNextQuestion(String question) {
         gameScreen.questionLabel.setText(question);
         gameScreen.changeInfoField();
         gameScreen.revalidate();
+    }
+
+    public void determineWhoChoosesCategory() {
+        System.out.println("My turn to choose: " + myTurnToChoose);
+        if (myTurnToChoose) {
+            welcomeScreen.setVisible(false);
+            resultsScreen = new ResultsScreen(player, currentPlayerName, opponentName);
+            resultsScreen.theirTurnLabel.setText("Your Turn");
+            resultsScreen.infoField.setText("Your turn to choose a category. Click \"Continue\" to continue.");
+        } else {
+            welcomeScreen.setVisible(false);
+            resultsScreen = new ResultsScreen(player, currentPlayerName, opponentName);
+            resultsScreen.theirTurnLabel.setText("Their Turn");
+            resultsScreen.goOnButton.setVisible(false);
+            resultsScreen.infoField.setText("Please wait while your opponent is choosing a category.");
+        }
     }
 
     public void getAndPaintUpAnswers(String answers) {
@@ -169,7 +188,8 @@ public class Client {
         gameScreen.rightAnswer = answersArray[answersArray.length - 1];
         gameScreen.revalidate();
     }
-    public void getAndPaintUpNextAnswers(String answers){
+
+    public void getAndPaintUpNextAnswers(String answers) {
         String[] answersArray = answers.split(",");
         for (int i = 0; i < answersArray.length - 1; i++) {
             System.out.println(answersArray[i]);// för att kontrollera att det fungerar korrekt
@@ -200,7 +220,7 @@ public class Client {
         resultsScreen.setVisible(true);
     }
 
-    public void setScreenToWaitForOpponentToFinishRound(){
+    public void setScreenToWaitForOpponentToFinishRound() {
         gameScreen.categoryTextLabel.setText("");
         gameScreen.questionLabel.setText("Please wait while your opponent is answering.");
         gameScreen.goOnButton.setVisible(false);

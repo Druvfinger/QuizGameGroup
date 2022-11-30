@@ -12,7 +12,6 @@ public class ResultsScreen extends JFrame {
     static String quizTitle;
     static String playerNumber;
     static String userName;
-//    static int finalScore; // kommer att användas senare på ResultsScreen
     GameSettings gameSettings = new GameSettings();
     String currentPlayerName;
     String opponentName;
@@ -116,8 +115,8 @@ public class ResultsScreen extends JFrame {
         rightPlayerPanel.add(rightUserInfoPanel, BorderLayout.NORTH);
         rightPlayerPanel.add(rightPlayerAnswersPanel, BorderLayout.CENTER);
 
-        reSetLabels(userNameLabelA, playerEmojiLabelA, leftUserInfoPanel);
-        reSetLabels(userNameLabelB, playerEmojiLabelB, rightUserInfoPanel);
+        updateLabels(userNameLabelA, playerEmojiLabelA, leftUserInfoPanel);
+        updateLabels(userNameLabelB, playerEmojiLabelB, rightUserInfoPanel);
 
         goOnButton.addActionListener(listener);
 
@@ -130,7 +129,7 @@ public class ResultsScreen extends JFrame {
         setVisible(true);
     }
 
-    private void reSetLabels(JLabel userNameLabel, JLabel playerEmojiLabel, JPanel userInfoPanel) {
+    private void updateLabels(JLabel userNameLabel, JLabel playerEmojiLabel, JPanel userInfoPanel) {
         userNameLabel.setForeground(Color.WHITE);
         userNameLabel.setFont(new Font("Sans Serif", Font.PLAIN, 20));
         playerEmojiLabel.setOpaque(true);
