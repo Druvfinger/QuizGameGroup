@@ -5,7 +5,7 @@ public class Server {
 
     int port = 54321;
 
-    public Server() throws IOException {
+    public Server() {
         try (ServerSocket ss = new ServerSocket(port)) {
             System.out.println("Quiz game server is running");
             while (true) {
@@ -22,16 +22,18 @@ public class Server {
                 game.setCurrentPlayer(player1);
                 game.setOpponentPlayer(player2);
 
-                System.out.println(game.getCurrentPlayer().player);
-                System.out.println(game.getOpponentPlayer().player);
+                System.out.println(game.getCurrentPlayer().player + " Connected");
+                System.out.println(game.getOpponentPlayer().player + " Connected");
 
                 player1.start();
                 player2.start();
             }
+        } catch (Exception e){
+            System.out.println("Player Disconnected");
         }
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         new Server();
     }
 }

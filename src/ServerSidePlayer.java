@@ -35,8 +35,8 @@ public class ServerSidePlayer extends Thread {
             input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             output = new PrintWriter(socket.getOutputStream(), true);
             multiWriter.addWriter(output);
-            output.println("WELCOME " + player); // skickas till klienten
-            output.println("WAITING " + player); // skickas till klienten
+            output.println("WELCOME " + player);
+            output.println("WAITING " + player);
             System.out.println("Waiting for opponent to connect.");
         } catch (IOException e) {
             System.out.println("Player died: " + e);
@@ -57,26 +57,17 @@ public class ServerSidePlayer extends Thread {
             System.out.println("All players connected");
 
             String fromClient, toClient;
-            while ((fromClient = input.readLine()) != null) { // kommunicerar med klienten
+            while ((fromClient = input.readLine()) != null) {
                 if (fromClient.startsWith("ENTERED_NAME ")) {
 
                     player = fromClient.substring(13);
-                    System.out.println(player + " has entered their name.");// för att kontrollera att det fungerar korrekt
-                    this.playerEnteredName = true;
-                    if (playerEnteredName && this.getOpponent().playerEnteredName) {
-                        System.out.println("ENTERED_NAME_BOTH");// för att kontrollera att det fungerar korrekt
-                        toClient = "ENTERED_NAME_BOTH";
-                        for (PrintWriter writer : multiWriter.getWriters()) {
-                            writer.println(toClient);
-                        }
-                    }
+                    System.out.println(player + " has entered their name to " + currentPlayerName);
+                    checkThatBothPlayerChoseName();
+
 
                 } else if (fromClient.startsWith("MY_NAME ")) {
                     currentPlayerName = fromClient.substring(8);
-                    for (PrintWriter writer : multiWriter.getWriters()) {
-                        writer.println("MY_NAME " + player + " " + currentPlayerName);
-                    }
-                    System.out.println(currentPlayerName);
+                    sendPlayerNames(currentPlayerName);
 
                 } else if (fromClient.startsWith("READY_TO_PLAY ")) {
                     player = fromClient.substring(14);
@@ -97,11 +88,9 @@ public class ServerSidePlayer extends Thread {
 
 
                 } else if (fromClient.startsWith("READY_TO_ANSWER ")) {
-                    System.out.println(fromClient);
                     output.println(fromClient);
 
                 } else if (fromClient.startsWith("QUESTION? ")) {
-                    System.out.println(category);
                     output.println("QUESTION: " + question);
                     output.println("ANSWERS: " + builderWithAnswers);
 
@@ -128,7 +117,7 @@ public class ServerSidePlayer extends Thread {
             try {
                 socket.close();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                System.out.println("There was a problem closing socket");
             }
         }
     }

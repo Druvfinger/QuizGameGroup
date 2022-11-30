@@ -44,13 +44,11 @@ public class Client {
 
                 if (response.startsWith("WELCOME")) {
                     player = response.substring(8);
-                    if (player.equals("Player1")) {
-                        myTurnToChoose = true;
-                    }
-                    welcomeScreen = new WelcomeScreen(player);
-                    welcomeScreen.userInfoTextField.setText("Just one moment " + player + "! We are waiting for your opponent.");
+                    setScreenWaitingToStartGame(player);
+
                 } else if (response.startsWith("WAITING")) {
                     System.out.println("Waiting for opponent to connect.");
+
                 } else if (response.equals("PLAYERS_CONNECTED")) {
                     System.out.println("All players connected. We are set to go.");
 
@@ -60,6 +58,7 @@ public class Client {
                     if (playerNumber.equals(player)) {
                         currentPlayerName = playerName;
                     } else opponentName = playerName;
+
                 } else if (response.equals("ENTERED_NAME_BOTH")) {
                     setScreenToStartGame();
 
@@ -112,12 +111,12 @@ public class Client {
                     String points = response.substring(16);
                     setPoints(playerInfoNumber, points);
 
-
                 } else if (response.equals("ANSWERED_QUESTIONS_BOTH")) {
                     showGoToResultScreen();
 
                 } else if (response.equals("SHOW_RESULTS")) {
                     showResults();
+
                 } else System.out.println("We are missing out on something. " + response);
             }
         } catch (Exception e) {
@@ -192,12 +191,10 @@ public class Client {
     public void getAndPaintUpNextAnswers(String answers) {
         String[] answersArray = answers.split(",");
         for (int i = 0; i < answersArray.length - 1; i++) {
-            System.out.println(answersArray[i]);// för att kontrollera att det fungerar korrekt
             gameScreen.buttonList.get(i).setText(answersArray[i]);
-            gameScreen.buttonList.get(i).setBackground(new JButton().getBackground()); // NYTT målar knappar i default färg
+            gameScreen.buttonList.get(i).setBackground(new JButton().getBackground());
         }
-        gameScreen.rightAnswer = answersArray[answersArray.length - 1]; // NYTT (Det korrekta svaret)
-        System.out.println(gameScreen.rightAnswer);
+        gameScreen.rightAnswer = answersArray[answersArray.length - 1];
         gameScreen.revalidate();
     }
 
@@ -228,14 +225,16 @@ public class Client {
         gameScreen.revalidate();
         System.out.println(player + " is waiting.");
     }
-    public void setScreenToWaitFroOpponentToFinishQuestion(){
+
+    public void setScreenToWaitForOpponentToFinishQuestion() {
         gameScreen.categoryTextLabel.setText("");
         gameScreen.questionLabel.setText("Please wait while your opponent is answering.");
         gameScreen.goOnButton.setEnabled(false);
         gameScreen.infoField.setVisible(false);
         gameScreen.revalidate();
     }
-    public void setScreenReadyToGoToNextQuestion(){
+
+    public void setScreenReadyToGoToNextQuestion() {
         gameScreen.goOnButton.setEnabled(true);
         gameScreen.infoField.setVisible(true);
         gameScreen.infoField.setText("You can go to next Question");
@@ -255,13 +254,11 @@ public class Client {
         if (player.equals("Player1")) {
             if (playerInfoNumber.equals("Player1")) {
                 gameScreen.pointsLabelA.setText(points);
-
                 pointsToStars = getScaledImage(resultsScreen.listOfLabelsPlayerA.get(currentRoundNumber), points);
                 resultsScreen.listOfLabelsPlayerA.get(currentRoundNumber).setIcon(pointsToStars);
                 currentPlayerPoints = sumPointsForRounds(currentPlayerPoints, points);
                 resultsScreen.pointsALabel.setText(Integer.toString(currentPlayerPoints));
                 System.out.println(playerInfoNumber + " " + currentPlayerPoints + "p / " + gameSettings.getNumberOfQuestions());
-
             } else {
                 gameScreen.pointsLabelB.setText(points);
                 pointsToStars = getScaledImage(resultsScreen.listOfLabelsPlayerB.get(currentRoundNumber), points);
@@ -270,6 +267,7 @@ public class Client {
                 resultsScreen.pointsBLabel.setText(Integer.toString(opponentPlayerPoints));
                 System.out.println(playerInfoNumber + " " + opponentPlayerPoints + "p / " + gameSettings.getNumberOfQuestions());
             }
+
         } else if (player.equals("Player2")) {
             if (playerInfoNumber.equals("Player1")) {
                 gameScreen.pointsLabelB.setText(points);
@@ -294,7 +292,6 @@ public class Client {
         currentRoundNumber++;
         gameScreen.setVisible(false);
         resultsScreen.setVisible(true);
-        // testing tool to see where we are in the game
         System.out.println("CurrentRound: " + ServerSideGame.currentRound + " - Max Rounds: " +
                 gameSettings.getNumberOfRounds() + " -- CurrentQuestion: " +
                 (GameScreen.currentQuestion - 1) + " - Max Questions: " + gameSettings.getNumberOfQuestions());
@@ -306,6 +303,7 @@ public class Client {
         } else if (myTurnToChoose) {
             resultsScreen.theirTurnLabel.setText("Your Turn");
             resultsScreen.infoField.setText("Your turn to choose a category. Click \"Continue\" to continue.");
+
         } else {
             resultsScreen.theirTurnLabel.setText("Their Turn");
             resultsScreen.goOnButton.setVisible(false);
@@ -349,6 +347,7 @@ public class Client {
             } else if (pointsPart.equals("3/3")) {
                 icon = new ImageIcon("Pictures/ThreeStarNoBG3.png");
             }
+
         } else if (gameSettings.getNumberOfQuestions() == 2) {
             if (pointsPart.equals("0/2")) {
                 icon = new ImageIcon("Pictures/NoStarNoBG2.png");
@@ -357,6 +356,7 @@ public class Client {
             } else if (pointsPart.equals("2/2")) {
                 icon = new ImageIcon("Pictures/TwoStarNoBG2.png");
             }
+
         } else if (gameSettings.getNumberOfQuestions() == 4) {
             if (pointsPart.equals("0/4")) {
                 icon = new ImageIcon("Pictures/NoStarNoBG4.png");
@@ -369,6 +369,7 @@ public class Client {
             } else if (pointsPart.equals("4/4")) {
                 icon = new ImageIcon("Pictures/FourStarNoBG4.png");
             }
+
         } else if (gameSettings.getNumberOfQuestions() == 5) {
             if (pointsPart.equals("0/4")) {
                 icon = new ImageIcon("Pictures/NoStarNoBG5.png");
