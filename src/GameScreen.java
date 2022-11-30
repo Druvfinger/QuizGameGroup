@@ -9,7 +9,6 @@ import java.util.List;
 public class GameScreen extends JFrame {
     GameSettings gameSettings = new GameSettings();
     int numberOfQuestions;
-//    ServerSideGame game = new ServerSideGame();
     static String playerNumber;
     boolean isAnswered = false; // testa
     int currentPoint = 0;

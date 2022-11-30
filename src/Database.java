@@ -5,8 +5,6 @@ import java.util.List;
 
 public class Database {
     private static int randIndex;
-    //private String currentCategory;
-    //Legacy
     private List<Integer> duplicates = new ArrayList<>();
     GameSettings gs = new GameSettings();
 
@@ -159,35 +157,6 @@ public class Database {
         Collections.shuffle(answers);
         return answers;
     }
-
-    /*public String getQuestion(){
-        while (true) {
-            randIndex = (int) (Math.random() * technologyQuestions.size());
-            if (!duplicates.contains(randIndex)) {
-                break;
-            }
-        }
-        System.out.println("Getting questions");
-        System.out.println("NUVARANDE KATEGORI: " + currentCategory);
-        duplicates.add(randIndex);
-        if (category.equals("Technology")) {
-            return technologyQuestions.get(randIndex);
-        } else if (category.equals("Pop culture")) {
-            return popcultureQuestions.get(randIndex);
-        } else if (category.equals("Geography")) {
-            return geographyQuestions.get(randIndex);
-        } else if (category.equals("Science")) {
-            return scienceQuestions.get(randIndex);
-        }
-        return "VAD FAN HÄNDER MED FRÅGORNA";
-    }*/
-
-    /*public void setQuestionCategory(String a) {
-        currentCategory = a;
-    }
-
-     */
-    //Legacy
 
     public String getCorrectAnswer(String category) {
         if (category.equals("Technology")) {

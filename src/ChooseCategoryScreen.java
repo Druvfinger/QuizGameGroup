@@ -13,7 +13,6 @@ public class ChooseCategoryScreen extends JFrame {
     JPanel emptyPanel = new JPanel();
     List<JButton> buttonList = new LinkedList<>();
     Database database = new Database();
-//    GameScreen gameScreen;
     static String quizTitle = "Quiz Game"; // Test title
     List<String> shuffledCategoryList;
     static String playerNumber;
