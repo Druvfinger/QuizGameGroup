@@ -121,14 +121,7 @@ public class Client {
                 } else if (response.startsWith("NEXT_ANSWERS: ")) {
                     String answers = response.substring(14);
                     System.out.println(answers);
-                    String[] answersArray = answers.split(",");
-                    for (int i = 0; i < answersArray.length - 1; i++) {
-                        gameScreen.buttonList.get(i).setText(answersArray[i]);
-                        gameScreen.buttonList.get(i).setBackground(new JButton().getBackground());
-                    }
-                    gameScreen.rightAnswer = answersArray[answersArray.length - 1];
-                    System.out.println(gameScreen.rightAnswer);
-                    gameScreen.revalidate();
+                    getAndPaintUpNextAnswers(answers);
 
                 } else if (response.equals("WAIT")) {
                     setScreenToWaitForOpponentToFinishRound();
@@ -283,8 +276,8 @@ public class Client {
         resultsScreen.setVisible(true);
         // testing tool to see where we are in the game
         System.out.println("CurrentRound: " + ServerSideGame.currentRound + " - Max Rounds: " +
-                gameSettings.getNumberOfRounds() + " / CurrentQuestion: " +
-                (GameScreen.currentQuestion - 1) + "-  Max Questions: " + gameSettings.getNumberOfQuestions());
+                gameSettings.getNumberOfRounds() + " -- CurrentQuestion: " +
+                (GameScreen.currentQuestion - 1) + " - Max Questions: " + gameSettings.getNumberOfQuestions());
         if ((ServerSideGame.currentRound == gameSettings.getNumberOfRounds()) && ((GameScreen.currentQuestion - 1) ==
                 gameSettings.getNumberOfQuestions())) {
             gameOver = true;

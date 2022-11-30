@@ -11,7 +11,7 @@ public class ResultsScreen extends JFrame {
     JButton goOnButton;
     static String quizTitle;
     static String playerNumber;
-    static String userName; // livsviktigt för att det ska fungera
+    static String userName;
 //    static int finalScore; // kommer att användas senare på ResultsScreen
     GameSettings gameSettings = new GameSettings();
     String currentPlayerName;
@@ -26,7 +26,6 @@ public class ResultsScreen extends JFrame {
     JLabel pointsBLabel;
 
     public void setUpResultScreenGUI() {
-
         JPanel basePanel = new JPanel(new BorderLayout());
         theirTurnLabel = new JLabel("Players Turn", SwingConstants.CENTER); //
         JPanel middlePanel = new JPanel(new BorderLayout());
@@ -82,7 +81,6 @@ public class ResultsScreen extends JFrame {
         basePanel.add(goOnPanel, BorderLayout.SOUTH);
 
         totalsPanel.setPreferredSize(new Dimension(190, 100));
-        // skriva en metod för följande rader (koden upprepas):
         pointsALabel.setForeground(Color.WHITE);
         pointsALabel.setFont(new Font("Sans Serif", Font.BOLD, 30));
         dashLabel.setForeground(Color.WHITE);
@@ -123,7 +121,6 @@ public class ResultsScreen extends JFrame {
 
         goOnButton.addActionListener(listener);
 
-        //Placerar namn/spelare på panelen
         userNameLabelA.setText(currentPlayerName);
         userNameLabelB.setText(opponentName);
 
@@ -145,7 +142,6 @@ public class ResultsScreen extends JFrame {
         userInfoPanel.add(userNameLabel, BorderLayout.SOUTH);
     }
 
-
     public ResultsScreen(String player, String currentPlayerName, String opponentName) {
         playerNumber = player;
         this.currentPlayerName = currentPlayerName;
@@ -166,7 +162,6 @@ public class ResultsScreen extends JFrame {
                 GameScreen.currentQuestion = 1;
             }
         }
-
     };
 
     public JPanel createDesiredNumberOfLabels(JPanel panelToFill, int numberOfLabels, List<JLabel> lista) {

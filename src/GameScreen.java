@@ -10,10 +10,10 @@ public class GameScreen extends JFrame {
     GameSettings gameSettings = new GameSettings();
     int numberOfQuestions;
     static String playerNumber;
-    boolean isAnswered = false; // testa
+    boolean isAnswered = false;
     int currentPoint = 0;
-    static String userName; // livsviktigt för att det ska fungera
-    static String quizTitle; // when do you use static ??
+    static String userName;
+    static String quizTitle;
     String currentCategory;
     static int finalScore;
     String totalPointsThisRound;
@@ -40,13 +40,10 @@ public class GameScreen extends JFrame {
     boolean wantToGoForward = false;
 
     public void setUpGameScreenGUI() {
-
-
         JPanel basePanel = new JPanel(new GridLayout(2, 1));
         JPanel upperPanel = new JPanel(new GridLayout(2, 1));
         JPanel infoPanel = new JPanel(new GridLayout(1, 3));
         JPanel emptyPanel = new JPanel();
-
 
         JPanel leftUserInfoPanel = new JPanel(new GridLayout(2, 1));
         JPanel categoryInfoPanel = new JPanel(new BorderLayout());
@@ -82,7 +79,6 @@ public class GameScreen extends JFrame {
         pointsLabelB = new JLabel("Points:", SwingConstants.CENTER);
 
         infoField = new JTextField("Question " + currentQuestion, 43);
-
 
         categoryTextLabel = new JLabel(currentCategory, SwingConstants.CENTER);
         categoryTextLabel.setPreferredSize(new Dimension(135, 50));
@@ -172,7 +168,6 @@ public class GameScreen extends JFrame {
         userNamePointsPanelB.add(userNameLabelB);
         userNamePointsPanelB.add(pointsLabelB);
 
-        //Placerar namn/spelare på panelen
         userNameLabelA.setText(currentPlayerName);
         userNameLabelB.setText(opponentName);
 
@@ -188,26 +183,24 @@ public class GameScreen extends JFrame {
         this.opponentName = opponentName;
         this.currentCategory = currentCategory;
 
-        numberOfQuestions = settings.getNumberOfQuestions(); // nuvarande 3
+        numberOfQuestions = settings.getNumberOfQuestions();
         setUpGameScreenGUI();
     }
 
     ActionListener listener = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-
             if (e.getSource() == answerButtonA || e.getSource() == answerButtonB || e.getSource() == answerButtonC ||
                     e.getSource() == answerButtonD) {
-
-                changeScore(isRightAnswer((JButton) e.getSource()), playerNumber); // ändrar antal poäng på spelarens poäng panel
-                paintRightOrFalseAnswer((JButton) e.getSource()); // målar knappar i olika färger beroende på om svaret är korrekt
+                changeScore(isRightAnswer((JButton) e.getSource()), playerNumber);
+                paintRightOrFalseAnswer((JButton) e.getSource());
                 for (JButton element : buttonList) {
                     element.setEnabled(false);
                 }
                 currentQuestion++;
                 isAnswered = true;
                 Client.outWriter.println("I_ANSWERED" + playerNumber); // NYTT
-
             }
+
             if (e.getSource() == goOnButton && isAnswered) {
                 isAnswered = false;
                 for (JButton element : buttonList) {
@@ -215,8 +208,6 @@ public class GameScreen extends JFrame {
                 }
                 if (currentQuestion <= numberOfQuestions) {
                     Client.outWriter.println("NEXT_QUESTION? " + playerNumber);
-
-
                 } else if (!wantToGoForward) {
                     changeInfoField();
                     questionLabel.setText("");
@@ -228,25 +219,20 @@ public class GameScreen extends JFrame {
                     Client.outWriter.println("BACK_TO_RESULTS " + playerNumber + " " + totalPointsThisRound);
                     wantToGoForward = true;
                     isAnswered = true;
-
                 } else {
                         Client.outWriter.println("SHOW_ME_RESULTS " + playerNumber);
                         isAnswered = false;
                         ServerSideGame.currentRound++;
-                        System.out.println("CURRENT ROUND" + ServerSideGame.currentRound);
                 }
             }
         }
     };
 
-
-    // kontrollerar om svaret på den valda knappen är korrekt
     public boolean isRightAnswer(JButton clickedButton) {
         String givenAnswer = clickedButton.getText();
         return givenAnswer.equalsIgnoreCase(rightAnswer);
     }
 
-    // målar knappar i grönt eller rött/grönt beroende på om svaret är korrekt
     public void paintRightOrFalseAnswer(JButton clickedButton) {
         if (isRightAnswer(clickedButton)) {
             clickedButton.setBackground(Constants.VERY_LIGHT_GREEN);
@@ -256,7 +242,6 @@ public class GameScreen extends JFrame {
         }
     }
 
-    // ger knapp med det korrekta svaret
     public JButton findButtonWithRightAnswer() {
         JButton correctButton = new JButton();
         for (JButton button : buttonList) {
@@ -268,20 +253,20 @@ public class GameScreen extends JFrame {
         return correctButton;
     }
 
-    // ändrar poäng på spelarens poäng-label
     public void changeScore(boolean isCorrectAnswer, String playerNumber) {
         if (isCorrectAnswer) {
             pointsLabelA.setText("Points: " + ++currentPoint + "/" + gameSettings.getNumberOfQuestions());
             pointsLabelA.revalidate();
             finalScore = currentPoint;
+            System.out.println(playerNumber + " Total points: " + finalScore);
         } else {
             pointsLabelA.setText("Points: " + currentPoint + "/" + gameSettings.getNumberOfQuestions());
             pointsLabelA.revalidate();
             finalScore = currentPoint;
+            System.out.println(playerNumber + " Total points: " + finalScore);
         }
     }
 
-    // ändrar information på info panelen längst ner
     public void changeInfoField() {
         if (currentQuestion <= numberOfQuestions) {
             infoField.setText("Question " + currentQuestion);

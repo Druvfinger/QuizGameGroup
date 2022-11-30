@@ -20,12 +20,11 @@ public class ServerSidePlayer extends Thread {
     boolean playerEnteredName = false;
     boolean playerAnsweredQuestions = false;
     boolean playerReadyToPlay = false;
-    static String category; // går det bra att göra denna variabel statisk? Hur ska den påverka om man spelar flera par???
-    static String question; // går det bra att göra denna variabel statisk? Hur ska den påverka om man spelar flera par???
-    static StringBuilder builderWithAnswers; // går det bra att göra denna variabel statisk? Hur ska den påverka om man spelar flera par???
+    static String category;
+    static String question;
+    static StringBuilder builderWithAnswers;
     static boolean drawnNextQuestion = false;
     boolean questionAnswered = false;
-
     String myPoints;
 
     public ServerSidePlayer(Socket socket, String player, ServerSideGame game, MultiWriter multiWriter, Database database) throws IOException {
@@ -61,7 +60,6 @@ public class ServerSidePlayer extends Thread {
 
             String fromClient, toClient;
             while ((fromClient = input.readLine()) != null) { // kommunicerar med klienten
-
                 if (fromClient.startsWith("ENTERED_NAME ")) {
                     player = fromClient.substring(13);
                     System.out.println(player + " has entered their name.");// för att kontrollera att det fungerar korrekt
@@ -79,8 +77,8 @@ public class ServerSidePlayer extends Thread {
                     for (PrintWriter writer : multiWriter.getWriters()) {
                         writer.println("MY_NAME " + player + " " + currentPlayerName);
                     }
-
                     System.out.println(currentPlayerName);
+
                 } else if (fromClient.startsWith("READY_TO_PLAY ")) {
                     player = fromClient.substring(14);
                     System.out.println(player + " is ready to play.");// för att kontrollera att det fungerar korrekt
@@ -131,6 +129,7 @@ public class ServerSidePlayer extends Thread {
                         this.questionAnswered = false;
                         getOpponent().questionAnswered = false;
                     }
+
                 } else if (fromClient.startsWith("NEXT_QUESTION? ")) {
                     System.out.println(drawnNextQuestion);
                     if (!drawnNextQuestion) {
@@ -147,24 +146,23 @@ public class ServerSidePlayer extends Thread {
                     }
                     output.println("NEXT_QUESTION: " + question);
                     output.println("NEXT_ANSWERS: " + builderWithAnswers);
-
                     if (!drawnNextQuestion) { // VIKTIGT för att det ska ändras i drawnNextQuestion på rätt sätt
                         drawnNextQuestion = true;
                     } else
                         drawnNextQuestion = false;
+
                 } else if (fromClient.startsWith("BACK_TO_RESULTS ")) {
                     String playerInfoNumber = fromClient.substring(16, 23);
                     myPoints = fromClient.substring(24);
-                    System.out.println(playerInfoNumber + " " + myPoints);// för att kontrollera att det fungerar korrekt
+                    System.out.println(playerInfoNumber + " " + myPoints);
                     this.playerAnsweredQuestions = true;
                     output.println("WAIT");
 
                     for (PrintWriter writer : multiWriter.getWriters()) {
                         writer.println("POINTS: " + playerInfoNumber + " " + myPoints);
                     }
-
                     if (playerAnsweredQuestions && this.getOpponent().playerAnsweredQuestions) {
-                        System.out.println("Both players have answered questions.");// för att kontrollera att det fungerar korrekt
+                        System.out.println("Both players have answered questions.");
                         toClient = "ANSWERED_QUESTIONS_BOTH";
                         for (PrintWriter writer : multiWriter.getWriters()) {
                             writer.println(toClient);
@@ -186,4 +184,5 @@ public class ServerSidePlayer extends Thread {
                 throw new RuntimeException(e);
             }
         }
-    }}
+    }
+}
