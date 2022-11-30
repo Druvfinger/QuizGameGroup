@@ -83,7 +83,7 @@ public class WelcomeScreen extends JFrame {
 
         setSize(410, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocation(900,250);
+        setLocation(900, 250);
         //setLocationRelativeTo(null);
         setVisible(true);
     }
