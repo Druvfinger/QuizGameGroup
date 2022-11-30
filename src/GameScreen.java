@@ -293,7 +293,7 @@ public class GameScreen extends JFrame {
             infoField.setText("Question " + currentQuestion);
             infoField.revalidate();
         } else {
-            infoField.setText("You have answer all " +questionsPerRound + "questions. Click on Continue to proceed."); // Ändra???
+            infoField.setText("You have answer all " + questionsPerRound + "questions. Click on Continue to proceed."); // Ändra???
             infoField.revalidate();
         }
     }

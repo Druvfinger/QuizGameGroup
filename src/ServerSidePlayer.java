@@ -3,7 +3,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ServerSidePlayer extends Thread {
@@ -135,6 +134,7 @@ public class ServerSidePlayer extends Thread {
                 } else if (fromClient.startsWith("READY_TO_ANSWER ")) {
                     System.out.println(fromClient);
                     output.println(fromClient);
+
                 } else if (fromClient.startsWith("QUESTION? ")) {
                     System.out.println(category);
                     output.println("QUESTION: " + question);

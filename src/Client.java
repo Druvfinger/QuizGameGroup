@@ -17,7 +17,6 @@ public class Client {
     WelcomeScreen welcomeScreen;
     ResultsScreen resultsScreen;
     GameScreen gameScreen;
-    GameSettings gameSettings = new GameSettings();
     ChooseCategoryScreen categoryScreen;
     ServerSideGame game; //
     String currentPlayerName;
@@ -28,6 +27,9 @@ public class Client {
     int currentRoundNumber = 0;
     int currentPlayerPoints = 0;
     int opponentPlayerPoints = 0;
+    GameSettings gameSettings = new GameSettings();
+    int numberOfCategories = gameSettings.getNumberOfRounds();
+    int numberOfQuestions = gameSettings.getNumberOfQuestions();
 
     public Client() throws IOException {
         socket = new Socket(host, port);
@@ -114,7 +116,6 @@ public class Client {
 
                     resultsScreen.setVisible(true); // viktigt för den spelaren som har just valt kategorin
 
-
                 } else if (response.startsWith("READY_TO_ANSWER ")) {
                     resultsScreen.setVisible(false);
                     outWriter.println("QUESTION? " + chosenCategory);
@@ -138,12 +139,14 @@ public class Client {
                     gameScreen.rightAnswer = answersArray[answersArray.length - 1]; // NYTT (Det korrekta svaret)
                     System.out.println(gameScreen.rightAnswer);
                     gameScreen.revalidate();
+
                 } else if (response.startsWith("HOLD")) {
                     gameScreen.categoryTextLabel.setText("");
                     gameScreen.questionLabel.setText("Please wait while your opponent is answering.");
                     gameScreen.goOnButton.setEnabled(false); // VIKTIGT!! Glöm inte att sätta tillbaka till synligt!
                     gameScreen.infoField.setVisible(false);
                     gameScreen.revalidate();
+
                 } else if (response.startsWith("BOTH_ANSWERED_QUESTION")) { // NYTT -->
                     gameScreen.goOnButton.setEnabled(true);
                     gameScreen.infoField.setVisible(true);
@@ -177,25 +180,38 @@ public class Client {
                     gameScreen.infoField.setVisible(false);
                     gameScreen.revalidate();
                     System.out.println(player + " is waiting.");
+
                 } else if (response.startsWith("POINTS: ")) {
                     String playerInfoNumber = response.substring(8, 15);
                     System.out.println(playerInfoNumber); // kontroll
                     String points = response.substring(16);
                     System.out.println(points); // kontroll
                     String pointsFirstPart = points.substring(9, 10);
+                    ImageIcon pointsToStars;
 
                     //Placerar poäng på GameScreen under respektive spelare innan man går vidare till ResultsScreen
                     if (player.equals("Player1")) {
                         if (playerInfoNumber.equals("Player1")) {
                             gameScreen.pointsLabelA.setText(points); // uppdaterar poäng på GameScreen poäng label
-                            resultsScreen.listOfLabelsPlayerA.get(currentRoundNumber).setText(points); // uppdaterar poäng på ResultsScreen poäng label
+
+                            pointsToStars = getScaledImage(resultsScreen.listOfLabelsPlayerA.get(currentRoundNumber), points);
+                            resultsScreen.listOfLabelsPlayerA.get(currentRoundNumber).setIcon(pointsToStars);
+                            // om man vill visa text istället:
+                            //resultsScreen.listOfLabelsPlayerA.get(currentRoundNumber).setText(points); // uppdaterar poäng på ResultsScreen poäng label
+
                             currentPlayerPoints = sumPointsForRounds(currentPlayerPoints, points); // metod som adderar befintliga poäng till poäng från Server
                             resultsScreen.pointsALabel.setText(Integer.toString(currentPlayerPoints));
                             System.out.println(playerInfoNumber + " " + currentPlayerPoints); // kontroll
 
                         } else { // (playerInfoNumber.equals("Player2"))
                             gameScreen.pointsLabelB.setText(points);
-                            resultsScreen.listOfLabelsPlayerB.get(currentRoundNumber).setText(points);
+
+                            pointsToStars = getScaledImage(resultsScreen.listOfLabelsPlayerB.get(currentRoundNumber), points);
+                            resultsScreen.listOfLabelsPlayerB.get(currentRoundNumber).setIcon(pointsToStars);
+                            // om man vill visa text istället:
+                            //resultsScreen.listOfLabelsPlayerB.get(currentRoundNumber).setText(points);
+
+
                             opponentPlayerPoints = sumPointsForRounds(opponentPlayerPoints, points);
                             resultsScreen.pointsBLabel.setText(Integer.toString(opponentPlayerPoints));
                             System.out.println(playerInfoNumber + " " + opponentPlayerPoints); // kontroll
@@ -203,26 +219,39 @@ public class Client {
                     } else if (player.equals("Player2")) {
                         if (playerInfoNumber.equals("Player1")) {
                             gameScreen.pointsLabelB.setText(points);
-                            resultsScreen.listOfLabelsPlayerB.get(currentRoundNumber).setText(points);
+
+                            pointsToStars = getScaledImage(resultsScreen.listOfLabelsPlayerB.get(currentRoundNumber), points);
+                            resultsScreen.listOfLabelsPlayerB.get(currentRoundNumber).setIcon(pointsToStars);
+                            // om man vill visa text istället:
+                            //resultsScreen.listOfLabelsPlayerB.get(currentRoundNumber).setText(points);
+
                             opponentPlayerPoints = sumPointsForRounds(opponentPlayerPoints, points);
                             resultsScreen.pointsBLabel.setText(Integer.toString(opponentPlayerPoints));
                             System.out.println(playerInfoNumber + " " + opponentPlayerPoints); // kontroll
                         } else { // (playerInfoNumber.equals("Player2"))
                             gameScreen.pointsLabelA.setText(points);
-                            resultsScreen.listOfLabelsPlayerA.get(currentRoundNumber).setText(points);
+
+                            pointsToStars = getScaledImage(resultsScreen.listOfLabelsPlayerA.get(currentRoundNumber), points);
+                            resultsScreen.listOfLabelsPlayerA.get(currentRoundNumber).setIcon(pointsToStars);
+                            // om man vill visa text istället:
+                            // resultsScreen.listOfLabelsPlayerA.get(currentRoundNumber).setText(points); // om man vill visa text istället
+
                             currentPlayerPoints = sumPointsForRounds(currentPlayerPoints, points);
                             resultsScreen.pointsALabel.setText(Integer.toString(currentPlayerPoints));
                             System.out.println(playerInfoNumber + " " + currentPlayerPoints); // kontroll
                         }
                     }
                     gameScreen.revalidate();
+
                 } else if (response.equals("ANSWERED_QUESTIONS_BOTH")) {
                     gameScreen.questionLabel.setText("Please continue to see the results.");
                     gameScreen.goOnButton.setVisible(true);
                     gameScreen.infoField.setVisible(true);
                     gameScreen.infoField.setText("Please continue to see the results.");
                     gameScreen.revalidate();
+
                 } else if (response.equals("SHOW_RESULTS")) {
+                    currentRoundNumber++;
                     gameScreen.setVisible(false);
                     resultsScreen.setVisible(true);
                     System.out.println(ServerSideGame.currentRound + "-" + gameSettings.getNumberOfRounds() + "-" + (GameScreen.currentQuestion - 1) + "-" + gameSettings.getNumberOfQuestions());
@@ -275,5 +304,73 @@ public class Client {
     public static void main(String[] args) throws IOException {
         Client client = new Client();
         client.play();
+    }
+
+    public ImageIcon turnPointsInPicture(String points) {
+        ImageIcon icon = null;
+        String pointsPart = points.substring(8, 11);
+        if (numberOfQuestions == 3) {
+            if (pointsPart.equals("0/3")) {
+                icon = new ImageIcon("Pictures/NoStarNoBG3.png");
+            } else if (pointsPart.equals("1/3")) {
+                icon = new ImageIcon("Pictures/OneStarNoBG3.png");
+            } else if (pointsPart.equals("2/3")) {
+                icon = new ImageIcon("Pictures/TwoStarNoBG3.png");
+            } else if (pointsPart.equals("3/3")) {
+                icon = new ImageIcon("Pictures/ThreeStarNoBG3.png");
+            }
+        } else if (numberOfQuestions == 2) {
+            if (pointsPart.equals("0/2")) {
+                icon = new ImageIcon("Pictures/NoStarNoBG2.png");
+            } else if (pointsPart.equals("1/2")) {
+                icon = new ImageIcon("Pictures/OneStarNoBG2.png");
+            } else if (pointsPart.equals("2/2")) {
+                icon = new ImageIcon("Pictures/TwoStarNoBG2.png");
+            }
+        } else if (numberOfQuestions == 4) {
+            if (pointsPart.equals("0/4")) {
+                icon = new ImageIcon("Pictures/NoStarNoBG4.png");
+            } else if (pointsPart.equals("1/4")) {
+                icon = new ImageIcon("Pictures/OneStarNoBG4.png");
+            } else if (pointsPart.equals("2/4")) {
+                icon = new ImageIcon("Pictures/TwoStarNoBG4.png");
+            } else if (pointsPart.equals("3/4")) {
+                icon = new ImageIcon("Pictures/ThreeStarNoBG4.png");
+            } else if (pointsPart.equals("4/4")) {
+                icon = new ImageIcon("Pictures/FourStarNoBG4.png");
+            }
+        } else if (numberOfQuestions == 5) {
+            if (pointsPart.equals("0/4")) {
+                icon = new ImageIcon("Pictures/NoStarNoBG5.png");
+            } else if (pointsPart.equals("1/5")) {
+                icon = new ImageIcon("Pictures/OneStarNoBG5.png");
+            } else if (pointsPart.equals("2/5")) {
+                icon = new ImageIcon("Pictures/TwoStarNoBG5.png");
+            } else if (pointsPart.equals("3/5")) {
+                icon = new ImageIcon("Pictures/ThreeStarNoBG5.png");
+            } else if (pointsPart.equals("4/5")) {
+                icon = new ImageIcon("Pictures/FourStarNoBG5.png");
+            } else if (pointsPart.equals("5/5")) {
+                icon = new ImageIcon("Pictures/FiveStarNoBG5.png");
+            }
+        }
+        return icon;
+    }
+
+    public ImageIcon getScaledImage(JLabel label, String points) {
+        ImageIcon icon = turnPointsInPicture(points);
+        Image image = icon.getImage();
+        Image imageScaled = null;
+        if (numberOfQuestions == 5) {
+            imageScaled = image.getScaledInstance(label.getWidth(), label.getHeight() / 3, Image.SCALE_SMOOTH);
+        } else if (numberOfQuestions == 4) {
+            imageScaled = image.getScaledInstance(label.getWidth() - 15, label.getHeight() - 60, Image.SCALE_SMOOTH);
+        } else if (numberOfQuestions == 3) {
+            imageScaled = image.getScaledInstance(label.getWidth() - 20, label.getHeight() / 2, Image.SCALE_SMOOTH);
+        } else if (numberOfQuestions == 2) {
+            imageScaled = image.getScaledInstance(label.getWidth(), label.getHeight() - 15, Image.SCALE_SMOOTH);
+        }
+        ImageIcon scaledIcon = new ImageIcon(imageScaled);
+        return scaledIcon;
     }
 }
