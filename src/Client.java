@@ -292,7 +292,7 @@ public class Client {
     public void getWinner() {
         gameScreen.setVisible(false);
         resultsScreen.infoField.setText("Game is over press continue to exit game");
-        if (this.currentPlayerPoints < opponentPlayerPoints) {
+        if (this.currentPlayerPoints > opponentPlayerPoints) {
             resultsScreen.theirTurnLabel.setText("YOU WON!");
         } else if (this.currentPlayerPoints == opponentPlayerPoints) {
             resultsScreen.theirTurnLabel.setText("YOU TIED!");
