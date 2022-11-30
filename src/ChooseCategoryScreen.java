@@ -8,8 +8,8 @@ import java.util.List;
 
 public class ChooseCategoryScreen extends JFrame {
     JPanel basePanel = new JPanel(new BorderLayout());
-    JLabel questionLabel = new JLabel("What category do you want to choose?",SwingConstants.CENTER);
-    JPanel categoryPanel = new JPanel(new GridLayout(3,1,10,10));
+    JLabel questionLabel = new JLabel("What category do you want to choose?", SwingConstants.CENTER);
+    JPanel categoryPanel = new JPanel(new GridLayout(3, 1, 10, 10));
     JPanel emptyPanel = new JPanel();
     List<JButton> buttonList = new LinkedList<>();
     Database database = new Database();
@@ -19,13 +19,13 @@ public class ChooseCategoryScreen extends JFrame {
     static String playerNumber;
     String currentPlayerName;
 
-    public void setUpCategoryScreenGUI(){
+    public void setUpCategoryScreenGUI() {
 
         setTitle(quizTitle);
         add(basePanel);
 
-        questionLabel.setPreferredSize(new Dimension(410,200));
-        emptyPanel.setPreferredSize(new Dimension(410,25));
+        questionLabel.setPreferredSize(new Dimension(410, 200));
+        emptyPanel.setPreferredSize(new Dimension(410, 25));
 
         basePanel.add(questionLabel, BorderLayout.NORTH);
 
@@ -47,7 +47,7 @@ public class ChooseCategoryScreen extends JFrame {
         emptyPanel.setBackground(Constants.LIGHT_BLUE);
 
         questionLabel.setForeground(Color.WHITE);
-        questionLabel.setFont(new Font("Sans Serif", Font.PLAIN,20));
+        questionLabel.setFont(new Font("Sans Serif", Font.PLAIN, 20));
 
         setSize(410, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -56,8 +56,8 @@ public class ChooseCategoryScreen extends JFrame {
     }
 
 
-    public ChooseCategoryScreen(String player, String currentPlayerName){
-        playerNumber=player;
+    public ChooseCategoryScreen(String player, String currentPlayerName) {
+        playerNumber = player;
         this.currentPlayerName = currentPlayerName;
         setUpCategoryScreenGUI();
     }
@@ -65,10 +65,10 @@ public class ChooseCategoryScreen extends JFrame {
     ActionListener listener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (e.getSource() instanceof JButton){
+            if (e.getSource() instanceof JButton) {
                 String chosenCategory = ((JButton) e.getSource()).getText();
                 Client.outWriter.println("I_CHOSE " + chosenCategory);
-            //    database.setQuestionCategory(chosenCategory);  // Kontrollera om den spelar roll
+                //    database.setQuestionCategory(chosenCategory);  // Kontrollera om den spelar roll
             }
         }
     };

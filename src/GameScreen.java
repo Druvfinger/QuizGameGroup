@@ -210,10 +210,9 @@ public class GameScreen extends JFrame {
             }
             if (e.getSource() == goOnButton && isAnswered) {
                 isAnswered = false;
-                if (currentRound > roundsToBePlayed){
+                if (currentRound > roundsToBePlayed) {
                     Client.outWriter.println("GAME_FINISHED");
-                }
-                else if (currentQuestion <= numberOfQuestions) {
+                } else if (currentQuestion <= numberOfQuestions) {
                     Client.outWriter.println("NEXT_QUESTION? " + playerNumber);
 
                 } else if (!wantToGoForward) {
@@ -286,7 +285,7 @@ public class GameScreen extends JFrame {
             infoField.setText("Question " + currentQuestion);
             infoField.revalidate();
         } else {
-            infoField.setText("You have answer all " +questionsPerRound + "questions. Click on Continue to proceed."); // Ändra???
+            infoField.setText("You have answer all " + questionsPerRound + "questions. Click on Continue to proceed."); // Ändra???
             infoField.revalidate();
         }
     }

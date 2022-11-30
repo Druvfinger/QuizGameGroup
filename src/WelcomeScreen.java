@@ -19,7 +19,7 @@ public class WelcomeScreen extends JFrame {
     JLabel userNameLabel;
 
 
-    public void setUpWelcomeScreenGUI(){
+    public void setUpWelcomeScreenGUI() {
 
         JPanel newGameButtonAndInfoFieldPanel = new JPanel(new BorderLayout());
         JLabel welcomeText = new JLabel("Welcome to our Quiz Game!", SwingConstants.CENTER);
@@ -110,7 +110,8 @@ public class WelcomeScreen extends JFrame {
             }
         }
     };
-    public void rePaintWelcomeScreenIfNameSubmitted(){
+
+    public void rePaintWelcomeScreenIfNameSubmitted() {
         quizTitle = "Quiz Game " + userName;
         ChooseCategoryScreen.quizTitle = quizTitle;
         GameScreen.quizTitle = quizTitle;
@@ -125,5 +126,4 @@ public class WelcomeScreen extends JFrame {
 
         System.out.println(userName + " is connected.");
     }
-
 }

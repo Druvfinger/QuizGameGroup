@@ -28,7 +28,7 @@ public class ResultsScreen extends JFrame {
     JLabel pointsALabel;
     JLabel pointsBLabel;
 
-    public void setUpResultScreenGUI(){
+    public void setUpResultScreenGUI() {
 
         JPanel basePanel = new JPanel(new BorderLayout());
         theirTurnLabel = new JLabel("Players Turn", SwingConstants.CENTER); //
@@ -36,7 +36,7 @@ public class ResultsScreen extends JFrame {
         JPanel goOnPanel = new JPanel(new BorderLayout());
         goOnButton = new JButton("Continue");
         JPanel leftPlayerPanel = new JPanel(new BorderLayout());
-        JPanel totalsPanel = new JPanel(new GridLayout(1,3)); // NYTT
+        JPanel totalsPanel = new JPanel(new GridLayout(1, 3)); // NYTT
         pointsALabel = new JLabel("0", SwingConstants.RIGHT);
         JLabel dashLabel = new JLabel("-", SwingConstants.CENTER);
         pointsBLabel = new JLabel("0", SwingConstants.LEFT);
@@ -49,7 +49,7 @@ public class ResultsScreen extends JFrame {
         JLabel playerEmojiLabelA = new JLabel(new ImageIcon("Pictures/CuteHipster.png"));
         JLabel playerEmojiLabelB = new JLabel(new ImageIcon("Pictures/CuteHeadphones.png"));
         String userNameA = "Player A";
-        JLabel userNameLabelA = new JLabel(userNameA,SwingConstants.CENTER);
+        JLabel userNameLabelA = new JLabel(userNameA, SwingConstants.CENTER);
         String userNameB = "Player B";
         JLabel userNameLabelB = new JLabel(userNameB, SwingConstants.CENTER);
 
@@ -96,7 +96,7 @@ public class ResultsScreen extends JFrame {
         middlePanel.add(totalsPanel, BorderLayout.NORTH);
         middlePanel.add(categoryPanel, BorderLayout.CENTER);
 
-        dashLabel.setPreferredSize(new Dimension(30,100));
+        dashLabel.setPreferredSize(new Dimension(30, 100));
 
         totalsPanel.add(pointsALabel);
         totalsPanel.add(dashLabel);
@@ -166,6 +166,7 @@ public class ResultsScreen extends JFrame {
             }
         }
     };
+
     public JPanel createDesiredNumberOfLabels(JPanel panelToFill, int numberOfLabels, List<JLabel> lista) {
         panelToFill.setLayout(new GridLayout(numberOfLabels, 1));
         for (int i = 0; i < numberOfLabels; i++) {

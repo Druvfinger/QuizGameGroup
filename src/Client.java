@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.LinkedList;
 
 public class Client {
     protected final String host = "127.0.0.1";
@@ -193,11 +192,11 @@ public class Client {
                     if (player.equals("Player1")) {
                         if (playerInfoNumber.equals("Player1")) {
                             gameScreen.pointsLabelA.setText(points); // uppdaterar poäng på GameScreen poäng label
-                            //resultsScreen.listOfLabelsPlayerA.get(currentRoundNumber).setText(points); // uppdaterar poäng på ResultsScreen poäng label
 
-                            pointsToStars = getScaledImage(resultsScreen.listOfLabelsPlayerA.get(currentRoundNumber),points);
+                            pointsToStars = getScaledImage(resultsScreen.listOfLabelsPlayerA.get(currentRoundNumber), points);
                             resultsScreen.listOfLabelsPlayerA.get(currentRoundNumber).setIcon(pointsToStars);
-                            //resultsScreen.listOfLabelsPlayerA.get(currentRoundNumber).setBackground(Color.WHITE);
+                            // om man vill visa text istället:
+                            //resultsScreen.listOfLabelsPlayerA.get(currentRoundNumber).setText(points); // uppdaterar poäng på ResultsScreen poäng label
 
                             currentPlayerPoints = sumPointsForRounds(currentPlayerPoints, points); // metod som adderar befintliga poäng till poäng från Server
                             resultsScreen.pointsALabel.setText(Integer.toString(currentPlayerPoints));
@@ -205,11 +204,12 @@ public class Client {
 
                         } else { // (playerInfoNumber.equals("Player2"))
                             gameScreen.pointsLabelB.setText(points);
+
+                            pointsToStars = getScaledImage(resultsScreen.listOfLabelsPlayerB.get(currentRoundNumber), points);
+                            resultsScreen.listOfLabelsPlayerB.get(currentRoundNumber).setIcon(pointsToStars);
+                            // om man vill visa text istället:
                             //resultsScreen.listOfLabelsPlayerB.get(currentRoundNumber).setText(points);
 
-                            pointsToStars = getScaledImage(resultsScreen.listOfLabelsPlayerB.get(currentRoundNumber),points);
-                            resultsScreen.listOfLabelsPlayerB.get(currentRoundNumber).setIcon(pointsToStars);
-                            //resultsScreen.listOfLabelsPlayerB.get(currentRoundNumber).setBackground(Color.WHITE);
 
                             opponentPlayerPoints = sumPointsForRounds(opponentPlayerPoints, points);
                             resultsScreen.pointsBLabel.setText(Integer.toString(opponentPlayerPoints));
@@ -218,22 +218,22 @@ public class Client {
                     } else if (player.equals("Player2")) {
                         if (playerInfoNumber.equals("Player1")) {
                             gameScreen.pointsLabelB.setText(points);
-                            //resultsScreen.listOfLabelsPlayerB.get(currentRoundNumber).setText(points);
 
-                            pointsToStars = getScaledImage(resultsScreen.listOfLabelsPlayerB.get(currentRoundNumber),points);
+                            pointsToStars = getScaledImage(resultsScreen.listOfLabelsPlayerB.get(currentRoundNumber), points);
                             resultsScreen.listOfLabelsPlayerB.get(currentRoundNumber).setIcon(pointsToStars);
-                            //resultsScreen.listOfLabelsPlayerB.get(currentRoundNumber).setBackground(Color.WHITE);
+                            // om man vill visa text istället:
+                            //resultsScreen.listOfLabelsPlayerB.get(currentRoundNumber).setText(points);
 
                             opponentPlayerPoints = sumPointsForRounds(opponentPlayerPoints, points);
                             resultsScreen.pointsBLabel.setText(Integer.toString(opponentPlayerPoints));
                             System.out.println(playerInfoNumber + " " + opponentPlayerPoints); // kontroll
                         } else { // (playerInfoNumber.equals("Player2"))
                             gameScreen.pointsLabelA.setText(points);
-                            // resultsScreen.listOfLabelsPlayerA.get(currentRoundNumber).setText(points);
 
-                            pointsToStars = getScaledImage(resultsScreen.listOfLabelsPlayerA.get(currentRoundNumber),points);
+                            pointsToStars = getScaledImage(resultsScreen.listOfLabelsPlayerA.get(currentRoundNumber), points);
                             resultsScreen.listOfLabelsPlayerA.get(currentRoundNumber).setIcon(pointsToStars);
-                            //resultsScreen.listOfLabelsPlayerA.get(currentRoundNumber).setBackground(Color.WHITE);
+                            // om man vill visa text istället:
+                            // resultsScreen.listOfLabelsPlayerA.get(currentRoundNumber).setText(points); // om man vill visa text istället
 
                             currentPlayerPoints = sumPointsForRounds(currentPlayerPoints, points);
                             resultsScreen.pointsALabel.setText(Integer.toString(currentPlayerPoints));
@@ -265,7 +265,7 @@ public class Client {
                     resultsScreen.revalidate();
 
 
-                }else if(response.equals("SHOW_FINAL_RESULT")){
+                } else if (response.equals("SHOW_FINAL_RESULT")) {
 
                 } else System.out.println("We are missing out on something. " + response);
             }
@@ -289,9 +289,9 @@ public class Client {
         client.play();
     }
 
-    public ImageIcon turnPointsInPicture (String points){
+    public ImageIcon turnPointsInPicture(String points) {
         ImageIcon icon = null;
-        String pointsPart = points.substring(8,11);
+        String pointsPart = points.substring(8, 11);
         if (numberOfQuestions == 3) {
             if (pointsPart.equals("0/3")) {
                 icon = new ImageIcon("Pictures/NoStarNoBG3.png");
@@ -302,8 +302,7 @@ public class Client {
             } else if (pointsPart.equals("3/3")) {
                 icon = new ImageIcon("Pictures/ThreeStarNoBG3.png");
             }
-        }
-        else if (numberOfQuestions == 2) {
+        } else if (numberOfQuestions == 2) {
             if (pointsPart.equals("0/2")) {
                 icon = new ImageIcon("Pictures/NoStarNoBG2.png");
             } else if (pointsPart.equals("1/2")) {
@@ -311,8 +310,7 @@ public class Client {
             } else if (pointsPart.equals("2/2")) {
                 icon = new ImageIcon("Pictures/TwoStarNoBG2.png");
             }
-        }
-        else if (numberOfQuestions == 4) {
+        } else if (numberOfQuestions == 4) {
             if (pointsPart.equals("0/4")) {
                 icon = new ImageIcon("Pictures/NoStarNoBG4.png");
             } else if (pointsPart.equals("1/4")) {
@@ -324,8 +322,7 @@ public class Client {
             } else if (pointsPart.equals("4/4")) {
                 icon = new ImageIcon("Pictures/FourStarNoBG4.png");
             }
-        }
-        else if (numberOfQuestions == 5) {
+        } else if (numberOfQuestions == 5) {
             if (pointsPart.equals("0/4")) {
                 icon = new ImageIcon("Pictures/NoStarNoBG5.png");
             } else if (pointsPart.equals("1/5")) {
@@ -343,20 +340,17 @@ public class Client {
         return icon;
     }
 
-    public ImageIcon getScaledImage (JLabel label, String points) {
+    public ImageIcon getScaledImage(JLabel label, String points) {
         ImageIcon icon = turnPointsInPicture(points);
         Image image = icon.getImage();
         Image imageScaled = null;
-        if (numberOfQuestions == 5){
+        if (numberOfQuestions == 5) {
             imageScaled = image.getScaledInstance(label.getWidth(), label.getHeight() / 3, Image.SCALE_SMOOTH);
-        }
-        else if (numberOfQuestions == 4){
+        } else if (numberOfQuestions == 4) {
             imageScaled = image.getScaledInstance(label.getWidth() - 15, label.getHeight() - 60, Image.SCALE_SMOOTH);
-        }
-        else if (numberOfQuestions == 3){
+        } else if (numberOfQuestions == 3) {
             imageScaled = image.getScaledInstance(label.getWidth() - 20, label.getHeight() / 2, Image.SCALE_SMOOTH);
-        }
-        else if (numberOfQuestions == 2){
+        } else if (numberOfQuestions == 2) {
             imageScaled = image.getScaledInstance(label.getWidth(), label.getHeight() - 15, Image.SCALE_SMOOTH);
         }
         ImageIcon scaledIcon = new ImageIcon(imageScaled);
