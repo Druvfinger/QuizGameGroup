@@ -73,7 +73,7 @@ public class Client {
                         welcomeScreen.setVisible(false);
                         resultsScreen = new ResultsScreen(player, currentPlayerName, opponentName);
                         resultsScreen.theirTurnLabel.setText("Your Turn");
-                        resultsScreen.infoField.setText("Your turn to choose a category. Click \"Fortsätt\" to continue.");
+                        resultsScreen.infoField.setText("Your turn to choose a category. Click \"Continue\" to continue.");
                     } else {
                         welcomeScreen.setVisible(false);
                         resultsScreen = new ResultsScreen(player, currentPlayerName, opponentName);
@@ -91,22 +91,7 @@ public class Client {
                 } else if (response.startsWith("I_CHOSE ")) {
                     chosenCategory = response.substring(8);
                     System.out.println(chosenCategory);
-                    resultsScreen.listOfCategoryLabels.get(currentRoundNumber).setText(chosenCategory);
-                    resultsScreen.listOfCategoryLabels.get(currentRoundNumber).setForeground(Color.WHITE);
-                    resultsScreen.listOfCategoryLabels.get(currentRoundNumber).setFont(new Font("Sans Serif", Font.BOLD, 25));
-                    resultsScreen.categoryPanel.removeAll();
-                    for (JLabel label : resultsScreen.listOfCategoryLabels) resultsScreen.categoryPanel.add(label);
-                    resultsScreen.goOnButton.setVisible(true);
-                    resultsScreen.infoField.setText("Your game experience is ready. Please continue.");
-                    resultsScreen.theirTurnLabel.setText("Time to play!");
-                    resultsScreen.revalidate();
-
-                    if (myTurnToChoose) {
-                        categoryScreen.setVisible(false);
-                        myTurnToChoose = false;
-                    } else myTurnToChoose = true;
-                    welcomeScreen.setVisible(false);
-                    resultsScreen.setVisible(true);
+                    setUpForNewRound(chosenCategory);
 
                 } else if (response.startsWith("READY_TO_ANSWER ")) {
                     resultsScreen.setVisible(false);
@@ -115,40 +100,23 @@ public class Client {
                 } else if (response.startsWith("QUESTION: ")) {
                     String question = response.substring(10);
                     System.out.println(question);
-                    gameScreen = new GameScreen(player, currentPlayerName, opponentName, chosenCategory);
-                    gameScreen.currentCategory = chosenCategory;
-                    gameScreen.questionLabel.setText(question);
-                    gameScreen.revalidate();
+                    getAndPaintUpQuestion(question);
 
                 } else if (response.startsWith("ANSWERS: ")) {
                     String answers = response.substring(9);
                     System.out.println(answers);
-                    String[] answersArray = answers.split(",");
-                    for (int i = 0; i < answersArray.length - 1; i++) {
-                        gameScreen.buttonList.get(i).setText(answersArray[i]);
-                    }
-                    gameScreen.rightAnswer = answersArray[answersArray.length - 1];
-                    gameScreen.revalidate();
+                    getAndPaintUpAnswers(answers);
 
                 } else if (response.startsWith("HOLD")) {
-                    gameScreen.categoryTextLabel.setText("");
-                    gameScreen.questionLabel.setText("Please wait while your opponent is answering.");
-                    gameScreen.goOnButton.setEnabled(false);
-                    gameScreen.infoField.setVisible(false);
-                    gameScreen.revalidate();
+                    setScreenToWaitFroOpponentToFinishQuestion();
 
                 } else if (response.startsWith("BOTH_ANSWERED_QUESTION")) {
-                    gameScreen.goOnButton.setEnabled(true);
-                    gameScreen.infoField.setVisible(true);
-                    gameScreen.infoField.setText("You can go to next Question");
-                    gameScreen.revalidate();
+                    setScreenReadyToGoToNextQuestion();
 
                 } else if (response.startsWith("NEXT_QUESTION: ")) {
                     String question = response.substring(15);
                     System.out.println(question);
-                    gameScreen.questionLabel.setText(question);
-                    gameScreen.changeInfoField();
-                    gameScreen.revalidate();
+                    getAndPaintUpNextQuestion(question);
 
                 } else if (response.startsWith("NEXT_ANSWERS: ")) {
                     String answers = response.substring(14);
@@ -163,12 +131,7 @@ public class Client {
                     gameScreen.revalidate();
 
                 } else if (response.equals("WAIT")) {
-                    gameScreen.categoryTextLabel.setText("");
-                    gameScreen.questionLabel.setText("Please wait while your opponent is answering.");
-                    gameScreen.goOnButton.setVisible(false);
-                    gameScreen.infoField.setVisible(false);
-                    gameScreen.revalidate();
-                    System.out.println(player + " is waiting.");
+                    setScreenToWaitForOpponentToFinishRound();
 
                 } else if (response.startsWith("POINTS: ")) {
                     String playerInfoNumber = response.substring(8, 15);
@@ -191,6 +154,79 @@ public class Client {
     public int getPointsIntFromPointsString(String points) {
         String part = points.substring(8, 9);
         return Integer.parseInt(part);
+    }
+
+    public void getAndPaintUpQuestion(String question) {
+        gameScreen = new GameScreen(player, currentPlayerName, opponentName, chosenCategory);
+        gameScreen.currentCategory = chosenCategory;
+        gameScreen.questionLabel.setText(question);
+        gameScreen.revalidate();
+    }
+    public void getAndPaintUpNextQuestion(String question){
+        gameScreen.questionLabel.setText(question);
+        gameScreen.changeInfoField();
+        gameScreen.revalidate();
+    }
+
+    public void getAndPaintUpAnswers(String answers) {
+        String[] answersArray = answers.split(",");
+        for (int i = 0; i < answersArray.length - 1; i++) {
+            gameScreen.buttonList.get(i).setText(answersArray[i]);
+        }
+        gameScreen.rightAnswer = answersArray[answersArray.length - 1];
+        gameScreen.revalidate();
+    }
+    public void getAndPaintUpNextAnswers(String answers){
+        String[] answersArray = answers.split(",");
+        for (int i = 0; i < answersArray.length - 1; i++) {
+            System.out.println(answersArray[i]);// för att kontrollera att det fungerar korrekt
+            gameScreen.buttonList.get(i).setText(answersArray[i]);
+            gameScreen.buttonList.get(i).setBackground(new JButton().getBackground()); // NYTT målar knappar i default färg
+        }
+        gameScreen.rightAnswer = answersArray[answersArray.length - 1]; // NYTT (Det korrekta svaret)
+        System.out.println(gameScreen.rightAnswer);
+        gameScreen.revalidate();
+    }
+
+    public void setUpForNewRound(String chosenCategory) {
+        resultsScreen.listOfCategoryLabels.get(currentRoundNumber).setText(chosenCategory);
+        resultsScreen.listOfCategoryLabels.get(currentRoundNumber).setForeground(Color.WHITE);
+        resultsScreen.listOfCategoryLabels.get(currentRoundNumber).setFont(new Font("Sans Serif", Font.BOLD, 25));
+        resultsScreen.categoryPanel.removeAll();
+        for (JLabel label : resultsScreen.listOfCategoryLabels) resultsScreen.categoryPanel.add(label);
+        resultsScreen.goOnButton.setVisible(true);
+        resultsScreen.infoField.setText("Your game experience is ready. Please continue.");
+        resultsScreen.theirTurnLabel.setText("Time to play!");
+        resultsScreen.revalidate();
+
+        if (myTurnToChoose) {
+            categoryScreen.setVisible(false);
+            myTurnToChoose = false;
+        } else myTurnToChoose = true;
+        welcomeScreen.setVisible(false);
+        resultsScreen.setVisible(true);
+    }
+
+    public void setScreenToWaitForOpponentToFinishRound(){
+        gameScreen.categoryTextLabel.setText("");
+        gameScreen.questionLabel.setText("Please wait while your opponent is answering.");
+        gameScreen.goOnButton.setVisible(false);
+        gameScreen.infoField.setVisible(false);
+        gameScreen.revalidate();
+        System.out.println(player + " is waiting.");
+    }
+    public void setScreenToWaitFroOpponentToFinishQuestion(){
+        gameScreen.categoryTextLabel.setText("");
+        gameScreen.questionLabel.setText("Please wait while your opponent is answering.");
+        gameScreen.goOnButton.setEnabled(false);
+        gameScreen.infoField.setVisible(false);
+        gameScreen.revalidate();
+    }
+    public void setScreenReadyToGoToNextQuestion(){
+        gameScreen.goOnButton.setEnabled(true);
+        gameScreen.infoField.setVisible(true);
+        gameScreen.infoField.setText("You can go to next Question");
+        gameScreen.revalidate();
     }
 
     public void showGoToResultScreen() {

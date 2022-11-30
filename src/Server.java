@@ -5,7 +5,6 @@ public class Server {
 
     int port = 54321;
 
-
     public Server() throws IOException {
         try (ServerSocket ss = new ServerSocket(port)) {
             System.out.println("Quiz game server is running");
