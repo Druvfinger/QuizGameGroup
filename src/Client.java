@@ -141,17 +141,23 @@ public class Client {
             myTurnToChoose = true;
         }
         welcomeScreen = new WelcomeScreen(player);
+        if (player.equals("Player1")){
+            welcomeScreen.setLocation(400,250);
+        }
+        else welcomeScreen.setLocation(900,250);
         welcomeScreen.userInfoTextField.setText("Just one moment " + player + "! We are waiting for your opponent.");
     }
     public void setScreenChooseCategory(){
         if (myTurnToChoose) {
             resultsScreen.setVisible(false);
             categoryScreen = new ChooseCategoryScreen(player, currentPlayerName);
+            categoryScreen.setLocation(resultsScreen.getLocation());
         }
     }
 
     public void getAndPaintUpQuestion(String question) {
         gameScreen = new GameScreen(player, currentPlayerName, opponentName, chosenCategory);
+        gameScreen.setLocation(resultsScreen.getLocation());
         gameScreen.currentCategory = chosenCategory;
         gameScreen.questionLabel.setText(question);
         gameScreen.revalidate();
@@ -168,11 +174,13 @@ public class Client {
         if (myTurnToChoose) {
             welcomeScreen.setVisible(false);
             resultsScreen = new ResultsScreen(player, currentPlayerName, opponentName);
+            resultsScreen.setLocation(welcomeScreen.getLocation());
             resultsScreen.theirTurnLabel.setText("Your Turn");
             resultsScreen.infoField.setText("Your turn to choose a category. Click \"Continue\" to continue.");
         } else {
             welcomeScreen.setVisible(false);
             resultsScreen = new ResultsScreen(player, currentPlayerName, opponentName);
+            resultsScreen.setLocation(welcomeScreen.getLocation());
             resultsScreen.theirTurnLabel.setText("Their Turn");
             resultsScreen.goOnButton.setVisible(false);
             resultsScreen.infoField.setText("Please wait while your opponent is choosing a category.");
@@ -213,6 +221,7 @@ public class Client {
             categoryScreen.setVisible(false);
             myTurnToChoose = false;
         } else myTurnToChoose = true;
+
         welcomeScreen.setVisible(false);
         resultsScreen.setVisible(true);
     }
@@ -292,6 +301,7 @@ public class Client {
         currentRoundNumber++;
         gameScreen.setVisible(false);
         resultsScreen.setVisible(true);
+        resultsScreen.setLocation(gameScreen.getLocation());
         System.out.println("CurrentRound: " + ServerSideGame.currentRound + " - Max Rounds: " +
                 gameSettings.getNumberOfRounds() + " -- CurrentQuestion: " +
                 (GameScreen.currentQuestion - 1) + " - Max Questions: " + gameSettings.getNumberOfQuestions());
