@@ -42,7 +42,6 @@ public class Client {
             while (true) {
                 response = inReader.readLine();
 
-                // Sparar spelarens player number, visar välkomstskärm
                 if (response.startsWith("WELCOME")) {
                     player = response.substring(8);
                     if (player.equals("Player1")) {
@@ -55,26 +54,21 @@ public class Client {
                 } else if (response.equals("PLAYERS_CONNECTED")) {
                     System.out.println("All players connected. We are set to go.");
 
-                    // tilldelar namn till denna spelare och till spelarens opponent
                 } else if (response.startsWith("MY_NAME ")) {
                     String playerNumber = response.substring(8, 15);
                     String playerName = response.substring(16);
                     if (playerNumber.equals(player)) {
                         currentPlayerName = playerName;
                     } else opponentName = playerName;
-                }
-
-                // väntar tills både spelare skrivit in sitt namn, sedan gör "Fortsätt" knapp synlig
-                else if (response.equals("ENTERED_NAME_BOTH")) {
+                } else if (response.equals("ENTERED_NAME_BOTH")) {
                     welcomeScreen.newGameButton.setBackground(Constants.VERY_LIGHT_GREEN);
                     welcomeScreen.newGameButton.setVisible(true);
                     welcomeScreen.userInfoTextField.setText("We are set to go. Please continue to the game.");
                     welcomeScreen.repaint();
                     welcomeScreen.revalidate();
 
-                    // visar resultat-skärm som ser olika ut beroende på vems tur att välja det är
                 } else if (response.equals("READY_TO_PLAY")) {
-                    System.out.println("My turn to choose: " + myTurnToChoose); // för att kontrollera vem som väljer
+                    System.out.println("My turn to choose: " + myTurnToChoose);
                     if (myTurnToChoose) {
                         welcomeScreen.setVisible(false);
                         resultsScreen = new ResultsScreen(player, currentPlayerName, opponentName);
@@ -96,7 +90,7 @@ public class Client {
 
                 } else if (response.startsWith("I_CHOSE ")) {
                     chosenCategory = response.substring(8);
-                    System.out.println(chosenCategory); // för att kontrollera att det fungerar korrekt
+                    System.out.println(chosenCategory);
                     resultsScreen.listOfCategoryLabels.get(currentRoundNumber).setText(chosenCategory);
                     resultsScreen.listOfCategoryLabels.get(currentRoundNumber).setForeground(Color.WHITE);
                     resultsScreen.listOfCategoryLabels.get(currentRoundNumber).setFont(new Font("Sans Serif", Font.BOLD, 25));
@@ -120,7 +114,7 @@ public class Client {
 
                 } else if (response.startsWith("QUESTION: ")) {
                     String question = response.substring(10);
-                    System.out.println(question);// för att kontrollera att det fungerar korrekt
+                    System.out.println(question);
                     gameScreen = new GameScreen(player, currentPlayerName, opponentName, chosenCategory);
                     gameScreen.currentCategory = chosenCategory;
                     gameScreen.questionLabel.setText(question);
@@ -128,24 +122,22 @@ public class Client {
 
                 } else if (response.startsWith("ANSWERS: ")) {
                     String answers = response.substring(9);
-                    System.out.println(answers);// för att kontrollera att det fungerar korrekt
+                    System.out.println(answers);
                     String[] answersArray = answers.split(",");
                     for (int i = 0; i < answersArray.length - 1; i++) {
-                        System.out.println(answersArray[i]);// för att kontrollera att det fungerar korrekt
                         gameScreen.buttonList.get(i).setText(answersArray[i]);
                     }
-                    gameScreen.rightAnswer = answersArray[answersArray.length - 1]; // NYTT (Det korrekta svaret)
-                    System.out.println(gameScreen.rightAnswer);
+                    gameScreen.rightAnswer = answersArray[answersArray.length - 1];
                     gameScreen.revalidate();
 
                 } else if (response.startsWith("HOLD")) {
                     gameScreen.categoryTextLabel.setText("");
                     gameScreen.questionLabel.setText("Please wait while your opponent is answering.");
-                    gameScreen.goOnButton.setEnabled(false); // VIKTIGT!! Glöm inte att sätta tillbaka till synligt!
+                    gameScreen.goOnButton.setEnabled(false);
                     gameScreen.infoField.setVisible(false);
                     gameScreen.revalidate();
 
-                } else if (response.startsWith("BOTH_ANSWERED_QUESTION")) { // NYTT -->
+                } else if (response.startsWith("BOTH_ANSWERED_QUESTION")) {
                     gameScreen.goOnButton.setEnabled(true);
                     gameScreen.infoField.setVisible(true);
                     gameScreen.infoField.setText("You can go to next Question");
@@ -153,35 +145,33 @@ public class Client {
 
                 } else if (response.startsWith("NEXT_QUESTION: ")) {
                     String question = response.substring(15);
-                    System.out.println(question);// för att kontrollera att det fungerar korrekt
+                    System.out.println(question);
                     gameScreen.questionLabel.setText(question);
                     gameScreen.changeInfoField();
                     gameScreen.revalidate();
 
                 } else if (response.startsWith("NEXT_ANSWERS: ")) {
                     String answers = response.substring(14);
-                    System.out.println(answers);// för att kontrollera att det fungerar korrekt
+                    System.out.println(answers);
                     String[] answersArray = answers.split(",");
                     for (int i = 0; i < answersArray.length - 1; i++) {
-                        System.out.println(answersArray[i]);// för att kontrollera att det fungerar korrekt
                         gameScreen.buttonList.get(i).setText(answersArray[i]);
-                        gameScreen.buttonList.get(i).setBackground(new JButton().getBackground()); // NYTT målar knappar i default färg
+                        gameScreen.buttonList.get(i).setBackground(new JButton().getBackground());
                     }
-                    gameScreen.rightAnswer = answersArray[answersArray.length - 1]; // NYTT (Det korrekta svaret)
+                    gameScreen.rightAnswer = answersArray[answersArray.length - 1];
                     System.out.println(gameScreen.rightAnswer);
                     gameScreen.revalidate();
 
                 } else if (response.equals("WAIT")) {
                     gameScreen.categoryTextLabel.setText("");
                     gameScreen.questionLabel.setText("Please wait while your opponent is answering.");
-                    gameScreen.goOnButton.setVisible(false); // VIKTIGT!! Glöm inte att sätta tillbaka till synligt!
+                    gameScreen.goOnButton.setVisible(false);
                     gameScreen.infoField.setVisible(false);
                     gameScreen.revalidate();
                     System.out.println(player + " is waiting.");
 
                 } else if (response.startsWith("POINTS: ")) {
                     String playerInfoNumber = response.substring(8, 15);
-                    System.out.println(playerInfoNumber); // kontroll
                     String points = response.substring(16);
                     setPoints(playerInfoNumber, points);
 

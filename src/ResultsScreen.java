@@ -14,8 +14,6 @@ public class ResultsScreen extends JFrame {
     static String userName; // livsviktigt för att det ska fungera
 //    static int finalScore; // kommer att användas senare på ResultsScreen
     GameSettings gameSettings = new GameSettings();
-    int numberOfCategories = gameSettings.getNumberOfRounds();
-    int numberOfQuestions = gameSettings.getNumberOfQuestions();
     String currentPlayerName;
     String opponentName;
     JLabel theirTurnLabel;
@@ -111,9 +109,9 @@ public class ResultsScreen extends JFrame {
         leftPlayerAnswersPanel.setBackground(Color.LIGHT_GRAY);// hjälpverktyg
         rightPlayerAnswersPanel.setBackground(Color.LIGHT_GRAY);// hjälpverktyg
 
-        leftPlayerAnswersPanel = createDesiredNumberOfLabels(leftPlayerAnswersPanel, numberOfCategories, listOfLabelsPlayerA);
-        rightPlayerAnswersPanel = createDesiredNumberOfLabels(rightPlayerAnswersPanel, numberOfCategories, listOfLabelsPlayerB);
-        categoryPanel = createDesiredNumberOfLabels(categoryPanel, numberOfCategories, listOfCategoryLabels);
+        leftPlayerAnswersPanel = createDesiredNumberOfLabels(leftPlayerAnswersPanel, gameSettings.getNumberOfRounds(), listOfLabelsPlayerA);
+        rightPlayerAnswersPanel = createDesiredNumberOfLabels(rightPlayerAnswersPanel, gameSettings.getNumberOfRounds(), listOfLabelsPlayerB);
+        categoryPanel = createDesiredNumberOfLabels(categoryPanel, gameSettings.getNumberOfRounds(), listOfCategoryLabels);
 
         leftPlayerPanel.add(leftUserInfoPanel, BorderLayout.NORTH);
         leftPlayerPanel.add(leftPlayerAnswersPanel, BorderLayout.CENTER);

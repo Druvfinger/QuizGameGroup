@@ -11,8 +11,6 @@ public class GameScreen extends JFrame {
     int numberOfQuestions;
 //    ServerSideGame game = new ServerSideGame();
     static String playerNumber;
-    int roundsToBePlayed = gameSettings.getNumberOfRounds();
-    int questionsPerRound = gameSettings.getNumberOfQuestions();
     boolean isAnswered = false; // testa
     int currentPoint = 0;
     static String userName; // livsviktigt för att det ska fungera
@@ -206,9 +204,7 @@ public class GameScreen extends JFrame {
                 for (JButton element : buttonList) {
                     element.setEnabled(false);
                 }
-                System.out.println(currentQuestion + " CURRENTQUEST BEFORE");
                 currentQuestion++;
-                System.out.println(currentQuestion + " CURRENTQUEST AFTER");
                 isAnswered = true;
                 Client.outWriter.println("I_ANSWERED" + playerNumber); // NYTT
 
@@ -230,7 +226,6 @@ public class GameScreen extends JFrame {
                     }
                     revalidate();
                     totalPointsThisRound = pointsLabelA.getText();  // hämtar poäng för denna runda i form av: "Points: .../..."
-                    System.out.println(totalPointsThisRound); // kontroll
                     Client.outWriter.println("BACK_TO_RESULTS " + playerNumber + " " + totalPointsThisRound);
                     wantToGoForward = true;
                     isAnswered = true;
@@ -277,11 +272,11 @@ public class GameScreen extends JFrame {
     // ändrar poäng på spelarens poäng-label
     public void changeScore(boolean isCorrectAnswer, String playerNumber) {
         if (isCorrectAnswer) {
-            pointsLabelA.setText("Points: " + ++currentPoint + "/" + questionsPerRound);
+            pointsLabelA.setText("Points: " + ++currentPoint + "/" + gameSettings.getNumberOfQuestions());
             pointsLabelA.revalidate();
             finalScore = currentPoint;
         } else {
-            pointsLabelA.setText("Points: " + currentPoint + "/" + questionsPerRound);
+            pointsLabelA.setText("Points: " + currentPoint + "/" + gameSettings.getNumberOfQuestions());
             pointsLabelA.revalidate();
             finalScore = currentPoint;
         }
@@ -293,7 +288,7 @@ public class GameScreen extends JFrame {
             infoField.setText("Question " + currentQuestion);
             infoField.revalidate();
         } else {
-            infoField.setText("You have answer all " + questionsPerRound + "questions. Click on Continue to proceed."); // Ändra???
+            infoField.setText("You have answer all " + gameSettings.getNumberOfQuestions() + "questions. Click on Continue to proceed."); // Ändra???
             infoField.revalidate();
         }
     }
