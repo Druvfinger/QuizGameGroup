@@ -5,7 +5,8 @@ import java.util.List;
 
 public class Database {
     private static int randIndex;
-    private String currentCategory;
+    //private String currentCategory;
+    //Legacy
     private List<Integer> duplicates = new ArrayList<>();
     GameSettings gs = new GameSettings();
 
@@ -181,9 +182,12 @@ public class Database {
         return "VAD FAN HÄNDER MED FRÅGORNA";
     }*/
 
-    public void setQuestionCategory(String a) {
+    /*public void setQuestionCategory(String a) {
         currentCategory = a;
     }
+
+     */
+    //Legacy
 
     public String getCorrectAnswer(String category) {
         if (category.equals("Technology")) {
