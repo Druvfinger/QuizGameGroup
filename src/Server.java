@@ -4,13 +4,13 @@ import java.net.ServerSocket;
 public class Server {
 
     int port = 54321;
-    private MultiWriter multiWriter = new MultiWriter();
+
 
     public Server() throws IOException {
         try (ServerSocket ss = new ServerSocket(port)) {
             System.out.println("Quiz game server is running");
             while (true) {
-
+                MultiWriter multiWriter = new MultiWriter();
                 ServerSideGame game = new ServerSideGame();
                 Database database = new Database();
 
