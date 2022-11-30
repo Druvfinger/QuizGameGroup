@@ -64,8 +64,16 @@ public class GameScreen extends JFrame {
 
         buttonList = List.of(answerButtonA, answerButtonB, answerButtonC, answerButtonD);
 
-        JLabel playerEmojiLabelA = new JLabel(new ImageIcon("Pictures/CuteHipster.png"));
-        JLabel playerEmojiLabelB = new JLabel(new ImageIcon("Pictures/CuteHeadphones.png"));
+        JLabel playerEmojiLabelA;
+        JLabel playerEmojiLabelB;
+        if (playerNumber.equals("Player1")) {
+            playerEmojiLabelA = new JLabel(new ImageIcon("Pictures/CuteHipster.png"));
+            playerEmojiLabelB = new JLabel(new ImageIcon("Pictures/CuteHeadphones.png"));
+        }
+        else{
+            playerEmojiLabelB = new JLabel(new ImageIcon("Pictures/CuteHipster.png"));
+            playerEmojiLabelA = new JLabel(new ImageIcon("Pictures/CuteHeadphones.png"));
+        }
         JLabel categoryImageLabel = new JLabel(new ImageIcon());
         JPanel userNamePointsPanelA = new JPanel(new GridLayout(2, 1));
         JPanel userNamePointsPanelB = new JPanel(new GridLayout(2, 1));
