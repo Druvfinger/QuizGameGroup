@@ -5,7 +5,7 @@ public class ServerSideGame {
 
     static ServerSidePlayer currentPlayer;
     static ServerSidePlayer opponentPlayer;
-    GameScreen gameScreen;
+//    GameScreen gameScreen;
     Database database = new Database();
     static int currentRound = 0;
 
