@@ -12,7 +12,7 @@ public class ResultsScreen extends JFrame {
     static String quizTitle;
     static String playerNumber;
     static String userName; // livsviktigt för att det ska fungera
-    static int finalScore; // kommer att användas senare på ResultsScreen
+//    static int finalScore; // kommer att användas senare på ResultsScreen
     GameSettings gameSettings = new GameSettings();
     int numberOfCategories = gameSettings.getNumberOfRounds();
     int numberOfQuestions = gameSettings.getNumberOfQuestions();

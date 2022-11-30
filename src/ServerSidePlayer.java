@@ -7,9 +7,8 @@ import java.util.List;
 
 public class ServerSidePlayer extends Thread {
 
-    GameSettings gameSettings = new GameSettings();
+//    GameSettings gameSettings = new GameSettings();
     ServerSidePlayer opponent;
-    ServerSidePlayer currentPlayer;
     Socket socket;
     BufferedReader input;
     PrintWriter output;
@@ -18,8 +17,6 @@ public class ServerSidePlayer extends Thread {
     ServerSideGame game;
     private MultiWriter multiWriter;
     Database database;
-    int score;
-    int currentScore = 0;
     boolean playerEnteredName = false;
     boolean playerAnsweredQuestions = false;
     boolean playerReadyToPlay = false;
@@ -30,10 +27,6 @@ public class ServerSidePlayer extends Thread {
     boolean questionAnswered = false;
 
     String myPoints;
-
-    public int getCurrentScore() {
-        return currentScore;
-    }
 
     public ServerSidePlayer(Socket socket, String player, ServerSideGame game, MultiWriter multiWriter, Database database) throws IOException {
         this.socket = socket;
@@ -53,28 +46,12 @@ public class ServerSidePlayer extends Thread {
         }
     }
 
-    public ServerSideGame getGame() {
-        return game;
-    }
-
-    public void setGame(ServerSideGame game) {
-        this.game = game;
-    }
-
     public void setOpponent(ServerSidePlayer opponent) {
         this.opponent = opponent;
     }
 
     public ServerSidePlayer getOpponent() {
         return opponent;
-    }
-
-    public ServerSidePlayer getCurrentPlayer() {
-        return currentPlayer;
-    }
-
-    public void setCurrentPlayer(ServerSidePlayer currentPlayer) {
-        this.currentPlayer = currentPlayer;
     }
 
     public synchronized void run() {

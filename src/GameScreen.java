@@ -9,7 +9,7 @@ import java.util.List;
 public class GameScreen extends JFrame {
     GameSettings gameSettings = new GameSettings();
     int numberOfQuestions;
-    ServerSideGame game = new ServerSideGame();
+//    ServerSideGame game = new ServerSideGame();
     static String playerNumber;
     int roundsToBePlayed = gameSettings.getNumberOfRounds();
     int questionsPerRound = gameSettings.getNumberOfQuestions();
