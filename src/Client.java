@@ -330,6 +330,7 @@ public class Client {
     public void getWinner() {
         gameScreen.setVisible(false);
         resultsScreen.infoField.setText("Game is over press continue to exit game");
+        resultsScreen.goOnButton.setText("Exit the game");
         if (this.currentPlayerPoints > opponentPlayerPoints) {
             resultsScreen.theirTurnLabel.setText("YOU WON!");
         } else if (this.currentPlayerPoints == opponentPlayerPoints) {
