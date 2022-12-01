@@ -209,6 +209,7 @@ public class Client {
     }
 
     public void setUpForNewRound(String chosenCategory) {
+        resultsScreen.listOfCategoryLabels.get(currentRoundNumber).setIcon(null);
         resultsScreen.listOfCategoryLabels.get(currentRoundNumber).setText(chosenCategory);
         resultsScreen.listOfCategoryLabels.get(currentRoundNumber).setForeground(Color.WHITE);
         resultsScreen.listOfCategoryLabels.get(currentRoundNumber).setFont(new Font("Sans Serif", Font.BOLD, 25));

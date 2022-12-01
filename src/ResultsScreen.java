@@ -116,6 +116,9 @@ public class ResultsScreen extends JFrame {
         leftPlayerAnswersPanel = createDesiredNumberOfLabels(leftPlayerAnswersPanel, gameSettings.getNumberOfRounds(), listOfLabelsPlayerA);
         rightPlayerAnswersPanel = createDesiredNumberOfLabels(rightPlayerAnswersPanel, gameSettings.getNumberOfRounds(), listOfLabelsPlayerB);
         categoryPanel = createDesiredNumberOfLabels(categoryPanel, gameSettings.getNumberOfRounds(), listOfCategoryLabels);
+        for (int i = 0; i< listOfCategoryLabels.size(); i++){
+            listOfCategoryLabels.get(i).setIcon(new ImageIcon("Pictures/QuestionMark.png"));
+        }
 
         leftPlayerPanel.add(leftUserInfoPanel, BorderLayout.NORTH);
         leftPlayerPanel.add(leftPlayerAnswersPanel, BorderLayout.CENTER);
