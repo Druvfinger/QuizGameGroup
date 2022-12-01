@@ -86,7 +86,6 @@ public class ServerSidePlayer extends Thread {
                         prepQuestionAndAnswers(category);
                     }
 
-
                 } else if (fromClient.startsWith("READY_TO_ANSWER ")) {
                     output.println(fromClient);
 
@@ -121,6 +120,7 @@ public class ServerSidePlayer extends Thread {
             }
         }
     }
+
     public void sendNextQuestionAndAnswer(){
         if (!drawnNextQuestion) {
             question = game.getQuestionText(category);
@@ -141,6 +141,7 @@ public class ServerSidePlayer extends Thread {
         } else
             drawnNextQuestion = false;
     }
+
     public void sendPointsAndCheckThatBothAnswered(String myPoints, String playerInfoNumber){
         String toClient = "";
         System.out.println(playerInfoNumber + " " + myPoints);
@@ -158,6 +159,7 @@ public class ServerSidePlayer extends Thread {
             }
         }
     }
+
     public void checkThatBothAnsweredQuestion(){
         String toClient = "";
         this.questionAnswered = true;
@@ -172,10 +174,11 @@ public class ServerSidePlayer extends Thread {
             getOpponent().questionAnswered = false;
         }
     }
+
     public void prepQuestionAndAnswers(String category){
         question = game.getQuestionText(category);
         System.out.println(category);
-        System.out.println(question);// för att kontrollera att det fungerar korrekt
+        System.out.println(question);
         List<String> answers = game.getAnswersText(category);
         String rightAnswer = database.getCorrectAnswer(category);
         builderWithAnswers = new StringBuilder();
@@ -183,8 +186,9 @@ public class ServerSidePlayer extends Thread {
             builderWithAnswers.append(answer).append(",");
         }
         builderWithAnswers.append(rightAnswer);
-        System.out.println(builderWithAnswers);// för att kontrollera att det fungerar korrekt
+        System.out.println(builderWithAnswers);
     }
+
     public void checkThatBothPlayerChoseName(){
         String toClient = "";
         this.playerEnteredName = true;
@@ -196,13 +200,14 @@ public class ServerSidePlayer extends Thread {
             }
         }
     }
+
     public void sendPlayerNames(String currentPlayerName){
         for (PrintWriter writer : multiWriter.getWriters()) {
             writer.println("MY_NAME " + player + " " + currentPlayerName);
         }
     }
     public void sendPlayerReadyToPlay(String player){
-        System.out.println(player + " is ready to play.");// för att kontrollera att det fungerar korrekt
+        System.out.println(player + " is ready to play.");
         this.playerReadyToPlay = true;
         output.println("READY_TO_PLAY");
     }

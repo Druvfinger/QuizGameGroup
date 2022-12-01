@@ -33,7 +33,7 @@ public class Client {
         socket = new Socket(host, port);
         outWriter = new PrintWriter(socket.getOutputStream(), true);
         inReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        game = new ServerSideGame(); //
+        game = new ServerSideGame();
     }
 
     public void play() {
@@ -136,6 +136,7 @@ public class Client {
         welcomeScreen.repaint();
         welcomeScreen.revalidate();
     }
+
     public void setScreenWaitingToStartGame(String player){
         if (player.equals("Player1")) {
             myTurnToChoose = true;
@@ -147,6 +148,7 @@ public class Client {
         else welcomeScreen.setLocation(900,250);
         welcomeScreen.userInfoTextField.setText("Just one moment " + player + "! We are waiting for your opponent.");
     }
+
     public void setScreenChooseCategory(){
         if (myTurnToChoose) {
             resultsScreen.setVisible(false);
@@ -340,11 +342,6 @@ public class Client {
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        Client client = new Client();
-        client.play();
-    }
-
     public ImageIcon turnPointsInPicture(String points) {
         ImageIcon icon = null;
         String pointsPart = points.substring(8, 11);
@@ -413,5 +410,10 @@ public class Client {
             imageScaled = image.getScaledInstance(label.getWidth(), label.getHeight() - 15, Image.SCALE_SMOOTH);
         }
         return new ImageIcon(imageScaled);
+    }
+
+    public static void main(String[] args) throws IOException {
+        Client client = new Client();
+        client.play();
     }
 }

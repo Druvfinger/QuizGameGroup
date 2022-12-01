@@ -70,7 +70,7 @@ public class GameScreen extends JFrame {
             playerEmojiLabelA = new JLabel(new ImageIcon("Pictures/CuteHipster.png"));
             playerEmojiLabelB = new JLabel(new ImageIcon("Pictures/CuteHeadphones.png"));
         }
-        else{
+        else {
             playerEmojiLabelB = new JLabel(new ImageIcon("Pictures/CuteHipster.png"));
             playerEmojiLabelA = new JLabel(new ImageIcon("Pictures/CuteHeadphones.png"));
         }
@@ -206,7 +206,7 @@ public class GameScreen extends JFrame {
                 }
                 currentQuestion++;
                 isAnswered = true;
-                Client.outWriter.println("I_ANSWERED" + playerNumber); // NYTT
+                Client.outWriter.println("I_ANSWERED" + playerNumber);
             }
 
             if (e.getSource() == goOnButton && isAnswered) {
@@ -220,10 +220,10 @@ public class GameScreen extends JFrame {
                     changeInfoField();
                     questionLabel.setText("");
                     for (JButton button : buttonList) {
-                        button.setVisible(false); // VIKTIGT!! Glöm inte att sätta tillbaka till synlig!
+                        button.setVisible(false);
                     }
                     revalidate();
-                    totalPointsThisRound = pointsLabelA.getText();  // hämtar poäng för denna runda i form av: "Points: .../..."
+                    totalPointsThisRound = pointsLabelA.getText();
                     Client.outWriter.println("BACK_TO_RESULTS " + playerNumber + " " + totalPointsThisRound);
                     wantToGoForward = true;
                     isAnswered = true;
@@ -280,7 +280,8 @@ public class GameScreen extends JFrame {
             infoField.setText("Question " + currentQuestion);
             infoField.revalidate();
         } else {
-            infoField.setText("You have answer all " + gameSettings.getNumberOfQuestions() + "questions. Click on Continue to proceed."); // Ändra???
+            infoField.setText("You have answer all " + gameSettings.getNumberOfQuestions() +
+                    "questions. Click on Continue to proceed.");
             infoField.revalidate();
         }
     }

@@ -14,7 +14,9 @@ public class Server {
                 Database database = new Database();
 
                 ServerSidePlayer player1 = new ServerSidePlayer(ss.accept(), "Player1", game, multiWriter, database);
+                System.out.println("One player as connected.");
                 ServerSidePlayer player2 = new ServerSidePlayer(ss.accept(), "Player2", game, multiWriter, database);
+                System.out.println("Both player as connected.");
 
                 player1.setOpponent(player2);
                 player2.setOpponent(player1);

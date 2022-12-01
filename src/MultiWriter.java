@@ -12,8 +12,4 @@ public class MultiWriter {
     public List<PrintWriter> getWriters() {
         return writers;
     }
-
-    public void removeWriter(PrintWriter writer) {
-        writers.remove(writer);
-    }
 }

@@ -1,4 +1,3 @@
-
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -26,12 +25,12 @@ public class ResultsScreen extends JFrame {
 
     public void setUpResultScreenGUI() {
         JPanel basePanel = new JPanel(new BorderLayout());
-        theirTurnLabel = new JLabel("Players Turn", SwingConstants.CENTER); //
+        theirTurnLabel = new JLabel("Players Turn", SwingConstants.CENTER);
         JPanel middlePanel = new JPanel(new BorderLayout());
         JPanel goOnPanel = new JPanel(new BorderLayout());
         goOnButton = new JButton("Continue");
         JPanel leftPlayerPanel = new JPanel(new BorderLayout());
-        JPanel totalsPanel = new JPanel(new GridLayout(1, 3)); // NYTT
+        JPanel totalsPanel = new JPanel(new GridLayout(1, 3));
         pointsALabel = new JLabel("0", SwingConstants.RIGHT);
         JLabel dashLabel = new JLabel("-", SwingConstants.CENTER);
         pointsBLabel = new JLabel("0", SwingConstants.LEFT);
@@ -72,13 +71,13 @@ public class ResultsScreen extends JFrame {
         leftUserInfoPanel.setPreferredSize(new Dimension(110, 125));
         rightUserInfoPanel.setPreferredSize(new Dimension(110, 125));
 
-        theirTurnLabel.setOpaque(true); //hjälpverktyg
-        theirTurnLabel.setBackground(Constants.LIGHT_BLUE); //hjälpverktyg
-        leftPlayerPanel.setBackground(Color.WHITE); //hjälpverktyg
+        theirTurnLabel.setOpaque(true);
+        theirTurnLabel.setBackground(Constants.LIGHT_BLUE);
+        leftPlayerPanel.setBackground(Color.WHITE);
         middlePanel.setBackground(Constants.LIGHT_BLUE);
-        categoryPanel.setBackground(Constants.VERY_LIGHT_BLUE); //hjälpverktyg
-        rightPlayerPanel.setBackground(Color.WHITE); //hjälpverktyg
-        goOnPanel.setBackground(Constants.LIGHT_BLUE); //hjälpverktyg
+        categoryPanel.setBackground(Constants.VERY_LIGHT_BLUE);
+        rightPlayerPanel.setBackground(Color.WHITE);
+        goOnPanel.setBackground(Constants.LIGHT_BLUE);
         totalsPanel.setBackground(Constants.LIGHT_BLUE);
 
         basePanel.add(theirTurnLabel, BorderLayout.NORTH);
@@ -111,8 +110,8 @@ public class ResultsScreen extends JFrame {
         goOnPanel.add(goOnButton, BorderLayout.CENTER);
         goOnPanel.add(infoField, BorderLayout.SOUTH);
 
-        leftPlayerAnswersPanel.setBackground(Color.LIGHT_GRAY);// hjälpverktyg
-        rightPlayerAnswersPanel.setBackground(Color.LIGHT_GRAY);// hjälpverktyg
+        leftPlayerAnswersPanel.setBackground(Color.LIGHT_GRAY);
+        rightPlayerAnswersPanel.setBackground(Color.LIGHT_GRAY);
 
         leftPlayerAnswersPanel = createDesiredNumberOfLabels(leftPlayerAnswersPanel, gameSettings.getNumberOfRounds(), listOfLabelsPlayerA);
         rightPlayerAnswersPanel = createDesiredNumberOfLabels(rightPlayerAnswersPanel, gameSettings.getNumberOfRounds(), listOfLabelsPlayerB);

@@ -1,6 +1,5 @@
 import java.util.List;
 
-
 public class ServerSideGame {
 
     static ServerSidePlayer currentPlayer;
