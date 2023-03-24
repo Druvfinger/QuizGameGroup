@@ -9,7 +9,7 @@ it was also a group project for us to practice working as an agile team with dai
 ### What does the game do
 * waits for to players to connect and then opens a game between these two players
 * You can play as many as you want you just need to be connected 1v1
-* Turnbased so you always wait until the 
+* Turnbased so you always wait until the other player finishes his round before you get to answer the questions
 * After each round you can see each others scores
 * You take turns picking categories for the questions
 * You can decide how many question and rounds you would like to play
